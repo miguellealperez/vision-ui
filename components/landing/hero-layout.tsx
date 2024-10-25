@@ -9,14 +9,21 @@ import { WindowExample } from "../examples/window";
 import { ComponentWrapper } from "../component-wrapper";
 
 export const HeroLayout = ({ children }: { children: React.ReactNode }) => {
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
-  if (!isDesktop)
+  const isTablet = useMediaQuery("(min-width: 640px)");
+  const canRotate = useMediaQuery("(orientation: portrait)");
+  if (!isTablet)
     return (
       <div>
         <Image src={heroImage} alt="hero" />
-        <p className="text-sm text-muted-foreground">
-          Use a larger screen to interact
-        </p>
+        {canRotate ? (
+          <p className="text-sm text-muted-foreground">
+            Try rotating your device to landscape
+          </p>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Use a larger screen to interact
+          </p>
+        )}
         <div className="flex flex-col gap-4 p-6">
           <ComponentWrapper className="flex flex-col gap-4" gradient>
             <ButtonExample />
