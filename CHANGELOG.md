@@ -1,5 +1,12 @@
 # vision-pro-ui
 
+## 0.1.6
+
+### Patch Changes
+
+- 23e4a06: version bump for next, fumadocs, and framer motion
+- cfa6e62: fixed ornament code import
+
 ## 0.1.5
 
 ### Patch Changes
