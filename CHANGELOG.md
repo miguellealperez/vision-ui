@@ -1,5 +1,11 @@
 # vision-pro-ui
 
+## 0.1.5
+
+### Patch Changes
+
+- 830af22: New List & Hoverable Component, updated landing page UI
+
 ## 0.1.4
 
 ### Patch Changes
