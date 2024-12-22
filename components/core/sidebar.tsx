@@ -9,7 +9,7 @@ import {
   MotionValue,
   useScroll,
   useTransform,
-} from "framer-motion";
+} from "motion/react";
 import View from "./view";
 
 interface HeaderProps extends HTMLAttributes<HTMLDivElement> {}

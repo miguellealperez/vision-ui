@@ -1,8 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { HTMLMotionProps, motion, MotionValue } from "framer-motion";
-import { useScroll } from "framer-motion";
+import { HTMLMotionProps, motion, MotionValue } from "motion/react";
+import { useScroll } from "motion/react";
 import React, { useImperativeHandle, useRef } from "react";
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
 import { ScrollBar } from "@/components/ui/scroll-area";

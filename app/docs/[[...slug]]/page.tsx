@@ -1,4 +1,4 @@
-import { getPage, getPages } from "@/app/source";
+import { source } from "@/app/source";
 import {
   DocsPage,
   DocsBody,
@@ -7,20 +7,18 @@ import {
   DocsCategory,
 } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
-import defaultComponents from "fumadocs-ui/mdx";
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { AutoTypeTable } from "fumadocs-typescript/ui";
 import { Metadata } from "next";
 import { ComponentWrapper } from "@/components/component-wrapper";
 import { getGithubLastEdit } from "fumadocs-core/server";
 
-export default async function Page({
-  params,
-}: {
-  params: { slug?: string[] };
+import { createTypeTable } from "fumadocs-typescript/ui";
+import defaultMdxComponents from "fumadocs-ui/mdx";
+export default async function Page(props: {
+  params: Promise<{ slug?: string[] }>;
 }) {
-  const page = getPage(params.slug);
-
+  const params = await props.params;
+  const page = source.getPage(params.slug);
   if (!page) notFound();
 
   const time = await getGithubLastEdit({
@@ -28,6 +26,8 @@ export default async function Page({
     repo: "vision-ui",
     path: `content/docs/${page.file.path}`,
   });
+
+  const { AutoTypeTable } = createTypeTable();
 
   const MDX = page.data.body;
 
@@ -51,29 +51,28 @@ export default async function Page({
       <DocsBody>
         <MDX
           components={{
-            ...defaultComponents,
+            ...defaultMdxComponents,
             AutoTypeTable,
             ComponentWrapper,
             Tab,
             Tabs,
           }}
         />
-        {page.data.index ? (
-          <DocsCategory page={page} pages={getPages()} />
-        ) : null}
+        {page.data.index ? <DocsCategory page={page} from={source} /> : null}
       </DocsBody>
     </DocsPage>
   );
 }
 
 export async function generateStaticParams() {
-  return getPages().map((page) => ({
-    slug: page.slugs,
-  }));
+  return source.generateParams();
 }
 
-export function generateMetadata({ params }: { params: { slug?: string[] } }) {
-  const page = getPage(params.slug);
+export async function generateMetadata(props: {
+  params: Promise<{ slug?: string[] }>;
+}) {
+  const params = await props.params;
+  const page = source.getPage(params.slug);
 
   if (page == null) notFound();
 

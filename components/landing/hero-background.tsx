@@ -6,7 +6,7 @@ import bg_day from "@/public/assets/background-day.png";
 import Image from "next/image";
 
 import { useAtom, atom } from "jotai";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 export const isDayAtom = atom(false);

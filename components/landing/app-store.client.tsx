@@ -1,6 +1,6 @@
 "use client";
 import { useWindowScroll } from "../core/window";
-import { motion, useMotionTemplate, useTransform } from "framer-motion";
+import { motion, useMotionTemplate, useTransform } from "motion/react";
 import { AppStoreView } from "./app-store.server";
 export const LibraryView = () => {
   const { scrollY } = useWindowScroll();

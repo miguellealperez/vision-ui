@@ -21,10 +21,10 @@ However, you are more than welcome to use this for your own projects.
 
 This project assumes you already have `shadcn/ui` configured in your project.
 
-Install `framer-motion` in your project.
+Install `motion/react` in your project.
 
 ```bash
-npm install framer-motion
+npm install motion/react
 ```
 
 Then `copy/paste` the component you want to use into your project.

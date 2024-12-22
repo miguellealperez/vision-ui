@@ -5,8 +5,8 @@ import { loader } from "fumadocs-core/source";
 import { icons } from "lucide-react";
 import { createElement } from "react";
 
-export const { getPage, getPages, pageTree } = loader({
-  baseUrl: "/docs",
+export const source = loader({
+  baseUrl: "docs",
   source: createMDXSource(docs, meta),
   icon(icon) {
     if (!icon) return undefined;

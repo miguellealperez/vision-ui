@@ -8,7 +8,6 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 const Hero = dynamic(
   () => import("../components/landing/hero").then((mod) => mod.Hero),
   {
-    ssr: false,
     loading: () => (
       <Skeleton className="rounded-[--tile-radius]">
         <AspectRatio ratio={2610 / 1468} />
@@ -41,8 +40,7 @@ export default function HomePage() {
             className="font-semibold text-fd-foreground underline"
           >
             Oliver
-          </Link>
-          {" "}
+          </Link>{" "}
           Powered by{" "}
           <Link
             href="https://fumadocs.vercel.app/"

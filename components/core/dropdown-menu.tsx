@@ -11,7 +11,7 @@ import {
 import * as RadixDropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "motion/react";
 import {
   DropdownMenuContentProps,
   DropdownMenuProps,

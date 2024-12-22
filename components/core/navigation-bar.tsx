@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Text } from "../ui/typography";
 import { useWindowScroll } from "./window";
-import { motion, useTransform } from "framer-motion";
+import { motion, useTransform } from "motion/react";
 import { cva, VariantProps } from "class-variance-authority";
 
 const navigationBarTitleVariants = cva(
