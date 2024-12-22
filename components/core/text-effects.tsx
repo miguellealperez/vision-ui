@@ -7,7 +7,7 @@ type PresetType = "blur" | "shake" | "scale" | "fade" | "slide";
 type TextEffectProps = {
   children: string;
   per?: "word" | "char";
-  as?: keyof JSX.IntrinsicElements;
+  as?: "p" | "span" | "div";
   variants?: {
     container?: Variants;
     item?: Variants;

@@ -1,6 +1,6 @@
 {
   "name": "vision-pro-ui",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "scripts": {
     "build": "next build",
     "dev": "next dev -p 3080",
