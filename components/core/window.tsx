@@ -3,9 +3,10 @@
 import { cn } from "@/lib/utils";
 import { HTMLMotionProps, motion, MotionValue } from "motion/react";
 import { useScroll } from "motion/react";
-import React, { useImperativeHandle, useRef } from "react";
+import React, { RefObject, useId, useImperativeHandle, useRef } from "react";
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
 import { ScrollBar } from "@/components/ui/scroll-area";
+import { useResizeObserver } from "@/hooks/use-resize-observer";
 
 type GlassThickness =
   | "none"
@@ -21,7 +22,7 @@ interface WindowApiProps {
   /**
    * Wrap content in a scroll area.
    *
-   * You can use `useWindowScroll` to get the scroll position of the window in the children.
+   * You can use `useWindow` to get the scroll position of the window in the children.
    * @default false
    */
   scroll?: boolean;
@@ -188,11 +189,17 @@ const rightBottomHighlightStyle = {
 
 const WindowContext = React.createContext<{
   scrollY: MotionValue<number>;
+  width: number | undefined;
+  height: number | undefined;
+  windowId: string;
 }>({
   scrollY: new MotionValue(),
+  width: 0,
+  height: 0,
+  windowId: "",
 });
 
-const useWindowScroll = () => {
+const useWindow = () => {
   const context = React.useContext(WindowContext);
   if (!context) {
     throw new Error("useWindowContext must be used within a WindowContext");
@@ -212,8 +219,8 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
     }: WindowProps,
     ref,
   ) => {
+    const windowId = useId();
     const localRef = useRef<HTMLDivElement>(null);
-
     // strip out *-h-*, h-* classes classes
     const scrollWindowRegex =
       /-h-.*|^h-.*|^max-h-.*|^min-h-.*|^h-.*|h-.*|max-h-.*|min-h-.*/g;
@@ -231,12 +238,15 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
       container: scroll ? localRef : undefined,
       layoutEffect: false,
     });
+    const { width, height } = useResizeObserver({
+      ref: localRef as RefObject<HTMLDivElement>,
+    });
 
     return (
-      <WindowContext.Provider value={{ scrollY }}>
+      <WindowContext.Provider value={{ scrollY, width, height, windowId }}>
         <motion.div
           className={cn(
-            "relative z-40 overflow-hidden",
+            "relative overflow-hidden",
             "before:absolute before:inset-0 before:z-[-1] before:rounded-[34px] before:bg-[#808080] before:bg-opacity-30",
             "min-h-[64px] min-w-[64px]",
             CONSTANTS.VAR_DIAMETER,
@@ -248,11 +258,11 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
             backdropFilter:
               thickness === "none"
                 ? "none"
-                : `saturate(${CONSTANTS.SATURATION}) blur(${getThickness(thickness || "normal")}px)`,
+                : `saturate(${CONSTANTS.SATURATION}) blur(${getThickness(thickness || "normal")}px) brightness(0.85)`,
             WebkitBackdropFilter:
               thickness === "none"
                 ? "none"
-                : `saturate(${CONSTANTS.SATURATION}) blur(${getThickness(thickness || "normal")}px)`,
+                : `saturate(${CONSTANTS.SATURATION}) blur(${getThickness(thickness || "normal")}px) brightness(0.85)`,
             borderRadius: CONSTANTS.BORDER_RADIUS,
             ...style,
           }}
@@ -292,7 +302,6 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
             }}
             aria-hidden="true"
           />
-
           {scroll ? (
             <ScrollAreaPrimitive.Root
               className={cn("relative", scrollWindowClassesName)}
@@ -337,5 +346,5 @@ const WindowControls = () => {
   );
 };
 
-export { Window, WindowControls, useWindowScroll };
+export { Window, WindowControls, useWindow };
 export type { WindowProps, WindowApiProps, GlassThickness };

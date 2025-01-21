@@ -206,28 +206,26 @@ const OrnamentTabs = ({
   } = useOrnament();
 
   return (
-    <div className="flex items-center">
-      <Window
-        className="hide-scrollbar absolute left-0 z-50 mx-auto flex items-center justify-start p-3"
-        initial={{
-          scale: 1,
-        }}
-        animate={{
-          scale: isMouseDown ? 1 : isExpanded ? 1.05 : 1,
-        }}
-        transition={CONSTANTS.ORNAMENT_TRANSITION_CONFIG}
-      >
-        <TabsList asChild>
-          <motion.div
-            onMouseEnter={handleOrnamentItemFocus}
-            onMouseLeave={handleOrnamentItemBlur}
-            className={cn("flex flex-col items-start gap-2", className)}
-          >
-            {children}
-          </motion.div>
-        </TabsList>
-      </Window>
-    </div>
+    <Window
+      className="hide-scrollbar mx-auto flex items-center justify-start p-3"
+      initial={{
+        scale: 1,
+      }}
+      animate={{
+        scale: isMouseDown ? 1 : isExpanded ? 1.05 : 1,
+      }}
+      transition={CONSTANTS.ORNAMENT_TRANSITION_CONFIG}
+    >
+      <TabsList asChild>
+        <motion.div
+          onMouseEnter={handleOrnamentItemFocus}
+          onMouseLeave={handleOrnamentItemBlur}
+          className={cn("flex flex-col items-start gap-2", className)}
+        >
+          {children}
+        </motion.div>
+      </TabsList>
+    </Window>
   );
 };
 
@@ -265,9 +263,7 @@ const OrnamentTab = ({
 
   return (
     <motion.div
-      initial={{
-        width: CONSTANTS.COLLAPSED_WIDTH,
-      }}
+      initial={false}
       animate={{
         width: isExpanded
           ? CONSTANTS.EXPANDED_WIDTH
@@ -301,7 +297,7 @@ const OrnamentTab = ({
             <Text
               size="title3"
               variant={isHovered ? "default" : variant}
-              className="line-clamp-1 w-fit min-w-[60px] font-medium leading-[24px]"
+              className="line-clamp-1 w-fit min-w-[60px] truncate font-medium leading-[24px]"
             >
               {label}
             </Text>
@@ -365,7 +361,7 @@ const OrnamentContent = ({
           value={value}
           key={`ornament-content-${value}-active`}
           forceMount
-          className="flex w-full flex-col"
+          className="order-2 flex w-full flex-col"
         >
           {HeaderComponent &&
             (typeof HeaderComponent === "function" ? (

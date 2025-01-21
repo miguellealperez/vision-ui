@@ -1,9 +1,9 @@
 "use client";
-import { useWindowScroll } from "../core/window";
+import { useWindow } from "../core/window";
 import { motion, useMotionTemplate, useTransform } from "motion/react";
 import { AppStoreView } from "./app-store.server";
 export const LibraryView = () => {
-  const { scrollY } = useWindowScroll();
+  const { scrollY } = useWindow();
   const backgroundOpacity = useTransform(scrollY, [0, 200], [1, 0]);
   const backgroundStyle = useMotionTemplate`rgba(0,0,0,${backgroundOpacity})`;
   return (

@@ -7,11 +7,11 @@ const baseStyle = "transition-all duration-500";
 
 export const textStyles = {
   default: {
-    bottom: cn(baseStyle, "text-[#545454] opacity-0 mix-blend-color-dodge"),
+    bottom: cn(baseStyle, "text-[#232323] opacity-10 mix-blend-color-dodge"),
     top: cn(baseStyle, "text-white opacity-95"),
   },
   secondary: {
-    bottom: cn(baseStyle, "text-[#545454] mix-blend-color-dodge opacity-100"),
+    bottom: cn(baseStyle, "text-[#232323] mix-blend-color-dodge opacity-100"),
     top: cn(baseStyle, "text-white opacity-55 mix-blend-lighten"),
   },
   tertiary: {

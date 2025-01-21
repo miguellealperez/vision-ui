@@ -49,6 +49,9 @@ const buttonVariants = cva(
           //* before *//
           "before:hover:opacity-50 before:opacity-0",
           "before:hover:[background:linear-gradient(0deg,rgba(94,94,94,0.24)_0%,rgba(94,94,94,0.24)_100%),rgba(255,255,255,0.12)]",
+          //* before[data-active]
+          "[&[data-active=true]]:before:opacity-40",
+          "[&[data-active=true]]:before:hover:[background:linear-gradient(0deg,rgba(94,94,94,0.24)_0%,rgba(94,94,94,0.24)_100%),rgba(255,255,255,0.12)]",
         ),
         /* bg-destructive text-destructive-foreground */
         destructive: cn(

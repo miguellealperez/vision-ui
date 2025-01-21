@@ -28,7 +28,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           "relative h-11 w-full items-center justify-start gap-2 bg-black/15",
           "disabled:bg-black/5 disabled:[background:linear-gradient(0deg,_rgba(0,_0,_0,_0.08)_0%,_rgba(0,_0,_0,_0.08)_100%),_rgba(214,_214,_214,_0.45)]",
           "[background-blend-mode:luminosity,color-burn]",
-          "[box-shadow:0px_-0.5px_1px_0px_rgba(255,255,255,0.30)_inset,_0px_-0.5px_1px_0px_rgba(255,255,255,0.25)_inset,_1px_1.5px_4px_0px_rgba(0,0,0,0.12)_inset,_1px_1.5px_4px_0px_rgba(0,0,0,0.10)_inset]",
+          "[box-shadow:0px_-0.5px_1px_0px_rgba(255,255,255,0.20)_inset,_0px_-0.5px_1px_0px_rgba(255,255,255,0.15)_inset,_1px_1.5px_4px_0px_rgba(0,0,0,0.12)_inset,_1px_1.5px_4px_0px_rgba(0,0,0,0.10)_inset]",
           {
             "rounded-[100px]": shape === "rounded",
             "rounded-full": shape === "pill",
