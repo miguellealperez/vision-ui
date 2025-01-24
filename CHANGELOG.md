@@ -1,5 +1,34 @@
 # vision-pro-ui
 
+## 1.1.0
+
+### Minor Changes
+
+- - Added new constants for window properties.
+  - Introduced MemoriesView and AppStorePage components.
+  - Enhanced landing page with new navigation and layout features.
+  - Improved animations and transitions in various components.
+
+## 1.0.2
+
+### Patch Changes
+
+- add apps and navigation, refined components & animations
+
+## 1.0.1
+
+### Patch Changes
+
+- f159553: Converted honeycomb layout to use context value instead of prop drilling. Optimized components
+
+## 1.0.0
+
+### Major Changes
+
+- 0a0b87f: - Brand new landing page
+  - Brand new VisionOS honeycomb home layout (mobile compatible)
+  - Optimized few components
+
 ## 0.1.7
 
 ### Patch Changes

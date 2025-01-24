@@ -7,6 +7,8 @@ import React, { RefObject, useId, useImperativeHandle, useRef } from "react";
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
 import { ScrollBar } from "@/components/ui/scroll-area";
 import { useResizeObserver } from "@/hooks/use-resize-observer";
+import { useRouter } from "next/navigation";
+import { XIcon } from "lucide-react";
 
 type GlassThickness =
   | "none"
@@ -17,6 +19,16 @@ type GlassThickness =
   | "thick"
   | "thicker"
   | "thickest";
+
+type WindowControlsProps =
+  | boolean
+  | {
+      /**
+       * The URL used when clicking the close button.
+       * @default `router.back()`
+       */
+      href?: string;
+    };
 
 interface WindowApiProps {
   /**
@@ -31,6 +43,15 @@ interface WindowApiProps {
    * @default "normal"
    */
   thickness?: GlassThickness;
+  /**
+   * The controls to display in the window.
+   * @default false
+   */
+  controls?: WindowControlsProps;
+  /**
+   * The root className for the window wrapper.
+   */
+  rootClassName?: string;
 }
 
 interface WindowProps extends HTMLMotionProps<"div">, WindowApiProps {
@@ -39,8 +60,6 @@ interface WindowProps extends HTMLMotionProps<"div">, WindowApiProps {
 
 export const getThickness = (thickness: GlassThickness) => {
   switch (thickness) {
-    case "none":
-      return 0;
     case "thinnest":
       return 24;
     case "thinner":
@@ -56,14 +75,12 @@ export const getThickness = (thickness: GlassThickness) => {
     case "thickest":
       return 96;
     default:
-      return 32;
+      return 24;
   }
 };
 
 export const getRings = (thickness: GlassThickness) => {
   switch (thickness) {
-    case "none":
-      return "none";
     case "thinnest":
       return "0px 3px 6.5px 0px rgba(0, 0, 0, 0.05), -0.25px 0.35px 0.15px -1.5px rgba(255, 255, 255, 0.15) inset, 0px 0.35px 2px 0px rgba(255, 255, 255, 0.15) inset";
     case "thinner":
@@ -79,14 +96,12 @@ export const getRings = (thickness: GlassThickness) => {
     case "thickest":
       return "0px 24px 28px 0px rgba(0, 0, 0, 0.05), -0.85px 1.85px 0.85px -1.5px rgba(255, 255, 255, 0.35) inset, 0px 1.85px 6px 0px rgba(255, 255, 255, 0.35) inset";
     default:
-      return "0px 4px 8px 0px rgba(0, 0, 0, 0.05), -0.25px 0.5px 0.25px -1.5px rgba(255, 255, 255, 0.35) inset, 0px 0.5px 2px 0px rgba(255, 255, 255, 0.35) inset";
+      return "0px 3px 6.5px 0px rgba(0, 0, 0, 0.05), -0.25px 0.35px 0.15px -1.5px rgba(255, 255, 255, 0.15) inset, 0px 0.35px 2px 0px rgba(255, 255, 255, 0.15) inset";
   }
 };
 
 export const getHighlightStroke = (thickness: GlassThickness) => {
   switch (thickness) {
-    case "none":
-      return "[--mask-stroke:0px]";
     case "thinnest":
       return "[--mask-stroke:0.75px]";
     case "thinner":
@@ -102,14 +117,12 @@ export const getHighlightStroke = (thickness: GlassThickness) => {
     case "thickest":
       return "[--mask-stroke:1.9px]";
     default:
-      return "[--mask-stroke:1.5px]";
+      return "[--mask-stroke:0.75px]";
   }
 };
 
 const getHighlightOpacity = (thickness: GlassThickness) => {
   switch (thickness) {
-    case "none":
-      return 0;
     case "thinnest":
       return 0.15;
     case "thinner":
@@ -125,13 +138,12 @@ const getHighlightOpacity = (thickness: GlassThickness) => {
     case "thickest":
       return 0.3;
     default:
-      return 0.225;
+      return 0.15;
   }
 };
 
 const CONSTANTS = {
   SATURATION: 2,
-  BORDER_RADIUS: 34,
   VAR_RADIUS: "[--radius:34px]",
   VAR_DIAMETER: "[--diameter:68px]",
 };
@@ -146,7 +158,7 @@ const maskComposite = [
 ];
 
 const defaultHighlightStyle = {
-  borderRadius: CONSTANTS.BORDER_RADIUS,
+  borderRadius: `var(--radius)`,
   maskSize: "100% 100%",
   WebkitMaskSize: "100% 100%",
   maskRepeat: "no-repeat",
@@ -212,9 +224,11 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
     {
       children,
       className,
+      rootClassName,
       thickness,
       style,
       scroll = false,
+      controls = false,
       ...props
     }: WindowProps,
     ref,
@@ -245,86 +259,99 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
     return (
       <WindowContext.Provider value={{ scrollY, width, height, windowId }}>
         <motion.div
+          key={`${windowId}-wrapper`}
           className={cn(
-            "relative overflow-hidden",
-            "before:absolute before:inset-0 before:z-[-1] before:rounded-[34px] before:bg-[#808080] before:bg-opacity-30",
-            "min-h-[64px] min-w-[64px]",
-            CONSTANTS.VAR_DIAMETER,
-            CONSTANTS.VAR_RADIUS,
-            restClassesName,
-            !scroll && scrollWindowClassesName,
+            "relative flex flex-col items-center justify-center",
+            rootClassName,
           )}
-          style={{
-            backdropFilter:
-              thickness === "none"
-                ? "none"
-                : `saturate(${CONSTANTS.SATURATION}) blur(${getThickness(thickness || "normal")}px) brightness(0.85)`,
-            WebkitBackdropFilter:
-              thickness === "none"
-                ? "none"
-                : `saturate(${CONSTANTS.SATURATION}) blur(${getThickness(thickness || "normal")}px) brightness(0.85)`,
-            borderRadius: CONSTANTS.BORDER_RADIUS,
-            ...style,
-          }}
-          {...props}
         >
-          {/* HIGHLIGHTRINGS */}
-          <motion.div
-            className="pointer-events-none absolute inset-x-0 z-40 h-full w-full"
-            style={{
-              boxShadow: getRings(thickness || "normal"),
-              borderRadius: CONSTANTS.BORDER_RADIUS,
-              top: 0,
-            }}
-            aria-hidden
-          />
           <motion.div
             className={cn(
-              getHighlightStroke(thickness || "normal"),
-              "pointer-events-none absolute inset-[-0.75px] z-40",
-              "[--mask-inner-distance:calc(50%-var(--mask-stroke)-var(--mask-stroke))] [--mask-outer-distance:calc(50%-var(--mask-stroke))]",
+              "relative overflow-hidden",
+              "before:absolute before:inset-0 before:z-[-1] before:rounded-[var(--radius)] before:bg-[#808080] before:bg-opacity-30",
+              "min-h-[64px] min-w-[64px]",
+              CONSTANTS.VAR_DIAMETER,
+              CONSTANTS.VAR_RADIUS,
+              restClassesName,
+              !scroll && scrollWindowClassesName,
             )}
             style={{
-              ...leftTopHighlightStyle,
-              opacity: getHighlightOpacity(thickness || "normal") + 0.35,
+              backdropFilter:
+                thickness === "none"
+                  ? "none"
+                  : `saturate(${CONSTANTS.SATURATION}) blur(${getThickness(thickness || "normal")}px) brightness(0.85)`,
+              WebkitBackdropFilter:
+                thickness === "none"
+                  ? "none"
+                  : `saturate(${CONSTANTS.SATURATION}) blur(${getThickness(thickness || "normal")}px) brightness(0.85)`,
+              borderRadius: `var(--radius)`,
+              ...style,
             }}
-            aria-hidden="true"
-          />
-          <motion.div
-            className={cn(
-              getHighlightStroke(thickness || "normal"),
-              "pointer-events-none absolute inset-[-0.25px] z-40",
-              "[--mask-inner-distance:calc(50%-var(--mask-stroke)-var(--mask-stroke))] [--mask-outer-distance:calc(50%-var(--mask-stroke))]",
-            )}
-            style={{
-              ...rightBottomHighlightStyle,
-              opacity: getHighlightOpacity(thickness || "normal") - 0.05,
-            }}
-            aria-hidden="true"
-          />
-          {scroll ? (
-            <ScrollAreaPrimitive.Root
-              className={cn("relative", scrollWindowClassesName)}
-            >
-              <ScrollAreaPrimitive.Viewport
-                className={cn(
-                  "h-full w-full",
-                  roundedClassesName.length > 0
-                    ? roundedClassesName
-                    : "rounded-[34px]",
-                  {
-                    "!overflow-visible": scrollWindowClassesName.length === 0,
-                  },
-                )}
-                ref={localRef}
+            {...props}
+          >
+            {/* HIGHLIGHTRINGS */}
+            <motion.div
+              className="pointer-events-none absolute inset-x-0 z-40 h-full w-full"
+              style={{
+                boxShadow: getRings(thickness || "normal"),
+                borderRadius: `var(--radius)`,
+                top: 0,
+              }}
+              aria-hidden
+            />
+            <motion.div
+              className={cn(
+                getHighlightStroke(thickness || "normal"),
+                "pointer-events-none absolute inset-[-0.75px] z-40",
+                "[--mask-inner-distance:calc(50%-var(--mask-stroke)-var(--mask-stroke))] [--mask-outer-distance:calc(50%-var(--mask-stroke))]",
+              )}
+              style={{
+                ...leftTopHighlightStyle,
+                opacity: getHighlightOpacity(thickness || "normal") + 0.35,
+              }}
+              aria-hidden="true"
+            />
+            <motion.div
+              className={cn(
+                getHighlightStroke(thickness || "normal"),
+                "pointer-events-none absolute inset-[-0.25px] z-40",
+                "[--mask-inner-distance:calc(50%-var(--mask-stroke)-var(--mask-stroke))] [--mask-outer-distance:calc(50%-var(--mask-stroke))]",
+              )}
+              style={{
+                ...rightBottomHighlightStyle,
+                opacity: getHighlightOpacity(thickness || "normal") - 0.05,
+              }}
+              aria-hidden="true"
+            />
+            {scroll ? (
+              <ScrollAreaPrimitive.Root
+                className={cn("relative", scrollWindowClassesName)}
               >
-                {children}
-              </ScrollAreaPrimitive.Viewport>
-              <ScrollBar />
-              <ScrollAreaPrimitive.Corner />
-            </ScrollAreaPrimitive.Root>
-          ) : (
-            children
+                <ScrollAreaPrimitive.Viewport
+                  className={cn(
+                    "h-full w-full",
+                    roundedClassesName.length > 0
+                      ? roundedClassesName
+                      : `rounded-[var(--radius)]`,
+                    {
+                      "!overflow-visible": scrollWindowClassesName.length === 0,
+                    },
+                  )}
+                  ref={localRef}
+                >
+                  {children}
+                </ScrollAreaPrimitive.Viewport>
+                <ScrollBar />
+                <ScrollAreaPrimitive.Corner />
+              </ScrollAreaPrimitive.Root>
+            ) : (
+              children
+            )}
+          </motion.div>
+          {controls && (
+            <WindowControls
+              href={typeof controls === "object" ? controls.href : undefined}
+            />
           )}
         </motion.div>
       </WindowContext.Provider>
@@ -334,14 +361,43 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
 
 Window.displayName = "Window";
 
-const WindowControls = () => {
+const WindowControls = ({ href }: { href?: string }) => {
+  const router = useRouter();
   return (
     <motion.div
-      className="z-50 inline-flex h-[37px] w-[212px] shrink-0 items-center justify-start gap-6 pb-px pr-[38px] pt-[22px]"
+      className="group/controls absolute inset-x-0 bottom-[var(--window-controls-bottom,-37px)] z-50 mx-auto inline-flex h-[37px] w-[212px] shrink-0 items-center justify-start gap-4 pb-px pr-[28px] pt-[22px]"
       layout
+      layoutId="navigation-bar"
     >
-      <div className="relative h-3.5 w-3.5 rounded-[100px] bg-white/30 backdrop-blur-[20px]"></div>
-      <div className="relative h-2.5 w-[136px] rounded-[100px] bg-white/30 backdrop-blur-[20px]"></div>
+      <button
+        onClick={() => (href ? router.push(href) : router.back())}
+        className={cn(
+          "h-[37px] w-[37px] hover:w-[47px]",
+          "group/close-btn",
+          "peer/close-btn",
+          "flex items-center justify-center",
+          "transition-all duration-300",
+        )}
+      >
+        <span
+          className={cn(
+            "size-3.5 rounded-[100px] bg-white/30 backdrop-blur-[20px]",
+            "transition-all duration-300",
+            "flex items-center justify-center",
+            "group-hover/close-btn:size-6 group-hover/close-btn:bg-white/100",
+            "group-active/close-btn:size-4 group-active/close-btn:bg-white/100",
+          )}
+        >
+          <XIcon className="size-3.5 text-[#333] opacity-0 group-hover/close-btn:size-3 group-hover/close-btn:opacity-100" />
+        </span>
+      </button>
+      <div
+        className={cn(
+          "relative h-3.5 w-[136px] rounded-[100px] bg-white/30 backdrop-blur-[20px]",
+          "transition-all duration-300",
+          "peer-hover/close-btn:w-[126px] peer-hover/close-btn:bg-white/50",
+        )}
+      ></div>
     </motion.div>
   );
 };

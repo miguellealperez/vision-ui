@@ -1,15 +1,18 @@
 "use client";
 
-import { NavigationBar, NavigationBarTitle } from "../core/navigation-bar";
-import { Button, ButtonGroup } from "../core/button";
-import { HeroDropdownMenu } from "./hero-dropdown-menu";
+import {
+  NavigationBar,
+  NavigationBarTitle,
+} from "../../../components/core/navigation-bar";
+import { Button, ButtonGroup } from "../../../components/core/button";
+import { HeroDropdownMenu } from "../../../components/landing/hero-dropdown-menu";
 import Image from "next/image";
 
-import { Text } from "../ui/typography";
+import { Text } from "../../../components/ui/typography";
 
 import forest from "@/public/assets/demo/forest.avif";
-import { AspectRatio } from "../ui/aspect-ratio";
-import { Toolbar } from "../core/toolbar";
+import { AspectRatio } from "../../../components/ui/aspect-ratio";
+import { Toolbar } from "../../../components/core/toolbar";
 import { useState } from "react";
 
 // const memories = [

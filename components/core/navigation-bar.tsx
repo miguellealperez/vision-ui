@@ -64,7 +64,7 @@ const NavigationBar = ({
   const { scrollY } = useWindow();
   const blurOpacity = useTransform(scrollY, [0, 100], [0, 1]);
   return (
-    <div
+    <nav
       className={cn(navigationBarVariants({ size }), className)}
       data-size={size}
     >
@@ -79,7 +79,7 @@ const NavigationBar = ({
         }}
       />
       {children}
-    </div>
+    </nav>
   );
 };
 

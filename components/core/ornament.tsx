@@ -13,6 +13,7 @@ const CONSTANTS = {
   COLLAPSED_WIDTH: 44,
   ENTERANCE_TIMEOUT: 700,
   EXITANCE_TIMEOUT: 500,
+  TAB_EXIT_TIMEOUT: 480,
   TEXT_TRANSITION_CONFIG: {
     duration: 0.4,
   },
@@ -26,21 +27,23 @@ const CONSTANTS = {
 const WINDOW_VARIANTS = {
   hidden: {
     opacity: 0,
-    scale: 0.98,
   },
   visible: {
     opacity: 1,
-    scale: 1,
     transition: {
       type: "spring",
-      duration: 0.6,
-      bounce: 0,
-      delay: 0.32,
+      damping: 18,
+      stiffness: 90,
+      delay: 0.6,
     },
   },
   exit: {
     opacity: 0,
-    scale: 0.98,
+    transition: {
+      type: "spring",
+      damping: 18,
+      stiffness: 90,
+    },
   },
 };
 
@@ -70,11 +73,13 @@ const OrnamentContext = createContext<{
   activeTab: string;
   isExpanded: boolean;
   isMouseDown: boolean;
+  isUnmounting: boolean;
   contentClassName?: string;
   setIsMouseDown: React.Dispatch<React.SetStateAction<boolean>>;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
   setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
   setContentClassName: React.Dispatch<React.SetStateAction<string>>;
+  setIsUnmounting: React.Dispatch<React.SetStateAction<boolean>>;
   handleOrnamentItemClick: () => void;
   handleOrnamentItemMouseDown: () => void;
   handleOrnamentItemMouseUp: () => void;
@@ -84,11 +89,13 @@ const OrnamentContext = createContext<{
   activeTab: "",
   isExpanded: false,
   isMouseDown: false,
+  isUnmounting: false,
   contentClassName: "",
   setIsMouseDown: () => {},
   setActiveTab: () => {},
   setIsExpanded: () => {},
   setContentClassName: () => {},
+  setIsUnmounting: () => {},
   handleOrnamentItemClick: () => {},
   handleOrnamentItemMouseDown: () => {},
   handleOrnamentItemMouseUp: () => {},
@@ -116,6 +123,7 @@ const Ornament = ({
   const [activeTab, setActiveTab] = useState(defaultTab || "");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMouseDown, setIsMouseDown] = useState(false);
+  const [isUnmounting, setIsUnmounting] = useState(false);
   const timeoutEnterRef = useRef<NodeJS.Timeout | null>(null);
   const timeoutLeaveRef = useRef<NodeJS.Timeout | null>(null);
   const [contentClassName, setContentClassName] = useState("");
@@ -157,13 +165,16 @@ const Ornament = ({
   const handleOrnamentItemBlur = () => {
     handleMouseLeave();
   };
+
   return (
     <OrnamentContext.Provider
       value={{
         activeTab,
         isExpanded,
         isMouseDown,
+        isUnmounting,
         contentClassName,
+        setIsUnmounting,
         setIsMouseDown,
         setActiveTab,
         setIsExpanded,
@@ -177,10 +188,8 @@ const Ornament = ({
     >
       <Tabs
         orientation="vertical"
-        onValueChange={setActiveTab}
-        value={activeTab}
         className={cn(
-          "relative ml-[-96px] grid h-full w-full flex-1 grid-cols-[68px_1fr] place-items-center gap-7",
+          "relative grid h-full w-full flex-1 grid-cols-[68px_1fr] place-content-center gap-4 md:gap-7 lg:ml-[-96px]",
           "max-w-3xl xl:max-w-4xl 2xl:max-w-6xl",
           className,
         )}
@@ -207,12 +216,19 @@ const OrnamentTabs = ({
 
   return (
     <Window
-      className="hide-scrollbar mx-auto flex items-center justify-start p-3"
+      className={
+        "hide-scrollbar relative z-[42] mx-auto flex items-center justify-start p-3"
+      }
       initial={{
+        opacity: 0,
         scale: 1,
       }}
       animate={{
+        opacity: 1,
         scale: isMouseDown ? 1 : isExpanded ? 1.05 : 1,
+      }}
+      exit={{
+        opacity: 0,
       }}
       transition={CONSTANTS.ORNAMENT_TRANSITION_CONFIG}
     >
@@ -244,6 +260,7 @@ const OrnamentTab = ({
     activeTab,
     setActiveTab,
     isExpanded,
+    setIsUnmounting,
     handleOrnamentItemClick,
     handleOrnamentItemMouseDown,
     handleOrnamentItemMouseUp,
@@ -253,7 +270,11 @@ const OrnamentTab = ({
   const [isHovered, setIsHovered] = useState(false);
 
   const handleClick = () => {
-    setActiveTab(value);
+    setIsUnmounting(true);
+    setTimeout(() => {
+      setActiveTab(value);
+      setIsUnmounting(false);
+    }, CONSTANTS.TAB_EXIT_TIMEOUT);
     handleOrnamentItemClick();
     onClick?.();
   };
@@ -354,14 +375,15 @@ const OrnamentContent = ({
 }: OrnamentContentProps) => {
   const { activeTab, contentClassName } = useOrnament();
   const isActive = activeTab === value;
+
   return (
     <AnimatePresence mode="popLayout">
       {isActive && (
         <TabsContent
           value={value}
-          key={`ornament-content-${value}-active`}
+          key={`ornament-content-${value}`}
           forceMount
-          className="order-2 flex w-full flex-col"
+          className="relative order-2 flex w-full flex-col"
         >
           {HeaderComponent &&
             (typeof HeaderComponent === "function" ? (
@@ -386,7 +408,7 @@ const OrnamentContent = ({
               transition={{
                 duration: 0.1,
               }}
-              className="z-[41] flex items-center justify-center"
+              className="absolute bottom-0 left-0 right-0 z-[41] flex items-center justify-center"
             >
               {typeof FooterComponent === "function" ? (
                 <FooterComponent />
@@ -401,12 +423,52 @@ const OrnamentContent = ({
   );
 };
 
+/**
+ * A motion.div without a window, header or footer.
+ */
+const OrnamentContentBase = ({
+  children,
+  value,
+  className,
+}: {
+  children: React.ReactNode;
+  value: string;
+  className?: string;
+}) => {
+  const { activeTab, contentClassName, isUnmounting } = useOrnament();
+  const isActive = activeTab === value;
+  return (
+    <AnimatePresence mode="popLayout">
+      {isActive && !isUnmounting && (
+        <TabsContent
+          value={value}
+          key={`ornament-content-${value}-active`}
+          forceMount
+          className="order-2 flex w-full flex-col"
+          asChild
+        >
+          <motion.div
+            className={cn(className, contentClassName)}
+            initial={WINDOW_VARIANTS.hidden}
+            animate={WINDOW_VARIANTS.visible}
+            exit={WINDOW_VARIANTS.exit}
+            transition={CONSTANTS.ORNAMENT_TRANSITION_CONFIG}
+          >
+            {children}
+          </motion.div>
+        </TabsContent>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export {
   Ornament,
   OrnamentTabs,
   OrnamentTab,
   OrnamentContents,
   OrnamentContent,
+  OrnamentContentBase,
 };
 
 export type { OrnamentContentApiProps, OrnamentContentsApiProps };

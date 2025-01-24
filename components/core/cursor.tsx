@@ -191,8 +191,8 @@ const CursorInner = () => {
         });
 
         frame.update(() => {
-          cursorWidthSpring.set(rect.width - 4);
-          cursorHeightSpring.set(rect.height - 4);
+          cursorWidthSpring.set((rect?.width ?? 4) - 4);
+          cursorHeightSpring.set((rect?.height ?? 4) - 4);
           cursorBorderRadiusSpring.set(
             parseInt(window.getComputedStyle(element).borderRadius) - 2,
           );

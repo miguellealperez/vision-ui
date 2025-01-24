@@ -23,7 +23,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         style={{
           display: "flex",
           flexDirection: "column",
-          minHeight: "100vh",
+          minHeight: "100dvh",
         }}
       >
         <RootProvider

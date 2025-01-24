@@ -11,11 +11,13 @@ import {
 import { HeroLayout } from "./hero-layout";
 import { cn } from "@/lib/utils";
 
-import { MemoriesToolbar, MemoriesView } from "./memories-view";
+import {
+  MemoriesToolbar,
+  MemoriesView,
+} from "../../app/(landing)/photos/memories-view";
 import { LibraryView } from "./app-store.client";
 import { SVGProps } from "react";
 import { PencilRulerIcon, Settings } from "lucide-react";
-import SettingsView from "./settings.server";
 import { ComponentWrapper } from "../component-wrapper";
 import { ButtonExample } from "../examples/button";
 import { WindowExample } from "../examples/window";
@@ -38,7 +40,7 @@ export const Hero = () => {
               <LibraryView />
             </OrnamentContent>
             <OrnamentContent value="settings" key="settings">
-              <SettingsView />
+              <p>Settings</p>
             </OrnamentContent>
           </OrnamentContents>
           <OrnamentTabs>
@@ -58,7 +60,6 @@ export const Hero = () => {
               value="settings"
             />
           </OrnamentTabs>
-          {/* <WindowControls /> */}
         </Ornament>
       </HeroBackground>
 

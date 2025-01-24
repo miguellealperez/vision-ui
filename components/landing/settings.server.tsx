@@ -9,7 +9,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarTrigger,
 } from "../core/sidebar";
 import View from "../core/view";
 import {
@@ -31,30 +30,26 @@ import {
   IconHourglassHigh,
   IconMoonFilled,
 } from "@tabler/icons-react";
-import { NavigationBar, NavigationBarTitle } from "../core/navigation-bar";
 
 const section_1 = [
   {
     title: "General",
-    url: "#",
     icon: CogIcon,
     gradient: "from-gray-400 to-gray-600",
+    isActive: true,
   },
   {
     title: "Apps",
-    url: "#",
     icon: AppStoreIcon,
     gradient: "from-sky-500 to-blue-700",
   },
   {
     title: "People",
-    url: "#",
     icon: PeopleIcon,
     gradient: "from-green-400 to-green-600",
   },
   {
     title: "Environments",
-    url: "#",
     icon: EnvironmentsIcon,
     gradient: "from-indigo-400 to-indigo-800",
   },
@@ -63,7 +58,6 @@ const section_1 = [
 const section_2 = [
   {
     title: "Notifications",
-    url: "#",
     icon: IconBellRingingFilled,
     gradient: "from-rose-400 to-red-600",
   },
@@ -81,7 +75,7 @@ const section_2 = [
   },
 ];
 
-function SettingsView() {
+function SettingsView({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <Sidebar>
@@ -94,7 +88,10 @@ function SettingsView() {
               <SidebarMenu>
                 {section_1.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton className="gap-4 [&_[data-slot='icon']]:opacity-75">
+                    <SidebarMenuButton
+                      className="gap-4 [&_[data-slot='icon']]:opacity-75"
+                      isActive={item.isActive}
+                    >
                       <item.icon data-slot="icon" />
                       <span
                         className={cn(
@@ -133,24 +130,7 @@ function SettingsView() {
           </SidebarGroup>
         </SidebarContent>
       </Sidebar>
-      <main className={cn("relative flex-1")}>
-        <NavigationBar size="sm" className="sticky rounded-l-none px-3.5">
-          <SidebarTrigger />
-          <NavigationBarTitle variant="center">Settings</NavigationBarTitle>
-        </NavigationBar>
-        <div className="relative my-4 h-[200px] bg-red-500/20">
-          Main Content
-        </div>
-        <div className="relative my-4 h-[200px] bg-red-500/20">
-          Main Content
-        </div>
-        <div className="relative my-4 h-[200px] bg-red-500/20">
-          Main Content
-        </div>
-        <div className="relative my-4 h-[200px] bg-red-500/20">
-          Main Content
-        </div>
-      </main>
+      <main className={cn("relative flex-1")}>{children}</main>
     </SidebarProvider>
   );
   /*  return (
