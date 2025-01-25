@@ -606,11 +606,20 @@ function HoneycombCell({
               </span>
             )}
             {item.background && (
-              <div className="pointer-events-none absolute inset-0">
+              <div className={"pointer-events-none absolute inset-0"}>
                 {item.background}
+                <div
+                  className={cn(
+                    "absolute inset-0 z-10 bg-white/5 opacity-0 transition-opacity",
+                    "bg-blend-overlay",
+                    "group-hover/cell:opacity-100",
+                  )}
+                />
               </div>
             )}
-            {item.icon && <div className="absolute inset-0">{item.icon}</div>}
+            {item.icon && (
+              <div className="absolute inset-0 z-[11]">{item.icon}</div>
+            )}
           </div>
         </Window>
       </motion.div>
@@ -635,7 +644,7 @@ function HoneycombCell({
 }
 
 export const honeycombIconClassName = cn(
-  "object-contain p-3 transition-all duration-300",
+  "object-contain p-3 transition-all duration-300 pointer-events-none touch-none",
   "translate-y-0 translate-x-0 group-hover/cell:!translate-y-[var(--cell-y,-1px)] group-hover/cell:!translate-x-[var(--cell-x,-1px)]",
   "[filter:drop-shadow(0px_0px_1px_rgba(12,12,12,0))] group-hover/cell:[filter:drop-shadow(calc(var(--cell-x,-1px)*-1.5)_calc(var(--cell-y,-1px)*-1.5)_1px_rgba(0,0,0,0.33))]",
 );

@@ -1,3 +1,4 @@
+import { Button } from "@/components/core/button";
 import {
   Ornament,
   OrnamentContentBase,
@@ -8,6 +9,7 @@ import {
 import { AppStoreIcon, EnvironmentsIcon, PeopleIcon } from "@/components/icons";
 import HomeView from "@/components/landing/home-view";
 import { Text } from "@/components/ui/typography";
+import Link from "next/dist/client/link";
 
 export const dynamic = "force-dynamic";
 
@@ -19,10 +21,30 @@ function LandingPage() {
           <HomeView />
         </OrnamentContentBase>
         <OrnamentContentBase value="people" key="people">
-          <div className="text-center">
+          <div className="flex flex-col items-center justify-center gap-4 text-center">
             <Text variant="secondary" size="XLTitle2">
               Coming Soon...
             </Text>
+            <Link href="/docs">
+              <Button>View Docs</Button>
+            </Link>
+            <p className="text-xs opacity-50">
+              Created by{" "}
+              <Link
+                href="https://twitter.com/useOptimistic"
+                className="font-semibold text-fd-foreground underline"
+              >
+                Oliver
+              </Link>
+              <br />
+              Docs powered by{" "}
+              <Link
+                href="https://fumadocs.vercel.app/"
+                className="font-semibold text-fd-foreground underline"
+              >
+                Fumadocs
+              </Link>
+            </p>
           </div>
         </OrnamentContentBase>
         <OrnamentContentBase value="environments" key="environments">

@@ -1,5 +1,15 @@
 # vision-pro-ui
 
+## 1.1.1
+
+### Patch Changes
+
+- Update Node.js version to 22 in release workflow
+  Remove unused landing page components and files
+  Update landing page layout and add documentation links
+  Improve sidebar and grid layout styling
+  Remove app store and hero-related components
+
 ## 1.1.0
 
 ### Minor Changes
