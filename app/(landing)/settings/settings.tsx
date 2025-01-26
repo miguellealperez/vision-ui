@@ -9,14 +9,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-} from "../core/sidebar";
-import View from "../core/view";
+} from "@/components/core/sidebar";
+import View from "@/components/core/view";
 import {
   ListDataItem,
   ListItem,
   ListRenderItemProps,
   ListSectionHeader,
-} from "../core/list";
+} from "@/components/core/list";
 
 import {
   AppStoreIcon,

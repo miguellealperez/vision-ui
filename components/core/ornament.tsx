@@ -34,7 +34,7 @@ const WINDOW_VARIANTS = {
       type: "spring",
       damping: 18,
       stiffness: 90,
-      delay: 0.6,
+      delay: 0.25,
     },
   },
   exit: {

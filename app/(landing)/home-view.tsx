@@ -10,6 +10,7 @@ import settingsIcon from "@/public/assets/landing/home/icon-settings.png";
 import appStoreIcon from "@/public/assets/landing/home/icon-app-store.png";
 import photosIcon from "@/public/assets/landing/home/icon-photos.png";
 import githubIcon from "@/public/assets/landing/home/icon-github.png";
+import docsIcon from "@/public/assets/landing/home/icon-docs.png";
 
 const items: HoneycombItem[] = [
   {
@@ -38,7 +39,7 @@ const items: HoneycombItem[] = [
     background: (
       <div className="h-full w-full bg-gradient-to-t from-blue-600 to-sky-400"></div>
     ),
-    href: "/store",
+    href: "/app-store",
   },
   {
     id: "photos",
@@ -60,6 +61,30 @@ const items: HoneycombItem[] = [
     ),
     href: "https://github.com/fluid-design-io/vision-ui",
   },
+  {
+    id: "docs",
+    label: "Docs",
+    icon: (
+      <Image src={docsIcon} alt="Docs" className={honeycombIconClassName} />
+    ),
+    background: (
+      <div className="h-full w-full bg-gradient-to-t from-[#FCC804] to-[#FFAC04]"></div>
+    ),
+    href: "/docs",
+  },
+  ...Array.from({ length: 20 }, (_, i) => ({
+    id: `test-${i}`,
+    label: `Test ${i}`,
+    background: <div className="h-full w-full bg-[#333333]"></div>,
+    icon: (
+      <Image
+        src={settingsIcon}
+        alt="Settings"
+        fill
+        className={honeycombIconClassName}
+      />
+    ),
+  })),
   // {
   //   id: "mail",
   //   label: "Mail",
@@ -78,19 +103,6 @@ const items: HoneycombItem[] = [
   //   background: <div className="h-full w-full"></div>,
   //   icon: <div className="bg-blue-500"></div>,
   // },
-  // ...Array.from({ length: 20 }, (_, i) => ({
-  //   id: `test-${i}`,
-  //   label: `Test ${i}`,
-  //   background: <div className="h-full w-full bg-[#333333]"></div>,
-  //   icon: (
-  //     <Image
-  //       src={settingsIcon}
-  //       alt="Settings"
-  //       fill
-  //       className={honeycombIconClassName}
-  //     />
-  //   ),
-  // })),
 ];
 
 function HomeView() {

@@ -7,9 +7,10 @@ import {
   OrnamentTabs,
 } from "@/components/core/ornament";
 import { AppStoreIcon, EnvironmentsIcon, PeopleIcon } from "@/components/icons";
-import HomeView from "@/components/landing/home-view";
+
 import { Text } from "@/components/ui/typography";
 import Link from "next/dist/client/link";
+import HomeView from "./home-view";
 
 export const dynamic = "force-dynamic";
 

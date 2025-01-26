@@ -5,19 +5,19 @@
 ### Patch Changes
 
 - Update Node.js version to 22 in release workflow
-  Remove unused landing page components and files
-  Update landing page layout and add documentation links
-  Improve sidebar and grid layout styling
-  Remove app store and hero-related components
+- Remove unused landing page components and files
+- Update landing page layout and add documentation links
+- Improve sidebar and grid layout styling
+- Remove app store and hero-related components
 
 ## 1.1.0
 
 ### Minor Changes
 
-- - Added new constants for window properties.
-  - Introduced MemoriesView and AppStorePage components.
-  - Enhanced landing page with new navigation and layout features.
-  - Improved animations and transitions in various components.
+- Added new constants for window properties.
+- Introduced MemoriesView and AppStorePage components.
+- Enhanced landing page with new navigation and layout features.
+- Improved animations and transitions in various components.
 
 ## 1.0.2
 

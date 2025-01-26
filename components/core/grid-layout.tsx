@@ -18,13 +18,14 @@ import {
   useMotionValueEvent,
   useTransform,
 } from "motion/react";
-import { atom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 
 import { Window } from "./window";
 import { cn } from "@/lib/utils";
 import useWindowSize from "@/hooks/use-window-size";
 import { useIsMounted } from "@/hooks/use-is-mounted";
 import { useRouter } from "next/navigation";
+import { debugModeAtom } from "@/app/(landing)/atoms";
 
 // ------------------------------------------------------------------
 // 1. CONTEXT SETUP
@@ -91,9 +92,6 @@ export interface HoneycombItem {
 interface HoneycombLayoutProps {
   items: HoneycombItem[];
 }
-
-// Hard-coded debug atom for demonstration
-const debugModeAtom = atom(false);
 
 // Some sizing constants
 const ITEM_SIZE = 96; // icon diameter
@@ -419,20 +417,20 @@ const tapVariants = {
 };
 
 const cellXclassName = {
-  "-4": "[--cell-x:-4px]",
-  "-3": "[--cell-x:-3px]",
-  "-2": "[--cell-x:-2px]",
-  "-1": "[--cell-x:-1px]",
+  "-4": "[--cell-x:-2.5px]",
+  "-3": "[--cell-x:-2px]",
+  "-2": "[--cell-x:-1.25px]",
+  "-1": "[--cell-x:-0.5px]",
   "0": "[--cell-x:0px]",
   "1": "[--cell-x:1px]",
-  "2": "[--cell-x:2px]",
-  "3": "[--cell-x:3px]",
-  "4": "[--cell-x:4px]",
+  "2": "[--cell-x:1.5px]",
+  "3": "[--cell-x:2.25px]",
+  "4": "[--cell-x:3px]",
 };
 
 const cellYclassName = {
   "-2": "[--cell-y:-2px]",
-  "0": "[--cell-y:0px]",
+  "0": "[--cell-y:-1px]",
   "2": "[--cell-y:2px]",
 };
 

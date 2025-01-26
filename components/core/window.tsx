@@ -372,15 +372,15 @@ const WindowControls = ({ href }: { href?: string }) => {
       <button
         onClick={() => (href ? router.push(href) : router.back())}
         className={cn(
-          "h-[37px] w-[37px] hover:w-[47px]",
+          "h-[37px] w-[37px]",
           "group/close-btn",
           "peer/close-btn",
           "flex items-center justify-center",
-          "transition-all duration-300",
         )}
       >
         <span
           className={cn(
+            "pointer-events-none",
             "size-3.5 rounded-[100px] bg-white/30 backdrop-blur-[20px]",
             "transition-all duration-300",
             "flex items-center justify-center",
@@ -395,7 +395,7 @@ const WindowControls = ({ href }: { href?: string }) => {
         className={cn(
           "relative h-3.5 w-[136px] rounded-[100px] bg-white/30 backdrop-blur-[20px]",
           "transition-all duration-300",
-          "peer-hover/close-btn:w-[126px] peer-hover/close-btn:bg-white/50",
+          "peer-hover/close-btn:ml-[10px] peer-hover/close-btn:w-[126px] peer-hover/close-btn:bg-white/50",
         )}
       ></div>
     </motion.div>
