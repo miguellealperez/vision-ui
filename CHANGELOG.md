@@ -1,5 +1,14 @@
 # vision-pro-ui
 
+## 1.2.0
+
+### Minor Changes
+
+- Add docs icon to home view
+- Improve window close button animation
+- Updated settings layout
+- Remove unused components
+
 ## 1.1.1
 
 ### Patch Changes
