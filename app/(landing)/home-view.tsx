@@ -72,19 +72,19 @@ const items: HoneycombItem[] = [
     ),
     href: "/docs",
   },
-  ...Array.from({ length: 20 }, (_, i) => ({
-    id: `test-${i}`,
-    label: `Test ${i}`,
-    background: <div className="h-full w-full bg-[#333333]"></div>,
-    icon: (
-      <Image
-        src={settingsIcon}
-        alt="Settings"
-        fill
-        className={honeycombIconClassName}
-      />
-    ),
-  })),
+  // ...Array.from({ length: 20 }, (_, i) => ({
+  //   id: `test-${i}`,
+  //   label: `Test ${i}`,
+  //   background: <div className="h-full w-full bg-[#333333]"></div>,
+  //   icon: (
+  //     <Image
+  //       src={settingsIcon}
+  //       alt="Settings"
+  //       fill
+  //       className={honeycombIconClassName}
+  //     />
+  //   ),
+  // })),
   // {
   //   id: "mail",
   //   label: "Mail",
