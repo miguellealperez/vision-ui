@@ -6,11 +6,12 @@ import {
 
 import Image from "next/image";
 
-import settingsIcon from "@/public/assets/landing/home/icon-settings.png";
-import appStoreIcon from "@/public/assets/landing/home/icon-app-store.png";
-import photosIcon from "@/public/assets/landing/home/icon-photos.png";
-import githubIcon from "@/public/assets/landing/home/icon-github.png";
-import docsIcon from "@/public/assets/landing/home/icon-docs.png";
+import settingsIcon from "@/public/assets/landing/home/icon-settings.avif";
+import appStoreIcon from "@/public/assets/landing/home/icon-app-store.avif";
+import photosIcon from "@/public/assets/landing/home/icon-photos.avif";
+import githubIcon from "@/public/assets/landing/home/icon-github.avif";
+import docsIcon from "@/public/assets/landing/home/icon-docs.avif";
+import fumadocsIcon from "@/public/assets/landing/home/icon-fumadocs.avif";
 
 const items: HoneycombItem[] = [
   {
@@ -63,7 +64,7 @@ const items: HoneycombItem[] = [
   },
   {
     id: "docs",
-    label: "Docs",
+    label: "Documentation",
     icon: (
       <Image src={docsIcon} alt="Docs" className={honeycombIconClassName} />
     ),
@@ -71,6 +72,21 @@ const items: HoneycombItem[] = [
       <div className="h-full w-full bg-gradient-to-t from-[#FCC804] to-[#FFAC04]"></div>
     ),
     href: "/docs",
+  },
+  {
+    id: "fumadocs",
+    label: "Fumadocs",
+    icon: (
+      <Image
+        src={fumadocsIcon}
+        alt="Fumadocs"
+        className={honeycombIconClassName}
+      />
+    ),
+    background: (
+      <div className="h-full w-full bg-gradient-to-t from-[#5A5962] to-[#151515]"></div>
+    ),
+    href: "https://fumadocs.vercel.app/",
   },
   // ...Array.from({ length: 20 }, (_, i) => ({
   //   id: `test-${i}`,
