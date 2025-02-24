@@ -8,6 +8,13 @@ Vision UI is a collection of components that follow the VisionOS design language
 
 It uses most of the components from [shadcn/ui](https://ui.shadcn.com/) for the underlying components with others using [radix-ui](https://www.radix-ui.com/).
 
+![Ornament](https://github.com/user-attachments/assets/8473d636-9eff-4de7-9224-6a306e3ed344)
+
+![Demo](https://github.com/user-attachments/assets/cd924064-d927-47ef-919e-9d169f67c7c9)
+
+
+## Demo Video
+
 [![Demo Video](https://img.youtube.com/vi/1tywYTXi0T4/0.jpg)](https://youtu.be/1tywYTXi0T4)
 
 ## How to use
