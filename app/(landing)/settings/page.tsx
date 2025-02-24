@@ -10,7 +10,6 @@ import {
   NavigationBarTitle,
 } from "@/components/core/navigation-bar";
 import { SidebarTrigger } from "@/components/core/sidebar";
-import View from "@/components/core/view";
 
 export const dynamic = "force-dynamic";
 
@@ -27,33 +26,44 @@ export default function Settings() {
         <List
           data={[
             {
-              id: "1",
-              title: "Personal Information",
-            },
-            {
-              id: "2",
-              title: "Sign-in & Security",
-            },
-            {
-              id: "3",
-              title: "Payment & Shipping",
-            },
-            {
-              id: "4",
-              title: "Subscriptions",
+              id: "about",
+              title: "About",
             },
             "",
             {
-              id: "5",
-              title: "iCloud",
-              rightView: "50 GB",
-              detail: true,
+              id: "autofill",
+              title: "AutoFill & Passwords",
             },
             {
-              id: "6",
-              title: "Family",
-              rightView: "Set Up",
-              detail: true,
+              id: "dictionary",
+              title: "Dictionary",
+            },
+            {
+              id: "fonts",
+              title: "Fonts",
+            },
+            {
+              id: "keyboard",
+              title: "Keyboard",
+            },
+            {
+              id: "language-region",
+              title: "Language & Region",
+            },
+            "",
+            {
+              id: "vpns",
+              title: "VPN & Device Management",
+            },
+            "",
+            {
+              id: "remote-devices",
+              title: "Remote Devices",
+            },
+            "",
+            {
+              id: "transfer-or-reset",
+              title: "Transfer or Reset Vision Pro",
             },
           ]}
           renderItem={renderItem}
@@ -70,11 +80,7 @@ function renderItem<T extends ListDataItem>(info: ListRenderItemProps<T>) {
   }
   return (
     <ListItem
-      leftView={
-        <div className="flex justify-center px-4">
-          <View className="aspect-square h-8 rounded-full" />
-        </div>
-      }
+      leftView={info.item.leftView}
       rightView={info.item.rightView}
       {...info}
     />

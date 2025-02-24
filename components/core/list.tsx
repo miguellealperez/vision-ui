@@ -178,6 +178,7 @@ function ListItem<T extends ListDataItem>({
             },
             "hover:bg-blend-color-dodge hover:[background:linear-gradient(0deg,rgba(94,94,94,0.18)0%,rgba(94,94,94,0.18)100%),rgba(255,255,255,0.07)]",
             "hover:[background-blend-mode:color-dodge,normal]",
+            !leftView && "pl-6",
             className,
           )}
         >
@@ -253,10 +254,10 @@ function ListSectionHeader<T extends ListDataItem>({
     );
   }
   return (
-    <div className={cn("w-full pb-4 pl-4 pt-4", className)}>
+    <div className={cn("w-full pt-4 pb-4 pl-4", className)}>
       <Text
         className={cn(
-          "text-left uppercase text-muted-foreground",
+          "text-muted-foreground text-left uppercase",
           textClassName,
         )}
         size="caption1"

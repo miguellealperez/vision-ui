@@ -1,5 +1,13 @@
 # vision-pro-ui
 
+## 1.3.2
+
+### Patch Changes
+
+- c4de32a: update photos app, added unsplash images, matched ornament tabs & icons with VisionOS photos app.
+- 61efb6f: minor UI improvements
+- updated settings app to match VisionOS
+
 ## 1.3.1
 
 ### Patch Changes
