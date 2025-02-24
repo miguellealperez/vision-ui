@@ -92,13 +92,13 @@ export default function SettingsLayout({
                   {section_1.map((item) => (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
-                        className="gap-4 [&_[data-slot='icon']]:opacity-75"
+                        className="gap-4 px-[22px] [&_[data-slot='icon']]:opacity-75"
                         isActive={item.isActive}
                       >
                         <item.icon data-slot="icon" />
                         <span
                           className={cn(
-                            "absolute top-2 left-3.5 z-[-1] size-8 rounded-full",
+                            "absolute top-2 left-3.5 z-[-1] size-10 rounded-full",
                             "bg-gradient-to-b",
                             item.gradient,
                           )}
@@ -115,11 +115,11 @@ export default function SettingsLayout({
                 <SidebarMenu>
                   {section_2.map((item) => (
                     <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton className="gap-4 [&_[data-slot='icon']]:opacity-75">
+                      <SidebarMenuButton className="gap-4 px-[22px] [&_[data-slot='icon']]:opacity-75">
                         <item.icon data-slot="icon" />
                         <span
                           className={cn(
-                            "absolute top-2 left-3.5 z-[-1] size-8 rounded-full",
+                            "absolute top-2 left-3.5 z-[-1] size-10 rounded-full",
                             "bg-gradient-to-b",
                             item.gradient,
                           )}

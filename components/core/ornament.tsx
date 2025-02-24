@@ -304,7 +304,9 @@ const OrnamentTab = ({
           onMouseLeave={() => setIsHovered(false)}
           variant={variant}
         >
-          <div className="relative mr-4 flex-shrink-0">{icon}</div>
+          <div className="relative mr-4 flex-shrink-0 [&_[data-slot='icon']]:size-6">
+            {icon}
+          </div>
           <motion.span
             className="flex-1 overflow-hidden text-start"
             initial={{

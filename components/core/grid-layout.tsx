@@ -128,6 +128,12 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
   // Motion values
   const x = useMotionValue(0);
 
+  // Filter items based on debug mode
+  const filteredItems = items.filter((item) => {
+    if (DEBUG) return true;
+    return !item.debug;
+  });
+
   // Condensed or normal spacing based on window size
   const isCondensedWidth = width <= 896;
   const isCondensedHeight = height <= 460;
@@ -151,8 +157,8 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
 
   // Break items into pages
   const pages: HoneycombItem[][] = [];
-  for (let i = 0; i < items.length; i += itemsPerPage) {
-    pages.push(items.slice(i, i + itemsPerPage));
+  for (let i = 0; i < filteredItems.length; i += itemsPerPage) {
+    pages.push(filteredItems.slice(i, i + itemsPerPage));
   }
 
   // Calculate actual page width
@@ -362,8 +368,6 @@ function PageContent({
         }}
       >
         {pageItems.map((item, i) => {
-          // If debug is false and the item has debug set to true, don't render
-          if (item.debug && !debug) return null;
           // Row-col math
           let row: number;
           let col: number;
@@ -625,7 +629,7 @@ function HoneycombCell({
 
       {/* Label */}
       <motion.div
-        className="pointer-events-none flex items-center justify-center text-center text-xs text-white/30 transition-colors group-hover/cell:text-white/70"
+        className="pointer-events-none flex translate-y-0.5 items-center justify-center text-center text-xs text-white/30 transition-colors group-hover/cell:text-white/70"
         style={{
           height: labelSize,
           width: itemSize,
