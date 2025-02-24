@@ -106,38 +106,44 @@ interface ButtonProps
   asChild?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, children, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      >
-        {children}
-      </Comp>
-    );
-  },
-);
-Button.displayName = "Button";
+function Button({
+  className,
+  variant,
+  size,
+  asChild = false,
+  ...props
+}: React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+  }) {
+  const Comp = asChild ? Slot : "button";
+
+  return (
+    <Comp
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  );
+}
 
 export interface ButtonGroupProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
-const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
-  ({ className, children, ...props }: ButtonGroupProps, ref) => {
-    return (
-      <div
-        className={cn("flex items-center justify-center gap-2 p-3", className)}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  },
-);
-ButtonGroup.displayName = "ButtonGroup";
+function ButtonGroup({ className, children, ...props }: ButtonGroupProps) {
+  return (
+    <div
+      className={cn(
+        "flex items-center justify-center gap-2 p-3",
+        "*:rounded-full [&_button:before]:rounded-full",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
 
 export { Button, buttonVariants, ButtonGroup };
 export type { ButtonVariant, ButtonProps };

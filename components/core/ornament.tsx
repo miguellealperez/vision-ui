@@ -294,7 +294,7 @@ const OrnamentTab = ({
     >
       <TabsTrigger value={value} asChild>
         <Button
-          className="flex w-full items-center justify-stretch rounded-full px-[10px]"
+          className="flex w-full items-center justify-stretch rounded-full px-[10px] before:rounded-full"
           onClick={handleClick}
           onMouseDown={handleOrnamentItemMouseDown}
           onMouseUp={handleOrnamentItemMouseUp}
@@ -318,7 +318,7 @@ const OrnamentTab = ({
             <Text
               size="title3"
               variant={isHovered ? "default" : variant}
-              className="line-clamp-1 w-fit min-w-[60px] truncate font-medium leading-[24px]"
+              className="line-clamp-1 w-fit min-w-[60px] truncate leading-[24px] font-medium"
             >
               {label}
             </Text>
@@ -371,6 +371,8 @@ const OrnamentContent = ({
   value,
   HeaderComponent,
   FooterComponent,
+  className,
+  rootClassName,
   ...props
 }: OrnamentContentProps) => {
   const { activeTab, contentClassName } = useOrnament();
@@ -383,7 +385,8 @@ const OrnamentContent = ({
           value={value}
           key={`ornament-content-${value}`}
           forceMount
-          className="relative order-2 flex w-full flex-col"
+          className={cn("relative order-2 flex w-full flex-col", className)}
+          data-slot="content"
         >
           {HeaderComponent &&
             (typeof HeaderComponent === "function" ? (
@@ -392,7 +395,8 @@ const OrnamentContent = ({
               HeaderComponent
             ))}
           <Window
-            className={contentClassName}
+            className={cn(contentClassName, className)}
+            rootClassName={cn("items-stretch", rootClassName)}
             scroll
             initial={WINDOW_VARIANTS.hidden}
             animate={WINDOW_VARIANTS.visible}
@@ -408,7 +412,7 @@ const OrnamentContent = ({
               transition={{
                 duration: 0.1,
               }}
-              className="absolute bottom-0 left-0 right-0 z-[41] flex items-center justify-center"
+              className="absolute right-0 bottom-0 left-0 z-[41] flex items-center justify-center"
             >
               {typeof FooterComponent === "function" ? (
                 <FooterComponent />

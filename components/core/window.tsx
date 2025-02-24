@@ -143,7 +143,7 @@ const getHighlightOpacity = (thickness: GlassThickness) => {
 };
 
 const CONSTANTS = {
-  SATURATION: 2,
+  SATURATION: 1.5,
   VAR_RADIUS: "[--radius:34px]",
   VAR_DIAMETER: "[--diameter:68px]",
 };
@@ -237,11 +237,10 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
     const localRef = useRef<HTMLDivElement>(null);
     // strip out *-h-*, h-* classes classes
     const scrollWindowRegex =
-      /-h-.*|^h-.*|^max-h-.*|^min-h-.*|^h-.*|h-.*|max-h-.*|min-h-.*/g;
+      /-h-.*|h-.*|^max-h-.*|^min-h-.*|^h-.*|h-.*|max-h-.*|min-h-.*/g;
     const scrollWindowClassesName =
       className?.match(scrollWindowRegex)?.join(" ") || "";
     const restClassesName = className?.replace(scrollWindowRegex, "") || "";
-
     // get rounded-* classes
     const roundedRegex = /rounded-.*|^rounded/g;
     const roundedClassesName = className?.match(roundedRegex)?.join(" ") || "";
