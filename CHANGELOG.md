@@ -1,5 +1,11 @@
 # vision-pro-ui
 
+## 1.3.0
+
+### Minor Changes
+
+- 13ae248: Upgrade to TailwindCSS V4
+
 ## 1.2.0
 
 ### Minor Changes
