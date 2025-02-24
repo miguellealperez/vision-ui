@@ -15,28 +15,59 @@ import { AspectRatio } from "../../../components/ui/aspect-ratio";
 import { Toolbar } from "../../../components/core/toolbar";
 import { useState } from "react";
 
-// const memories = [
-//   {
-//     alt: "Photo by Paul Earle on Unsplash",
-//     link: "https://unsplash.com/photos/mountain-dew-during-sunrise-xJ2tjuUHD9M?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash",
-//     src: mountains,
-//   },
-//   {
-//     alt: "Photo by Jp Valery on Unsplash",
-//     link: "https://unsplash.com/photos/brown-wooden-house-surrounded-by-trees-OBpOP9GVH9U?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash",
-//     src: mercantour,
-//   },
-//   {
-//     alt: "Photo by Paul Pastourmatzis on Unsplash",
-//     link: "https://unsplash.com/photos/silhouette-of-trees-covered-by-fog-KT3WlrL_bsg?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash",
-//     src: forest2,
-//   },
-//   {
-//     alt: "Photo by Sylwia Bartyzel on Unsplash",
-//     link: "https://unsplash.com/photos/mountain-covered-with-clouds-tME8s001BNQ?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash",
-//     src: mountains2,
-//   },
-// ];
+import img1 from "./unsplash/aaron-burden-unsplash.avif";
+import img2 from "./unsplash/aaron-burden-unsplash-2.avif";
+import img3 from "./unsplash/clement-m-unsplash.avif";
+import img4 from "./unsplash/damiano-baschiera-unsplash.avif";
+import img5 from "./unsplash/dominik-schroder-unsplash.avif";
+import img6 from "./unsplash/kenrick-mills-unsplash.avif";
+import img7 from "./unsplash/matthew-smith-unsplash.avif";
+import img8 from "./unsplash/shifaaz-shamoon-unsplash.avif";
+import img9 from "./unsplash/wil-stewart-unsplash.avif";
+import img10 from "./unsplash/michael-olsen-unsplash.avif";
+
+const memories = [
+  {
+    alt: "Photo by Aaron Burden on Unsplash",
+    src: img1,
+  },
+  {
+    alt: "Photo by Aaron Burden on Unsplash",
+    src: img2,
+  },
+  {
+    alt: "Photo by Clement M on Unsplash",
+    src: img3,
+  },
+  {
+    alt: "Photo by Damiano Baschiera on Unsplash",
+    src: img4,
+  },
+  {
+    alt: "Photo by Dominik Schroder on Unsplash",
+    src: img5,
+  },
+  {
+    alt: "Photo by Kenrick Mills on Unsplash",
+    src: img6,
+  },
+  {
+    alt: "Photo by Matthew Smith on Unsplash",
+    src: img7,
+  },
+  {
+    alt: "Photo by Shifaaz Shamoon on Unsplash",
+    src: img8,
+  },
+  {
+    alt: "Photo by Wil Stewart on Unsplash",
+    src: img9,
+  },
+  {
+    alt: "Photo by Michael Olsen on Unsplash",
+    src: img10,
+  },
+];
 
 const MemoriesView = () => {
   return (
@@ -67,18 +98,14 @@ const MemoriesView = () => {
           className="h-[25vw] w-full object-cover"
         />
       </div>
-      <div className="mt-1 grid grid-cols-4 gap-1">
-        {Array.from({ length: 12 }).map((_, index) => (
+      <div className="grid grid-cols-5">
+        {memories.map((memory, index) => (
           <AspectRatio ratio={1 / 1} key={`memory-${index}`}>
-            <div className="h-full w-full bg-gray-300/10" />
-
-            {/* <Image
-              src={forest}
-              alt={
-                "A small boat of fisherman in Fuvahmulah, Maldives heading out for the days work."
-              }
+            <Image
+              src={memory.src}
+              alt={memory.alt}
               className="h-full w-full object-cover"
-            /> */}
+            />
           </AspectRatio>
         ))}
       </div>

@@ -2,3 +2,8 @@ export { default as CogIcon } from "./cog";
 export { default as AppStoreIcon } from "./app-store";
 export { default as PeopleIcon } from "./people";
 export { default as EnvironmentsIcon } from "./environments";
+export { default as PhotosIcon } from "./photos";
+export { default as CollectionsIcon } from "./collections";
+export { default as PanoIcon } from "./pano";
+export { default as SearchIcon } from "./search";
+export { default as SpacialIcon } from "./spacial";

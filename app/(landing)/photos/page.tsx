@@ -6,8 +6,6 @@ import {
   OrnamentTabs,
 } from "@/components/core/ornament";
 import { MemoriesToolbar, MemoriesView } from "./memories-view";
-import { IconPhotoFilled } from "@tabler/icons-react";
-import { PencilRulerIcon, Settings } from "lucide-react";
 import { defaultWindowProps } from "../constants";
 import {
   NavigationBar,
@@ -15,32 +13,49 @@ import {
 } from "@/components/core/navigation-bar";
 import { ButtonGroup } from "@/components/core/button";
 import { HeroDropdownMenu } from "@/components/landing/hero-dropdown-menu";
+import {
+  CollectionsIcon,
+  PanoIcon,
+  PhotosIcon,
+  SearchIcon,
+  SpacialIcon,
+} from "@/components/icons";
 
 function PhotosPage() {
   return (
-    <Ornament defaultTab="memories">
+    <Ornament defaultTab="library">
       <OrnamentTabs>
         <OrnamentTab
-          icon={<IconPhotoFilled data-slot="icon" />}
-          label="Memories"
-          value="memories"
+          icon={<PhotosIcon data-slot="icon" />}
+          label="Library"
+          value="library"
         />
         <OrnamentTab
-          icon={<PencilRulerIcon className="size-6" data-slot="icon" />}
+          icon={<CollectionsIcon data-slot="icon" />}
           label="Collections"
           value="collections"
         />
         <OrnamentTab
-          icon={<Settings data-slot="icon" />}
+          icon={<SpacialIcon data-slot="icon" />}
           label="Spacial"
           value="spacial"
+        />
+        <OrnamentTab
+          icon={<PanoIcon data-slot="icon" />}
+          label="Panoramas"
+          value="panoramas"
+        />
+        <OrnamentTab
+          icon={<SearchIcon data-slot="icon" />}
+          label="Search"
+          value="search"
         />
       </OrnamentTabs>
       <OrnamentContents>
         <OrnamentContent
           {...defaultWindowProps}
-          value="memories"
-          key="memories"
+          value="library"
+          key="library"
           FooterComponent={MemoriesToolbar}
           rootClassName="[--window-controls-bottom:-80px]"
         >
@@ -66,6 +81,25 @@ function PhotosPage() {
             <ButtonGroup>
               <HeroDropdownMenu />
             </ButtonGroup>
+          </NavigationBar>
+        </OrnamentContent>
+        <OrnamentContent
+          value="panoramas"
+          key="panoramas"
+          {...defaultWindowProps}
+        >
+          <NavigationBar>
+            <div />
+            <NavigationBarTitle>Panoramas</NavigationBarTitle>
+            <ButtonGroup>
+              <HeroDropdownMenu />
+            </ButtonGroup>
+          </NavigationBar>
+        </OrnamentContent>
+        <OrnamentContent value="search" key="search" {...defaultWindowProps}>
+          <NavigationBar>
+            <div />
+            <NavigationBarTitle>Search</NavigationBarTitle>
           </NavigationBar>
         </OrnamentContent>
       </OrnamentContents>
