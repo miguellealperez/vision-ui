@@ -7,7 +7,6 @@ import React, {
   useRef,
   useState,
   ReactNode,
-  useId,
 } from "react";
 import {
   animate,
@@ -25,7 +24,7 @@ import { cn } from "@/lib/utils";
 import useWindowSize from "@/hooks/use-window-size";
 import { useIsMounted } from "@/hooks/use-is-mounted";
 import { useRouter } from "next/navigation";
-import { debugModeAtom } from "@/app/(landing)/atoms";
+import { debugModeAtom } from "@/lib/atoms";
 
 // ------------------------------------------------------------------
 // 1. CONTEXT SETUP
@@ -87,6 +86,7 @@ export interface HoneycombItem {
   icon: React.ReactNode;
   background?: React.ReactNode;
   href?: string;
+  debug?: boolean;
 }
 
 interface HoneycombLayoutProps {
@@ -220,7 +220,7 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
           ...DEBUG_CLASSNAMES,
           "outline-yellow-500",
           "after:content-[attr(data-debug)]",
-          "after:absolute after:left-0 after:top-0 after:z-40",
+          "after:absolute after:top-0 after:left-0 after:z-40",
           "after:bg-yellow-500 after:p-2 after:text-xs after:text-yellow-900",
         ],
       )}
@@ -244,7 +244,7 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
             ...DEBUG_CLASSNAMES,
             "outline-sky-500",
             "after:content-[attr(data-debug)]",
-            "after:absolute after:left-0 after:top-[2rem] after:z-[41]",
+            "after:absolute after:top-[2rem] after:left-0 after:z-[41]",
             "after:bg-sky-500 after:p-2 after:text-xs after:text-sky-950",
           ],
         )}
@@ -349,7 +349,7 @@ function PageContent({
           ...DEBUG_CLASSNAMES,
           "outline-green-500",
           "after:content-[attr(data-debug)]",
-          "after:absolute after:left-0 after:top-[-2rem]",
+          "after:absolute after:top-[-2rem] after:left-0",
           "after:bg-green-500 after:p-2 after:text-xs after:text-green-900",
         ],
       )}
@@ -362,7 +362,9 @@ function PageContent({
         }}
       >
         {pageItems.map((item, i) => {
-          // Row-col math. (Same as your original code)
+          // If debug is false and the item has debug set to true, don't render
+          if (item.debug && !debug) return null;
+          // Row-col math
           let row: number;
           let col: number;
           if (i < maxCols) {
@@ -460,7 +462,6 @@ function HoneycombCell({
     setAnimateOverwrite,
   } = useHoneycombContext();
 
-  const id = useId();
   const router = useRouter();
 
   const [isMouseDown, setIsMouseDown] = useState(false);
@@ -596,7 +597,7 @@ function HoneycombCell({
         >
           <div className="relative h-full w-full overflow-hidden rounded-full">
             {debug && (
-              <span className="absolute inset-0 flex h-full w-full items-center justify-center rounded-full bg-black/50 text-center font-mono text-xs font-light tabular-nums text-white/85">
+              <span className="absolute inset-0 flex h-full w-full items-center justify-center rounded-full bg-black/50 text-center font-mono text-xs font-light text-white/85 tabular-nums">
                 {Math.round(cellX)},{Math.round(cellY)}
                 <br />
                 row:{row} col:{col}

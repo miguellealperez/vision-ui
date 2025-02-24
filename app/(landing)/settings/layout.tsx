@@ -1,6 +1,7 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -25,6 +26,8 @@ import {
 } from "@tabler/icons-react";
 import { Window } from "@/components/core/window";
 import { defaultWindowProps } from "../constants";
+import { DebugModeSwitch } from "./debug-mode-switch";
+import { Text } from "@/components/ui/typography";
 
 const section_1 = [
   {
@@ -95,7 +98,7 @@ export default function SettingsLayout({
                         <item.icon data-slot="icon" />
                         <span
                           className={cn(
-                            "absolute left-3.5 top-2 z-[-1] size-8 rounded-full",
+                            "absolute top-2 left-3.5 z-[-1] size-8 rounded-full",
                             "bg-gradient-to-b",
                             item.gradient,
                           )}
@@ -116,7 +119,7 @@ export default function SettingsLayout({
                         <item.icon data-slot="icon" />
                         <span
                           className={cn(
-                            "absolute left-3.5 top-2 z-[-1] size-8 rounded-full",
+                            "absolute top-2 left-3.5 z-[-1] size-8 rounded-full",
                             "bg-gradient-to-b",
                             item.gradient,
                           )}
@@ -129,6 +132,16 @@ export default function SettingsLayout({
               </SidebarGroupContent>
             </SidebarGroup>
           </SidebarContent>
+          <SidebarFooter>
+            <SidebarMenu>
+              <SidebarMenuItem className="gap- flex items-center justify-between p-2">
+                <Text variant="secondary" size="callout">
+                  Debug Mode
+                </Text>
+                <DebugModeSwitch />
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarFooter>
         </Sidebar>
         <main className="relative w-full">{children}</main>
       </SidebarProvider>

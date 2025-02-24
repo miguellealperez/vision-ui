@@ -88,37 +88,20 @@ const items: HoneycombItem[] = [
     ),
     href: "https://fumadocs.vercel.app/",
   },
-  // ...Array.from({ length: 20 }, (_, i) => ({
-  //   id: `test-${i}`,
-  //   label: `Test ${i}`,
-  //   background: <div className="h-full w-full bg-[#333333]"></div>,
-  //   icon: (
-  //     <Image
-  //       src={settingsIcon}
-  //       alt="Settings"
-  //       fill
-  //       className={honeycombIconClassName}
-  //     />
-  //   ),
-  // })),
-  // {
-  //   id: "mail",
-  //   label: "Mail",
-  //   background: <div className="h-full w-full"></div>,
-  //   icon: <div className="bg-blue-500"></div>,
-  // },
-  // {
-  //   id: "messages",
-  //   label: "Messages",
-  //   background: <div className="h-full w-full"></div>,
-  //   icon: <div className="bg-blue-500"></div>,
-  // },
-  // {
-  //   id: "maps",
-  //   label: "Maps",
-  //   background: <div className="h-full w-full"></div>,
-  //   icon: <div className="bg-blue-500"></div>,
-  // },
+  ...Array.from({ length: 25 }, (_, i) => ({
+    id: `test-${i}`,
+    label: `Test ${i}`,
+    background: <div className="h-full w-full bg-[#333333]"></div>,
+    icon: (
+      <Image
+        src={settingsIcon}
+        alt="Settings"
+        fill
+        className={honeycombIconClassName}
+      />
+    ),
+    debug: true,
+  })),
 ];
 
 function HomeView() {

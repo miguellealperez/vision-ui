@@ -1,5 +1,4 @@
 import "./global.css";
-import "@/app/vision-pro-ui.css";
 
 import { RootProvider } from "fumadocs-ui/provider";
 import { Metadata } from "next";

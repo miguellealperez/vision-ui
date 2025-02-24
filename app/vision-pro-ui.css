@@ -1,10 +1,7 @@
 [data-vision-os-ui],
 [data-vision-os-ui] * {
   font-family: "SF Pro", "Inter", sans-serif;
-}
-
-[data-vision-os-ui] a {
-  display: inline-block;
+  cursor: none !important;
 }
 
 [data-vision-os-ui] .hide-scrollbar {
@@ -18,8 +15,4 @@
 [data-vision-os-ui] *::selection {
   background-color: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
-}
-
-[data-vision-os-ui] * {
-  cursor: none !important;
 }

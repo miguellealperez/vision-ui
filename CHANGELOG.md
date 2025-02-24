@@ -1,5 +1,11 @@
 # vision-pro-ui
 
+## 1.3.1
+
+### Patch Changes
+
+- Update project structure and UI components with debug mode and minor refinements
+
 ## 1.3.0
 
 ### Minor Changes
