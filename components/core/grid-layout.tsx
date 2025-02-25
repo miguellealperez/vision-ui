@@ -87,6 +87,7 @@ export interface HoneycombItem {
   background?: React.ReactNode;
   href?: string;
   debug?: boolean;
+  onClick?: () => void;
 }
 
 interface HoneycombLayoutProps {
@@ -566,6 +567,9 @@ function HoneycombCell({
       onMouseLeave={() => setIsMouseDown(false)}
       className={cn("group/cell", debug && ["outline", "outline-pink-500"])}
       onClick={() => {
+        if (item.onClick) {
+          item.onClick();
+        }
         if (item.href) {
           const href = item.href;
           setTimeout(() => {
@@ -629,7 +633,7 @@ function HoneycombCell({
 
       {/* Label */}
       <motion.div
-        className="pointer-events-none flex translate-y-0.5 items-center justify-center text-center text-xs text-white/30 transition-colors group-hover/cell:text-white/70"
+        className="text-shadow-md pointer-events-none flex translate-y-0.5 items-center justify-center text-center text-xs font-medium text-white/65 transition-colors group-hover/cell:text-white/85"
         style={{
           height: labelSize,
           width: itemSize,

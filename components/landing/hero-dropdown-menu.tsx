@@ -8,12 +8,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/core/dropdown-menu";
 import { IconBrandGithub, IconBrightnessFilled } from "@tabler/icons-react";
-import { useAtom } from "jotai";
-import { isDayAtom } from "./hero-background";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 export const HeroDropdownMenu = () => {
-  const [isDay, setIsDay] = useAtom(isDayAtom);
+  const [isDay, setIsDay] = useState(false);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="backdrop-blur-xl" size="icon">

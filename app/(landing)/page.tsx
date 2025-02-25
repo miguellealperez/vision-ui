@@ -11,6 +11,7 @@ import { AppStoreIcon, EnvironmentsIcon, PeopleIcon } from "@/components/icons";
 import { Text } from "@/components/ui/typography";
 import Link from "next/dist/client/link";
 import HomeView from "./home-view";
+import EnvironmentView from "./environment-view";
 
 export const dynamic = "force-dynamic";
 
@@ -33,7 +34,7 @@ function LandingPage() {
               Created by{" "}
               <Link
                 href="https://twitter.com/useOptimistic"
-                className="font-semibold text-fd-foreground underline"
+                className="text-fd-foreground font-semibold underline"
               >
                 Oliver
               </Link>
@@ -41,7 +42,7 @@ function LandingPage() {
               Docs powered by{" "}
               <Link
                 href="https://fumadocs.vercel.app/"
-                className="font-semibold text-fd-foreground underline"
+                className="text-fd-foreground font-semibold underline"
               >
                 Fumadocs
               </Link>
@@ -49,11 +50,7 @@ function LandingPage() {
           </div>
         </OrnamentContentBase>
         <OrnamentContentBase value="environments" key="environments">
-          <div className="text-center">
-            <Text variant="secondary" size="XLTitle2">
-              Stay tuned...
-            </Text>
-          </div>
+          <EnvironmentView />
         </OrnamentContentBase>
       </OrnamentContents>
       <OrnamentTabs>

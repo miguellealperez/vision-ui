@@ -28,45 +28,55 @@ export default function Settings() {
             {
               id: "about",
               title: "About",
+              detail: true,
             },
-            "",
+            "section1",
             {
               id: "autofill",
               title: "AutoFill & Passwords",
+              detail: true,
             },
             {
               id: "dictionary",
               title: "Dictionary",
+              detail: true,
             },
             {
               id: "fonts",
               title: "Fonts",
+              detail: true,
             },
             {
               id: "keyboard",
               title: "Keyboard",
+              detail: true,
             },
             {
               id: "language-region",
               title: "Language & Region",
+              detail: true,
             },
-            "",
+            "section2",
             {
               id: "vpns",
               title: "VPN & Device Management",
+              detail: true,
             },
-            "",
+            "section3",
             {
               id: "remote-devices",
               title: "Remote Devices",
+              detail: true,
             },
-            "",
+            "section4",
             {
               id: "transfer-or-reset",
               title: "Transfer or Reset Vision Pro",
+              detail: true,
             },
           ]}
           renderItem={renderItem}
+          sectionHeaderAsGap
           variant="insets"
         />
       </div>

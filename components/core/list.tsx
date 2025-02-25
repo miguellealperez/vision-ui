@@ -209,9 +209,11 @@ function ListItem<T extends ListDataItem>({
                   ) : (
                     rightView
                   )}
-                  {item.detail && (
-                    <ChevronRightIcon className="mr-4 size-4 opacity-50" />
-                  )}
+                </div>
+              )}
+              {item.detail && (
+                <div className="flex items-center justify-center">
+                  <ChevronRightIcon className="mr-4 size-4 opacity-50" />
                 </div>
               )}
             </div>

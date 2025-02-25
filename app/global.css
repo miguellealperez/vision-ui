@@ -124,3 +124,36 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
+
+.text-shadow-md {
+  text-shadow:
+    0 0 1px hsl(var(--background) / 0.05),
+    0 0 2px hsl(var(--background) / 0.05),
+    0 0 3px hsl(var(--background) / 0.05),
+    0 0 4px hsl(var(--background) / 0.05),
+    0 0 5px hsl(var(--background) / 0.05),
+    0 0 6px hsl(var(--background) / 0.05),
+    0 0 7px hsl(var(--background) / 0.05),
+    0 0 8px hsl(var(--background) / 0.05),
+    0 0 9px hsl(var(--background) / 0.05),
+    0 0 10px hsl(var(--background) / 0.05);
+}
+
+.text-shadow-lg {
+  text-shadow:
+    0 0 1px hsl(var(--background) / 0.1),
+    0 0 2px hsl(var(--background) / 0.1),
+    0 0 3px hsl(var(--background) / 0.1),
+    0 0 4px hsl(var(--background) / 0.1),
+    0 0 5px hsl(var(--background) / 0.1),
+    0 0 6px hsl(var(--background) / 0.1),
+    0 0 7px hsl(var(--background) / 0.1),
+    0 0 8px hsl(var(--background) / 0.1),
+    0 0 9px hsl(var(--background) / 0.1),
+    0 0 10px hsl(var(--background) / 0.1),
+    0 0 11px hsl(var(--background) / 0.1),
+    0 0 12px hsl(var(--background) / 0.1),
+    0 0 13px hsl(var(--background) / 0.1),
+    0 0 14px hsl(var(--background) / 0.1),
+    0 0 15px hsl(var(--background) / 0.1);
+}

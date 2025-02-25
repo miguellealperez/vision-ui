@@ -1,11 +1,11 @@
-import { HeroBackground } from "@/components/landing/hero-background";
 import { Cursor } from "@/components/core/cursor";
+import Environment from "@/components/environment";
 
 function LandingLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Cursor />
-      <HeroBackground>{children}</HeroBackground>
+      <Environment>{children}</Environment>
     </>
   );
 }
