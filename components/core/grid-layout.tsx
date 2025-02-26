@@ -11,6 +11,7 @@ import React, {
 import {
   animate,
   motion,
+  MotionProps,
   MotionValue,
   PanInfo,
   useMotionValue,
@@ -80,7 +81,7 @@ function HoneycombProvider({
 // 2. MAIN HONEYCOMB LAYOUT
 // ------------------------------------------------------------------
 
-export interface HoneycombItem {
+export interface HoneycombItem extends MotionProps {
   id: string;
   label: string;
   icon: React.ReactNode;
@@ -549,6 +550,7 @@ function HoneycombCell({
 
   return (
     <motion.li
+      {...item}
       style={{
         position: "absolute",
         left: cellX,

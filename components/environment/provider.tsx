@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 import React, { useEffect, useRef } from "react";
 import { Environment } from "./data";
 import { motion, AnimatePresence } from "motion/react";
+import { Text } from "../ui/typography";
+import Image from "next/image";
 
 function EnvironmentProvider({
   environment,
@@ -23,8 +25,8 @@ function EnvironmentProvider({
       className={cn(
         "h-dvh w-full",
         "relative isolate mx-auto flex items-center justify-center overflow-hidden rounded-[--tile-radius]",
-        "after:pointer-events-none after:absolute after:inset-0 after:z-[3] after:overflow-hidden after:rounded-[--tile-radius] after:bg-black/10 after:[box-shadow:inset_0_0_16px_16px_hsl(var(--background))]",
         "px-4 py-1 sm:px-8 md:px-12 lg:px-16",
+        "after:pointer-events-none after:absolute after:inset-0 after:z-[0] after:overflow-hidden after:rounded-[--tile-radius] after:[box-shadow:inset_0_0_16px_16px_hsl(var(--background))]",
       )}
       data-vision-os-ui
     >
@@ -37,13 +39,18 @@ function EnvironmentProvider({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 2 }}
-            style={{
-              backgroundImage: `url(${previousEnvironment.current?.background.src})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
-          />
+          >
+            {previousEnvironment.current?.background.src && (
+              <Image
+                src={previousEnvironment.current?.background}
+                alt={`${previousEnvironment.current?.label} background`}
+                className="size-full object-cover"
+                style={{
+                  backgroundPosition: "center 10%",
+                }}
+              />
+            )}
+          </motion.div>
         )}
 
         {/* Current background with mask effect */}
@@ -80,10 +87,66 @@ function EnvironmentProvider({
             bounce: 0,
             duration: 3.5,
           }}
-        />
+        >
+          <Image
+            src={environment.background}
+            alt={`${environment.label} background`}
+            className="size-full object-cover"
+            style={{
+              backgroundPosition: "center 10%",
+            }}
+          />
+        </motion.div>
       </AnimatePresence>
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-0 z-[0]",
+          "transition-colors duration-1000",
+          environment.brightnessOffset ?? "bg-black/10",
+        )}
+      />
 
       {children}
+
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 px-4 pb-4 text-right">
+        <a
+          href={environment.credit.url ?? "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <AnimatePresence mode="popLayout">
+            <Text
+              variant="default"
+              size="caption2"
+              key={environment.credit.name}
+              asChild
+            >
+              <motion.p
+                initial={{
+                  opacity: 0,
+                  filter: "blur(10px)",
+                }}
+                animate={{
+                  opacity: 0.6,
+                  filter: "blur(0px)",
+                  transition: {
+                    delay: 2,
+                  },
+                }}
+                exit={{ opacity: 0, filter: "blur(10px)" }}
+                whileHover={{
+                  opacity: 1,
+                  filter: "blur(0px)",
+                }}
+                className="pointer-events-auto"
+              >
+                Photo by{" "}
+                <span className="underline">{environment.credit.name}</span>
+              </motion.p>
+            </Text>
+          </AnimatePresence>
+        </a>
+      </div>
     </div>
   );
 }

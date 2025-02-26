@@ -15,6 +15,10 @@ export interface Environment {
   icon: StaticImageData;
   background: StaticImageData;
   credit: { name: string; url: string };
+  /**
+   * @example `bg-black/10`
+   */
+  brightnessOffset?: string;
 }
 
 const data: Environment[] = [
@@ -24,8 +28,8 @@ const data: Environment[] = [
     icon: homeNightIcon,
     background: homeNightBackground,
     credit: {
-      name: "Figma",
-      url: "",
+      name: "Apple - Figma",
+      url: "https://www.figma.com/community/file/1253443272911187215/apple-design-resources-visionos",
     },
   },
   {
@@ -37,6 +41,7 @@ const data: Environment[] = [
       name: "Adam Kool",
       url: "https://unsplash.com/@adamkool",
     },
+    brightnessOffset: "bg-black/20",
   },
   {
     id: "joshua-tree",
@@ -47,6 +52,7 @@ const data: Environment[] = [
       name: "Cedric Letsch",
       url: "https://unsplash.com/@cedricletsch",
     },
+    brightnessOffset: "bg-black/15",
   },
   {
     id: "haleakala",
@@ -57,6 +63,7 @@ const data: Environment[] = [
       name: "Tevin Trinh",
       url: "https://unsplash.com/@tevintrinh",
     },
+    brightnessOffset: "bg-black/20",
   },
 ];
 

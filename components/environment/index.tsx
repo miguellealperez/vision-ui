@@ -1,4 +1,4 @@
-import { getEnvironment } from "@/lib/cookie-store";
+import { getEnvironment } from "@/app/(landing)/actions";
 import data from "./data";
 import EnvironmentProvider from "./provider";
 

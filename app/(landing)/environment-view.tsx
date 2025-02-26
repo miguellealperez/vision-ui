@@ -5,7 +5,7 @@ import { HoneycombItem, HoneycombLayout } from "@/components/core/grid-layout";
 import Image from "next/image";
 
 import data from "@/components/environment/data";
-import { saveEnvironment } from "@/lib/cookie-store";
+import { saveEnvironment } from "./actions";
 
 const items: HoneycombItem[] = data.map((environment) => ({
   id: environment.id,
