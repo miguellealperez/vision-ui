@@ -1,5 +1,17 @@
 # vision-pro-ui
 
+## 1.4.0
+
+### Minor Changes
+
+- c8263d5: Added environments to Vision Pro UI
+
+### Patch Changes
+
+- e0d05cc: Improve accessibility and keyboard navigation in grid and tab components
+- e0d05cc: Enhance environment view with improved background handling and credits
+- 5cc0977: minor UI fixes
+
 ## 1.3.2
 
 ### Patch Changes
