@@ -4,32 +4,18 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/core/dropdown-menu";
-import { IconBrandGithub, IconBrightnessFilled } from "@tabler/icons-react";
-import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { IconBrandGithub } from "@tabler/icons-react";
 
 export const HeroDropdownMenu = () => {
-  const [isDay, setIsDay] = useState(false);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="backdrop-blur-xl" size="icon">
         <Ellipsis data-slot="icon" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem onClick={() => setIsDay(!isDay)}>
-          Toggle Background
-          <IconBrightnessFilled
-            data-slot="icon"
-            className={cn(
-              "!transition-all duration-300",
-              isDay ? "rotate-0" : "rotate-180",
-            )}
-          />
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator /> */}
         <a
           href="https://github.com/fluid-design-io/vision-ui"
           target="_blank"

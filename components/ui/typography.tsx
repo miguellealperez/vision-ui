@@ -7,18 +7,18 @@ const baseStyle = "transition-all duration-500";
 
 export const textStyles = {
   default: {
-    bottom: cn(baseStyle, "text-[#232323] opacity-10 mix-blend-color-dodge"),
+    // bottom: cn(baseStyle, "text-[#232323] opacity-10 mix-blend-color-dodge"),
     top: cn(baseStyle, "text-white opacity-95"),
   },
   secondary: {
-    bottom: cn(baseStyle, "text-[#232323] mix-blend-color-dodge opacity-100"),
-    top: cn(baseStyle, "text-white opacity-55 mix-blend-lighten"),
+    // bottom: cn(baseStyle, "text-[#232323] mix-blend-color-dodge opacity-100"),
+    top: cn(baseStyle, "text-white opacity-55"),
   },
   tertiary: {
-    bottom: cn(
-      baseStyle,
-      "text-[#5E5E5E] mix-blend-color-dodge opacity-[0.21]",
-    ),
+    // bottom: cn(
+    //   baseStyle,
+    //   "text-[#5E5E5E] mix-blend-color-dodge opacity-[0.21]",
+    // ),
     top: cn(baseStyle, "text-white opacity-[0.31]"),
   },
 };
@@ -61,28 +61,38 @@ export interface TextProps
 const Text = React.forwardRef<HTMLParagraphElement, TextProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "p";
-
     return (
-      <div className="relative">
-        <Comp
-          className={cn(
-            "absolute inset-0 m-0",
-            textVariants({ variant, size, className }),
-            textStyles[variant ?? "default"].bottom,
-          )}
-          ref={ref}
-          {...props}
-        />
-        <Comp
-          className={cn(
-            textVariants({ variant, size, className }),
-            textStyles[variant ?? "default"].top,
-          )}
-          ref={ref}
-          {...props}
-        />
-      </div>
+      <Comp
+        className={cn(
+          textVariants({ variant, size, className }),
+          textStyles[variant ?? "default"].top,
+        )}
+        ref={ref}
+        {...props}
+      />
     );
+    // TODO: Fix mix blend mode in different z indexes
+    // return (
+    //   <div className="relative">
+    //     <Comp
+    //       className={cn(
+    //         "absolute inset-0 m-0",
+    //         textVariants({ variant, size, className }),
+    //         textStyles[variant ?? "default"].bottom,
+    //       )}
+    //       ref={ref}
+    //       {...props}
+    //     />
+    //     <Comp
+    //       className={cn(
+    //         textVariants({ variant, size, className }),
+    //         textStyles[variant ?? "default"].top,
+    //       )}
+    //       ref={ref}
+    //       {...props}
+    //     />
+    //   </div>
+    // );
   },
 );
 

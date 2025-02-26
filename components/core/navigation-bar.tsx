@@ -71,7 +71,7 @@ const NavigationBar = ({
       <motion.div
         // TODO: Alternative variable blur effect: https://codepen.io/silas/pen/rNYqZoz
         className={cn(
-          "pointer-events-none absolute inset-[-4px] bg-black/10 backdrop-blur",
+          "pointer-events-none absolute inset-[-4px] backdrop-blur",
           "[mask:linear-gradient(black,black_var(--navigation-bar-mask-height,64px),transparent)]",
         )}
         style={{

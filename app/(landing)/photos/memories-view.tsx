@@ -98,7 +98,7 @@ const MemoriesView = () => {
           className="h-[25vw] w-full object-cover"
         />
       </div>
-      <div className="grid grid-cols-5">
+      <div className="mb-36 grid grid-cols-5">
         {memories.map((memory, index) => (
           <AspectRatio ratio={1 / 1} key={`memory-${index}`}>
             <Image

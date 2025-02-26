@@ -12,7 +12,7 @@ function EnvironmentProvider({
   environment: Environment;
   children: React.ReactNode;
 }) {
-  const previousEnvironment = useRef<Environment | null>(null);
+  const previousEnvironment = useRef<Environment | null>(environment);
 
   useEffect(() => {
     previousEnvironment.current = environment;
