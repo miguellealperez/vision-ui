@@ -18,6 +18,23 @@ export const dynamic = "force-dynamic";
 function LandingPage() {
   return (
     <Ornament defaultTab="apps">
+      <OrnamentTabs>
+        <OrnamentTab
+          icon={<AppStoreIcon className="size-6" data-slot="icon" />}
+          label="Apps"
+          value="apps"
+        />
+        <OrnamentTab
+          icon={<PeopleIcon className="size-6" data-slot="icon" />}
+          label="People"
+          value="people"
+        />
+        <OrnamentTab
+          icon={<EnvironmentsIcon className="size-6" data-slot="icon" />}
+          label="Environments"
+          value="environments"
+        />
+      </OrnamentTabs>
       <OrnamentContents>
         <OrnamentContentBase value="apps" key="apps">
           <HomeView />
@@ -53,23 +70,6 @@ function LandingPage() {
           <EnvironmentView />
         </OrnamentContentBase>
       </OrnamentContents>
-      <OrnamentTabs>
-        <OrnamentTab
-          icon={<AppStoreIcon className="size-6" data-slot="icon" />}
-          label="Apps"
-          value="apps"
-        />
-        <OrnamentTab
-          icon={<PeopleIcon className="size-6" data-slot="icon" />}
-          label="People"
-          value="people"
-        />
-        <OrnamentTab
-          icon={<EnvironmentsIcon className="size-6" data-slot="icon" />}
-          label="Environments"
-          value="environments"
-        />
-      </OrnamentTabs>
     </Ornament>
   );
 }

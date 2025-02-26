@@ -3,7 +3,13 @@
 import { cn } from "@/lib/utils";
 import { HTMLMotionProps, motion, MotionValue } from "motion/react";
 import { useScroll } from "motion/react";
-import React, { RefObject, useId, useImperativeHandle, useRef } from "react";
+import React, {
+  RefObject,
+  useId,
+  useImperativeHandle,
+  useRef,
+  useEffect,
+} from "react";
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
 import { ScrollBar } from "@/components/ui/scroll-area";
 import { useResizeObserver } from "@/hooks/use-resize-observer";
@@ -255,6 +261,9 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
       ref: localRef as RefObject<HTMLDivElement>,
     });
 
+    // Extract role and aria-label from props if provided
+    const { role, "aria-label": ariaLabel, ...restProps } = props;
+
     return (
       <WindowContext.Provider value={{ scrollY, width, height, windowId }}>
         <motion.div
@@ -267,7 +276,8 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
           <motion.div
             className={cn(
               "relative overflow-hidden",
-              "before:absolute before:inset-0 before:z-[-1] before:rounded-[var(--radius)] before:bg-[#808080] before:bg-opacity-30",
+              "before:absolute before:inset-0 before:z-[-1] before:rounded-[var(--radius)]",
+              "before:bg-[#80808030]",
               "min-h-[64px] min-w-[64px]",
               CONSTANTS.VAR_DIAMETER,
               CONSTANTS.VAR_RADIUS,
@@ -286,7 +296,9 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
               borderRadius: `var(--radius)`,
               ...style,
             }}
-            {...props}
+            role={role || "region"}
+            aria-label={ariaLabel || "Window content"}
+            {...restProps}
           >
             {/* HIGHLIGHTRINGS */}
             <motion.div
@@ -296,7 +308,7 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
                 borderRadius: `var(--radius)`,
                 top: 0,
               }}
-              aria-hidden
+              aria-hidden="true"
             />
             <motion.div
               className={cn(
@@ -325,6 +337,9 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
             {scroll ? (
               <ScrollAreaPrimitive.Root
                 className={cn("relative", scrollWindowClassesName)}
+                aria-label={
+                  ariaLabel ? `Scrollable ${ariaLabel}` : "Scrollable content"
+                }
               >
                 <ScrollAreaPrimitive.Viewport
                   className={cn(
@@ -337,6 +352,7 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
                     },
                   )}
                   ref={localRef}
+                  tabIndex={0}
                 >
                   {children}
                 </ScrollAreaPrimitive.Viewport>
@@ -362,20 +378,49 @@ Window.displayName = "Window";
 
 const WindowControls = ({ href }: { href?: string }) => {
   const router = useRouter();
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  // Handle Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (document.activeElement === buttonRef.current) {
+          // If button is already focused, trigger the action
+          href ? router.push(href) : router.back();
+        } else {
+          // Focus the button on first Escape press
+          buttonRef.current?.focus();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [href, router]);
+
   return (
     <motion.div
-      className="group/controls absolute inset-x-0 bottom-[var(--window-controls-bottom,-37px)] z-50 mx-auto inline-flex h-[37px] w-[212px] shrink-0 items-center justify-start gap-4 pb-px pr-[28px] pt-[22px]"
+      className="group/controls absolute inset-x-0 bottom-[var(--window-controls-bottom,-37px)] z-50 mx-auto inline-flex h-[37px] w-[212px] shrink-0 items-center justify-start gap-4 pt-[22px] pr-[28px] pb-px"
       layout
       layoutId="navigation-bar"
+      role="toolbar"
+      aria-label="Window controls"
     >
       <button
+        ref={buttonRef}
         onClick={() => (href ? router.push(href) : router.back())}
         className={cn(
           "h-[37px] w-[37px]",
           "group/close-btn",
           "peer/close-btn",
           "flex items-center justify-center",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+          "rounded-full",
         )}
+        aria-label="Close window"
+        title={href ? "Navigate to previous page" : "Go back"}
       >
         <span
           className={cn(
@@ -385,9 +430,10 @@ const WindowControls = ({ href }: { href?: string }) => {
             "flex items-center justify-center",
             "group-hover/close-btn:size-6 group-hover/close-btn:bg-white/100",
             "group-active/close-btn:size-4 group-active/close-btn:bg-white/100",
+            "group-focus-visible/close-btn:size-6 group-focus-visible/close-btn:bg-white/100",
           )}
         >
-          <XIcon className="size-3.5 text-[#333] opacity-0 group-hover/close-btn:size-3 group-hover/close-btn:opacity-100" />
+          <XIcon className="size-3.5 text-[#333] opacity-0 group-hover/close-btn:size-3 group-hover/close-btn:opacity-100 group-focus-visible/close-btn:size-3 group-focus-visible/close-btn:opacity-100" />
         </span>
       </button>
       <div
@@ -395,7 +441,9 @@ const WindowControls = ({ href }: { href?: string }) => {
           "relative h-3.5 w-[136px] rounded-[100px] bg-white/30 backdrop-blur-[20px]",
           "transition-all duration-300",
           "peer-hover/close-btn:ml-[10px] peer-hover/close-btn:w-[126px] peer-hover/close-btn:bg-white/50",
+          "peer-focus-visible/close-btn:ml-[10px] peer-focus-visible/close-btn:w-[126px] peer-focus-visible/close-btn:bg-white/50",
         )}
+        aria-hidden="true"
       ></div>
     </motion.div>
   );

@@ -193,7 +193,13 @@ const Ornament = ({
           "max-w-3xl xl:max-w-4xl 2xl:max-w-6xl",
           className,
         )}
+        defaultValue={defaultTab}
+        aria-label="Navigation and content panels"
       >
+        <div className="sr-only">
+          This navigation menu expands when focused. Use tab key to navigate
+          between tabs.
+        </div>
         {children}
       </Tabs>
     </OrnamentContext.Provider>
@@ -231,6 +237,7 @@ const OrnamentTabs = ({
         opacity: 0,
       }}
       transition={CONSTANTS.ORNAMENT_TRANSITION_CONFIG}
+      aria-label="Navigation tabs"
     >
       <TabsList asChild>
         <motion.div
@@ -279,6 +286,13 @@ const OrnamentTab = ({
     onClick?.();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
   const isActive = activeTab === value;
   const variant = isHovered ? "default" : isActive ? "default" : "secondary";
 
@@ -294,6 +308,7 @@ const OrnamentTab = ({
     >
       <TabsTrigger value={value} asChild>
         <Button
+          id={`ornament-tab-${value}`}
           className="flex w-full items-center justify-stretch rounded-full px-[10px] before:rounded-full"
           onClick={handleClick}
           onMouseDown={handleOrnamentItemMouseDown}
@@ -302,9 +317,14 @@ const OrnamentTab = ({
           onBlur={handleOrnamentItemBlur}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          onKeyDown={handleKeyDown}
           variant={variant}
+          aria-expanded={isExpanded}
         >
-          <div className="relative mr-4 flex-shrink-0 [&_[data-slot='icon']]:size-6">
+          <div
+            className="relative mr-4 flex-shrink-0 [&_[data-slot='icon']]:size-6"
+            aria-hidden="true"
+          >
             {icon}
           </div>
           <motion.span
@@ -389,6 +409,8 @@ const OrnamentContent = ({
           forceMount
           className={cn("relative order-2 flex w-full flex-col", className)}
           data-slot="content"
+          id={`ornament-content-${value}`}
+          tabIndex={-1}
         >
           {HeaderComponent &&
             (typeof HeaderComponent === "function" ? (
@@ -452,6 +474,7 @@ const OrnamentContentBase = ({
           forceMount
           className="order-2 flex w-full flex-col"
           asChild
+          tabIndex={-1}
         >
           <motion.div
             className={cn(className, contentClassName)}

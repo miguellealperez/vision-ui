@@ -232,6 +232,8 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
           "after:bg-yellow-500 after:p-2 after:text-xs after:text-yellow-900",
         ],
       )}
+      role="region"
+      aria-label="Interactive grid layout"
     >
       <motion.div
         ref={innerRef}
@@ -261,6 +263,7 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
           touchAction: "none",
           userSelect: "none",
         }}
+        aria-roledescription="Draggable grid"
       >
         <HoneycombProvider value={providerValue}>
           {pages.map((pageItems, pageIndex) => {
@@ -276,6 +279,12 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
           })}
         </HoneycombProvider>
       </motion.div>
+      {pages.length > 1 && (
+        <div className="sr-only">
+          This grid can be navigated by dragging left or right. Use tab key to
+          navigate between items.
+        </div>
+      )}
     </div>
   );
 }
@@ -319,7 +328,7 @@ function PageContent({
 
   // We figure out how many columns we can have by seeing how many fits into a single page
   // For consistency, we re-derive it from (pageWidth - PAGE_GUTTER) / (itemSize+gutter) or so.
-  // Or you might pass `maxCols` in context if that’s simpler.
+  // Or you might pass `maxCols` in context if that's simpler.
   // For brevity, let's just guess 4 columns from the original logic:
   const maxCols = Math.min(
     Math.floor((pageWidth - 96) / (itemSize + gutter)),
@@ -361,6 +370,8 @@ function PageContent({
           "after:bg-green-500 after:p-2 after:text-xs after:text-green-900",
         ],
       )}
+      role="group"
+      aria-label={`Page ${pageIndex + 1}`}
     >
       <motion.ul
         style={{
@@ -368,6 +379,7 @@ function PageContent({
           width: "100%",
           height: "100%",
         }}
+        aria-label={`Grid items on page ${pageIndex + 1}`}
       >
         {pageItems.map((item, i) => {
           // Row-col math
@@ -422,6 +434,13 @@ const tapVariants = {
       mass: 0.1,
     },
   },
+  focus: {
+    scale: 1.08,
+    transition: {
+      type: "spring",
+      bounce: 0,
+    },
+  },
 };
 
 const cellXclassName = {
@@ -448,6 +467,7 @@ function HoneycombCell({
   col,
   maxCols,
   pageOffset,
+  index,
 }: {
   item: HoneycombItem;
   row: number;
@@ -471,6 +491,8 @@ function HoneycombCell({
   const router = useRouter();
 
   const [isMouseDown, setIsMouseDown] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const cellRef = useRef<HTMLLIElement>(null);
 
   // Some geometry
   const halfOffset = (itemSize + gutter) / 2;
@@ -544,12 +566,106 @@ function HoneycombCell({
         duration: 0.5,
       },
     },
+    focused: {
+      x: 0,
+      y: 0,
+      filter: "blur(0px)",
+      scale: 1.02,
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut",
+      },
+    },
   };
 
   const isOnFirstPage = pageOffset === 0;
 
+  const handleClick = () => {
+    if (item.onClick) {
+      item.onClick();
+    }
+    if (item.href) {
+      const href = item.href;
+      setTimeout(() => {
+        setAnimateOverwrite(true);
+        router.push(href, {
+          scroll: false,
+        });
+      }, 200);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleClick();
+    }
+
+    // Arrow key navigation
+    const gridItems = Array.from(
+      document.querySelectorAll('[role="button"][tabindex="0"]'),
+    );
+    const currentIndex = gridItems.findIndex(
+      (item) => item === cellRef.current,
+    );
+
+    let nextItem: HTMLElement | null = null;
+
+    switch (e.key) {
+      case "ArrowRight":
+        if (currentIndex < gridItems.length - 1) {
+          nextItem = gridItems[currentIndex + 1] as HTMLElement;
+        }
+        break;
+      case "ArrowLeft":
+        if (currentIndex > 0) {
+          nextItem = gridItems[currentIndex - 1] as HTMLElement;
+        }
+        break;
+      case "ArrowDown":
+        // Try to find an item in the next row (approximately maxCols away)
+        if (currentIndex + maxCols < gridItems.length) {
+          nextItem = gridItems[currentIndex + maxCols] as HTMLElement;
+        }
+        break;
+      case "ArrowUp":
+        // Try to find an item in the previous row
+        if (currentIndex - maxCols >= 0) {
+          nextItem = gridItems[currentIndex - maxCols] as HTMLElement;
+        }
+        break;
+    }
+
+    if (nextItem) {
+      e.preventDefault();
+      nextItem.focus();
+    }
+  };
+
+  // A pulse animation for the focus ring
+  const pulseAnimation = {
+    initial: { scale: 0.95, opacity: 0 },
+    animate: {
+      scale: [0.98, 1.02, 0.98],
+      opacity: 1,
+      transition: {
+        scale: {
+          repeat: Infinity,
+          duration: 2.5,
+          ease: "easeInOut",
+        },
+        opacity: {
+          duration: 0.3,
+        },
+      },
+    },
+    exit: { scale: 0.95, opacity: 0, transition: { duration: 0.2 } },
+  };
+
   return (
     <motion.li
+      ref={cellRef}
       {...item}
       style={{
         position: "absolute",
@@ -558,30 +674,32 @@ function HoneycombCell({
         x: row === 1 ? middleRowParallax : 0,
         scale,
       }}
-      initial={isOnFirstPage ? "initialFirstPage" : "initialOtherPages"}
       animate={
-        animateOverwrite ? "zoomOut" : isOnFirstPage ? "animate" : undefined
+        isFocused
+          ? "focused"
+          : animateOverwrite
+            ? "zoomOut"
+            : isOnFirstPage
+              ? "animate"
+              : undefined
       }
+      initial={isOnFirstPage ? "initialFirstPage" : "initialOtherPages"}
       exit="exit"
       variants={wrapperVariants}
       onMouseDown={() => setIsMouseDown(true)}
       onMouseUp={() => setIsMouseDown(false)}
       onMouseLeave={() => setIsMouseDown(false)}
-      className={cn("group/cell", debug && ["outline", "outline-pink-500"])}
-      onClick={() => {
-        if (item.onClick) {
-          item.onClick();
-        }
-        if (item.href) {
-          const href = item.href;
-          setTimeout(() => {
-            setAnimateOverwrite(true);
-            router.push(href, {
-              scroll: false,
-            });
-          }, 200);
-        }
-      }}
+      className={cn(
+        "group/cell outline-none",
+        debug && ["outline", "outline-pink-500"],
+      )}
+      onClick={handleClick}
+      tabIndex={0}
+      role="button"
+      aria-label={item.label}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      onKeyDown={handleKeyDown}
     >
       {/* Icon bubble */}
       <motion.div
@@ -590,19 +708,40 @@ function HoneycombCell({
         whileHover={isMouseDown ? undefined : "hover"}
         transition={tapVariants.hover.transition}
         className={cn(
-          "group/icon",
+          "group/icon relative",
           cellXclassName[orderX.toString() as keyof typeof cellXclassName],
           cellYclassName[orderY.toString() as keyof typeof cellYclassName],
         )}
       >
+        {/* iOS-style focus ring */}
+        <motion.div
+          className={cn(
+            "absolute inset-[-8px] rounded-full",
+            "bg-gradient-to-t from-white/25 to-white/5",
+            "shadow-[0_0_18px_6px_rgba(255,255,255,0.32)]",
+            "z-10",
+          )}
+          initial="initial"
+          animate={isFocused ? "animate" : "initial"}
+          exit="exit"
+          variants={pulseAnimation}
+          aria-hidden="true"
+        />
         <Window
-          className="rounded-full backdrop-blur [--diameter:96px] [--radius:48px] before:rounded-full"
+          className={cn(
+            "rounded-full backdrop-blur [--diameter:96px] [--radius:48px] before:rounded-full",
+            isFocused &&
+              "ring-1 ring-white/50 ring-offset-1 ring-offset-transparent",
+          )}
           thickness="none"
           style={{
             width: itemSize,
             height: itemSize,
             opacity,
             filter,
+            position: "relative",
+            zIndex: 20,
+            transition: "all 0.3s ease-out",
           }}
         >
           <div className="relative h-full w-full overflow-hidden rounded-full">
@@ -612,6 +751,7 @@ function HoneycombCell({
                 <br />
                 row:{row} col:{col}
                 {isMouseDown ? " 👆" : ""}
+                {isFocused ? " 🔍" : ""}
               </span>
             )}
             {item.background && (
@@ -619,15 +759,23 @@ function HoneycombCell({
                 {item.background}
                 <div
                   className={cn(
-                    "absolute inset-0 z-10 bg-white/5 opacity-0 transition-opacity",
+                    "absolute inset-0 z-10 bg-white/10 opacity-0 transition-opacity duration-300",
                     "bg-blend-overlay",
                     "group-hover/cell:opacity-100",
+                    isFocused ? "opacity-100" : "",
                   )}
                 />
               </div>
             )}
             {item.icon && (
-              <div className="absolute inset-0 z-[11]">{item.icon}</div>
+              <div
+                className={cn(
+                  "absolute inset-0 z-[11] transition-all duration-300",
+                  isFocused && "scale-105 brightness-110",
+                )}
+              >
+                {item.icon}
+              </div>
             )}
           </div>
         </Window>
@@ -635,7 +783,10 @@ function HoneycombCell({
 
       {/* Label */}
       <motion.div
-        className="text-shadow-md pointer-events-none flex translate-y-0.5 items-center justify-center text-center text-xs font-medium text-white/65 transition-colors group-hover/cell:text-white/85"
+        className={cn(
+          "text-shadow-md pointer-events-none flex translate-y-0.5 items-center justify-center text-center text-xs font-medium text-white/65 transition-all duration-300 group-hover/cell:text-white/85",
+          isFocused ? "translate-y-1 font-semibold text-white" : "",
+        )}
         style={{
           height: labelSize,
           width: itemSize,
@@ -655,5 +806,7 @@ function HoneycombCell({
 export const honeycombIconClassName = cn(
   "object-contain p-3 transition-all duration-300 pointer-events-none touch-none",
   "translate-y-0 translate-x-0 group-hover/cell:!translate-y-[var(--cell-y,-1px)] group-hover/cell:!translate-x-[var(--cell-x,-1px)]",
+  "group-focus-visible/cell:!translate-y-[var(--cell-y,-1px)] group-focus-visible/cell:!translate-x-[var(--cell-x,-1px)]",
   "[filter:drop-shadow(0px_0px_1px_rgba(12,12,12,0))] group-hover/cell:[filter:drop-shadow(calc(var(--cell-x,-1px)*-1.5)_calc(var(--cell-y,-1px)*-1.5)_1px_rgba(0,0,0,0.33))]",
+  "group-focus-visible/cell:[filter:drop-shadow(calc(var(--cell-x,-1px)*-1.5)_calc(var(--cell-y,-1px)*-1.5)_1px_rgba(0,0,0,0.33))]",
 );
