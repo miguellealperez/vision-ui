@@ -473,8 +473,8 @@ const OrnamentContentBase = ({
           key={`ornament-content-${value}-active`}
           forceMount
           className="order-2 flex w-full flex-col"
-          asChild
           tabIndex={-1}
+          asChild
         >
           <motion.div
             className={cn(className, contentClassName)}
