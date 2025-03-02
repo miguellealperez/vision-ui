@@ -28,6 +28,8 @@ import { Window } from "@/components/core/window";
 import { defaultWindowProps } from "../constants";
 import { DebugModeSwitch } from "./debug-mode-switch";
 import { Text } from "@/components/ui/typography";
+import { WithDialogEffect } from "@/components/core/dialog";
+import { Dialog } from "@/components/core/dialog";
 
 const section_1 = [
   {
@@ -79,72 +81,77 @@ export default function SettingsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Window {...defaultWindowProps}>
-      <SidebarProvider>
-        <Sidebar>
-          <SidebarHeader>
-            <SidebarInput placeholder="Search" />
-          </SidebarHeader>
-          <SidebarContent>
-            <SidebarGroup>
-              <SidebarGroupContent>
+    <Dialog>
+      {/* Wrap the content that should scale down when dialog opens */}
+      <WithDialogEffect>
+        <Window {...defaultWindowProps}>
+          <SidebarProvider>
+            <Sidebar>
+              <SidebarHeader>
+                <SidebarInput placeholder="Search" />
+              </SidebarHeader>
+              <SidebarContent>
+                <SidebarGroup>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      {section_1.map((item) => (
+                        <SidebarMenuItem key={item.title}>
+                          <SidebarMenuButton
+                            className="gap-4 px-[22px] [&_[data-slot='icon']]:opacity-75"
+                            isActive={item.isActive}
+                          >
+                            <item.icon data-slot="icon" />
+                            <span
+                              className={cn(
+                                "absolute top-2 left-3.5 z-[-1] size-10 rounded-full",
+                                "bg-gradient-to-b",
+                                item.gradient,
+                              )}
+                            />
+                            <span>{item.title}</span>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+                <SidebarGroup className="pt-0">
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      {section_2.map((item) => (
+                        <SidebarMenuItem key={item.title}>
+                          <SidebarMenuButton className="gap-4 px-[22px] [&_[data-slot='icon']]:opacity-75">
+                            <item.icon data-slot="icon" />
+                            <span
+                              className={cn(
+                                "absolute top-2 left-3.5 z-[-1] size-10 rounded-full",
+                                "bg-gradient-to-b",
+                                item.gradient,
+                              )}
+                            />
+                            <span>{item.title}</span>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+              </SidebarContent>
+              <SidebarFooter>
                 <SidebarMenu>
-                  {section_1.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton
-                        className="gap-4 px-[22px] [&_[data-slot='icon']]:opacity-75"
-                        isActive={item.isActive}
-                      >
-                        <item.icon data-slot="icon" />
-                        <span
-                          className={cn(
-                            "absolute top-2 left-3.5 z-[-1] size-10 rounded-full",
-                            "bg-gradient-to-b",
-                            item.gradient,
-                          )}
-                        />
-                        <span>{item.title}</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
+                  <SidebarMenuItem className="gap- flex items-center justify-between p-2">
+                    <Text variant="secondary" size="callout">
+                      Debug Mode
+                    </Text>
+                    <DebugModeSwitch />
+                  </SidebarMenuItem>
                 </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-            <SidebarGroup className="pt-0">
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {section_2.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton className="gap-4 px-[22px] [&_[data-slot='icon']]:opacity-75">
-                        <item.icon data-slot="icon" />
-                        <span
-                          className={cn(
-                            "absolute top-2 left-3.5 z-[-1] size-10 rounded-full",
-                            "bg-gradient-to-b",
-                            item.gradient,
-                          )}
-                        />
-                        <span>{item.title}</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </SidebarContent>
-          <SidebarFooter>
-            <SidebarMenu>
-              <SidebarMenuItem className="gap- flex items-center justify-between p-2">
-                <Text variant="secondary" size="callout">
-                  Debug Mode
-                </Text>
-                <DebugModeSwitch />
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarFooter>
-        </Sidebar>
-        <main className="relative w-full">{children}</main>
-      </SidebarProvider>
-    </Window>
+              </SidebarFooter>
+            </Sidebar>
+            <main className="relative w-full">{children}</main>
+          </SidebarProvider>
+        </Window>
+      </WithDialogEffect>
+    </Dialog>
   );
 }

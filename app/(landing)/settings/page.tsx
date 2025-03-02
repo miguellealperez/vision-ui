@@ -1,3 +1,6 @@
+"use client";
+
+import ExampleDialog from "./example-dialog";
 import {
   List,
   ListItem,
@@ -14,8 +17,6 @@ import { SidebarTrigger } from "@/components/core/sidebar";
 export const dynamic = "force-dynamic";
 
 export default function Settings() {
-  //* Artifical delay
-  // await new Promise((resolve) => setTimeout(resolve, 600));
   return (
     <>
       <NavigationBar size="sm" className="sticky rounded-tl-none px-3.5">
@@ -80,6 +81,9 @@ export default function Settings() {
           variant="insets"
         />
       </div>
+
+      {/* Dialog example is now integrated in the list above */}
+      <ExampleDialog />
     </>
   );
 }
