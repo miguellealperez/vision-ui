@@ -1,5 +1,16 @@
 # vision-pro-ui
 
+## 1.5.0
+
+### Minor Changes
+
+- ec9d0c7: Add dialog component
+
+### Patch Changes
+
+- made cursor lighter
+- 0e99163: Update dependencies and add React Scan script for performance optimization
+
 ## 1.4.0
 
 ### Minor Changes

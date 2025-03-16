@@ -16,7 +16,7 @@ const CONSTANTS = {
   TEXT_ELEMENT_TAGS: ["P", "SPAN", "H1", "H2", "H3", "H4", "TEXTAREA"],
   HOVER_ELEMENT_TAGS: ["BUTTON", "A", "LABEL", "SELECT"],
   HOVERABLE_CLASSNAME: "vision-pro-ui-hoverable", // No translate X or Y
-  CURSOR_SPRING_CONFIG: { stiffness: 90, damping: 8, mass: 0.02 },
+  CURSOR_SPRING_CONFIG: { stiffness: 90, damping: 2, mass: 0.01 },
   DEFAULT_SPRING_CONFIG: { stiffness: 90, damping: 8, mass: 0.2 },
   CLICK_SPRING_CONFIG: { duration: 0.12 },
   DEFAULT_CURSOR_SIZE: 20,
