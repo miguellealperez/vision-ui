@@ -1,5 +1,11 @@
 # vision-pro-ui
 
+## 1.5.1
+
+### Patch Changes
+
+- 11bfd07: use react scan package instead of script tag
+
 ## 1.5.0
 
 ### Minor Changes
