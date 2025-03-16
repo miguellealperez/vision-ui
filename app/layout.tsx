@@ -4,6 +4,7 @@ import { RootProvider } from "fumadocs-ui/provider";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
+import ReactScan from "./(landing)/react-scan";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,9 +19,7 @@ export const metadata = {
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
-      <head>
-        <script src="https://unpkg.com/react-scan/dist/auto.global.js" />
-      </head>
+      <ReactScan />
       <body
         style={{
           display: "flex",
