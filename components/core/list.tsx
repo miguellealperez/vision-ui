@@ -139,7 +139,6 @@ type ListItemProps<T extends ListDataItem> = {
 
 function ListItem<T extends ListDataItem>({
   item,
-  index,
   variant,
   className,
   titleClassName,
@@ -147,14 +146,11 @@ function ListItem<T extends ListDataItem>({
   subTitleStyle,
   subTitleClassName,
   textContentClassName,
-  sectionHeaderAsGap,
-  removeSeparator = false,
   leftView,
   rightView,
   onClick,
   isFirstInSection,
   isLastInSection,
-  // Note: Remove the rest parameter to avoid spreading unwanted props
 }: ListItemProps<T>) {
   if (typeof item === "string") {
     console.warn(

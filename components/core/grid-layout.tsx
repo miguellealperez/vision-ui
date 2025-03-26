@@ -13,7 +13,6 @@ import {
   motion,
   MotionProps,
   MotionValue,
-  PanInfo,
   useMotionValue,
   useMotionValueEvent,
   useTransform,
@@ -182,7 +181,7 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
     }
   });
 
-  function onDragEnd(_event: any, info: PanInfo) {
+  function onDragEnd() {
     const currentX = x.get();
     const rawPageIndex = -currentX / pageWidth;
     const nearestPage = Math.round(rawPageIndex);
@@ -400,7 +399,6 @@ function PageContent({
             <HoneycombCell
               key={item.id}
               item={item}
-              index={i}
               row={row}
               col={col}
               maxCols={maxCols}
@@ -467,14 +465,12 @@ function HoneycombCell({
   col,
   maxCols,
   pageOffset,
-  index,
 }: {
   item: HoneycombItem;
   row: number;
   col: number;
   maxCols: number;
   pageOffset: number;
-  index: number;
 }) {
   const {
     debug,
@@ -496,7 +492,7 @@ function HoneycombCell({
 
   // Some geometry
   const halfOffset = (itemSize + gutter) / 2;
-  let cellX =
+  const cellX =
     row === 1
       ? col * (itemSize + gutter)
       : halfOffset + col * (itemSize + gutter);

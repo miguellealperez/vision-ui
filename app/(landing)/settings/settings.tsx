@@ -10,13 +10,6 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/core/sidebar";
-import View from "@/components/core/view";
-import {
-  ListDataItem,
-  ListItem,
-  ListRenderItemProps,
-  ListSectionHeader,
-} from "@/components/core/list";
 
 import {
   AppStoreIcon,
@@ -95,7 +88,7 @@ function SettingsView({ children }: { children: React.ReactNode }) {
                       <item.icon data-slot="icon" />
                       <span
                         className={cn(
-                          "absolute left-3.5 top-2 z-[-1] size-8 rounded-full",
+                          "absolute top-2 left-3.5 z-[-1] size-8 rounded-full",
                           "bg-gradient-to-b",
                           item.gradient,
                         )}
@@ -116,7 +109,7 @@ function SettingsView({ children }: { children: React.ReactNode }) {
                       <item.icon data-slot="icon" />
                       <span
                         className={cn(
-                          "absolute left-3.5 top-2 z-[-1] size-8 rounded-full",
+                          "absolute top-2 left-3.5 z-[-1] size-8 rounded-full",
                           "bg-gradient-to-b",
                           item.gradient,
                         )}
@@ -132,89 +125,6 @@ function SettingsView({ children }: { children: React.ReactNode }) {
       </Sidebar>
       <main className={cn("relative flex-1")}>{children}</main>
     </SidebarProvider>
-  );
-  /*  return (
-    <>
-      <div className="flex h-full w-full flex-1">
-        <Sidebar
-          header={
-            <SidebarHeader>
-              <Input placeholder="Search" />
-            </SidebarHeader>
-          }
-        >
-          <div className="mb-8">
-            <ListScreen />
-          </div>
-        </Sidebar>
-        <div className="relative flex-1">
-          <NavigationBar>
-            <NavigationBarTitle variant="center">Account</NavigationBarTitle>
-          </NavigationBar>
-          <div className="mt-24 flex flex-col items-center gap-2">
-            <View className="size-24 rounded-full md:size-32" />
-            <Text size="title1">John Doe</Text>
-            <Text variant="tertiary" size="caption1">
-              john.doe@example.com
-            </Text>
-          </div>
-          <div className="mx-auto my-8 w-full max-w-xl">
-            <List
-              data={[
-                {
-                  id: "1",
-                  title: "Personal Information",
-                },
-                {
-                  id: "2",
-                  title: "Sign-in & Security",
-                },
-                {
-                  id: "3",
-                  title: "Payment & Shipping",
-                },
-                {
-                  id: "4",
-                  title: "Subscriptions",
-                },
-                "",
-                {
-                  id: "5",
-                  title: "iCloud",
-                  rightView: "50 GB",
-                  detail: true,
-                },
-                {
-                  id: "6",
-                  title: "Family",
-                  rightView: "Set Up",
-                  detail: true,
-                },
-              ]}
-              renderItem={renderItem}
-              variant="insets"
-            />
-          </div>
-        </div>
-      </div>
-    </>
-  ); */
-}
-
-function renderItem<T extends ListDataItem>(info: ListRenderItemProps<T>) {
-  if (typeof info.item === "string") {
-    return <ListSectionHeader {...info} />;
-  }
-  return (
-    <ListItem
-      leftView={
-        <div className="flex justify-center px-4">
-          <View className="aspect-square h-8 rounded-full" />
-        </div>
-      }
-      rightView={info.item.rightView}
-      {...info}
-    />
   );
 }
 

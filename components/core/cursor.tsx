@@ -122,7 +122,7 @@ const CursorInner = () => {
     }
   };
 
-  const handleElementMouseLeave = (e: MouseEvent) => {
+  const handleElementMouseLeave = () => {
     if (!hoveredElement) return;
     cursorBorderRadiusSpring.set(CONSTANTS.CURSOR_BORDER_RADIUS);
     cursorOpacitySpring.set(CONSTANTS.DEFAULT_CURSOR_OPACITY);
@@ -137,7 +137,7 @@ const CursorInner = () => {
     }
   };
 
-  const handleElementMouseDown = (event: MouseEvent) => {
+  const handleElementMouseDown = () => {
     if (
       hoveredElement &&
       CONSTANTS.HOVER_ELEMENT_TAGS.includes(hoveredElement.tagName)
@@ -151,7 +151,7 @@ const CursorInner = () => {
     }
   };
 
-  const handleElementMouseUp = (event: MouseEvent) => {
+  const handleElementMouseUp = () => {
     if (
       hoveredElement &&
       CONSTANTS.HOVER_ELEMENT_TAGS.includes(hoveredElement.tagName)

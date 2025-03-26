@@ -13,6 +13,7 @@ const Hoverable = React.forwardRef<HTMLDivElement, HoverableProps>(
     const Comp = asChild ? Slot : View;
     return (
       <Comp
+        ref={ref}
         className={cn({ "vision-pro-ui-hoverable": enabled }, className)}
         {...props}
       />

@@ -127,10 +127,11 @@ function Button({
   );
 }
 
-export interface ButtonGroupProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
-
-function ButtonGroup({ className, children, ...props }: ButtonGroupProps) {
+function ButtonGroup({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(

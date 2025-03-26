@@ -7,7 +7,6 @@ type PresetType = "blur" | "shake" | "scale" | "fade" | "slide";
 type TextEffectProps = {
   children: string;
   per?: "word" | "char";
-  as?: "p" | "span" | "div";
   variants?: {
     container?: Variants;
     item?: Variants;
@@ -112,7 +111,6 @@ AnimationComponent.displayName = "AnimationComponent";
 export function TextEffect({
   children,
   per = "word",
-  as = "p",
   variants,
   className,
   preset,

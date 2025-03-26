@@ -211,7 +211,7 @@ const WindowContext = React.createContext<{
   height: number | undefined;
   windowId: string;
 }>({
-  scrollY: new MotionValue(),
+  scrollY: new MotionValue(0),
   width: 0,
   height: 0,
   windowId: "",
@@ -386,7 +386,11 @@ const WindowControls = ({ href }: { href?: string }) => {
       if (e.key === "Escape") {
         if (document.activeElement === buttonRef.current) {
           // If button is already focused, trigger the action
-          href ? router.push(href) : router.back();
+          if (href) {
+            router.push(href);
+          } else {
+            router.back();
+          }
         } else {
           // Focus the button on first Escape press
           buttonRef.current?.focus();
