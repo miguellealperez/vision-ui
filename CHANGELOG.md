@@ -1,5 +1,11 @@
 # vision-pro-ui
 
+## 1.5.2
+
+### Patch Changes
+
+- 0bc47fa: update deps, add lint
+
 ## 1.5.1
 
 ### Patch Changes
