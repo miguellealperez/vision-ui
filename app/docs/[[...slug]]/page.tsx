@@ -12,8 +12,13 @@ import { Metadata } from "next";
 import { ComponentWrapper } from "@/components/component-wrapper";
 import { getGithubLastEdit } from "fumadocs-core/server";
 
-import { createTypeTable } from "fumadocs-typescript/ui";
+import { createGenerator } from 'fumadocs-typescript';
+import { AutoTypeTable } from 'fumadocs-typescript/ui';
+
 import defaultMdxComponents from "fumadocs-ui/mdx";
+
+const generator = createGenerator();
+
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
 }) {
@@ -27,7 +32,6 @@ export default async function Page(props: {
     path: `content/docs/${page.file.path}`,
   });
 
-  const { AutoTypeTable } = createTypeTable();
 
   const MDX = page.data.body;
 
@@ -52,7 +56,9 @@ export default async function Page(props: {
         <MDX
           components={{
             ...defaultMdxComponents,
-            AutoTypeTable,
+            AutoTypeTable: (props) => (
+              <AutoTypeTable {...props} generator={generator} />
+            ),
             ComponentWrapper,
             Tab,
             Tabs,
