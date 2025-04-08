@@ -712,7 +712,7 @@ function HoneycombCell({
         {/* iOS-style focus ring */}
         <motion.div
           className={cn(
-            "absolute inset-[-8px] rounded-full",
+            "absolute inset-[-1px] rounded-full",
             "bg-gradient-to-t from-white/25 to-white/5",
             "shadow-[0_0_18px_6px_rgba(255,255,255,0.32)]",
             "z-10",
@@ -781,16 +781,14 @@ function HoneycombCell({
       <motion.div
         className={cn(
           "text-shadow-md pointer-events-none flex translate-y-0.5 items-center justify-center text-center text-xs font-medium text-white/65 transition-all duration-300 group-hover/cell:text-white/85",
-          isFocused ? "translate-y-1 font-semibold text-white" : "",
+          "!delay-0 !duration-0",
+          isFocused && "translate-y-1 font-semibold text-white",
         )}
         style={{
           height: labelSize,
           width: itemSize,
           opacity,
           filter,
-        }}
-        whileHover={{
-          opacity: 1,
         }}
       >
         {item.label}

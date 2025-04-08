@@ -53,7 +53,7 @@ const items: HoneycombItem[] = [
   },
   {
     id: "github",
-    label: "Github",
+    label: "Source Code",
     icon: (
       <Image src={githubIcon} alt="Github" className={honeycombIconClassName} />
     ),
@@ -64,7 +64,7 @@ const items: HoneycombItem[] = [
   },
   {
     id: "docs",
-    label: "Documentation",
+    label: "API Docs",
     icon: (
       <Image src={docsIcon} alt="Docs" className={honeycombIconClassName} />
     ),
