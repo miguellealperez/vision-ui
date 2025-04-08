@@ -1,5 +1,12 @@
 # vision-pro-ui
 
+## 1.5.3
+
+### Patch Changes
+
+- 252cb4f: improve grid layout
+- 1f115cc: update deps
+
 ## 1.5.2
 
 ### Patch Changes
