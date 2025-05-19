@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
   animate,
-  CustomValueType,
   frame,
   motion,
   useMotionTemplate,
@@ -173,6 +172,8 @@ const CursorInner = () => {
     ) as HTMLElement;
 
     if (hoveredElement !== element) {
+      // disable if data-cursor-disabled is true
+      if (element.getAttribute("data-cursor-disabled")) return;
       setHoveredElement(element);
 
       if (
@@ -279,8 +280,7 @@ const CursorInner = () => {
           top: shineY,
           background:
             "radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 75%), radial-gradient(101.08% 100% at 50% 100%, rgba(94, 94, 94, 0.14) 0%, rgba(94, 94, 94, 0.00) 73.85%), radial-gradient(100.02% 100% at 50% 100%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.00) 55.59%), linear-gradient(0deg, rgba(94, 94, 94, 0.18) 0%, rgba(94, 94, 94, 0.18) 100%), rgba(255, 255, 255, 0.1)",
-          mixBlendMode:
-            "color-dodge, normal, color-dodge, lighten" as unknown as CustomValueType,
+          mixBlendMode: "color-dodge, normal, color-dodge, lighten" as any,
         }}
       />
     </motion.div>

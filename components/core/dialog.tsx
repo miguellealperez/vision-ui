@@ -1,6 +1,13 @@
 "use client";
 
-import * as React from "react";
+import React, {
+  // TODO: Wait for this to be stable
+  // unstable_Activity as Activity,
+  createContext,
+  useState,
+  useCallback,
+  useContext,
+} from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { XIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
@@ -8,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { Window, GlassThickness } from "./window";
 
 // Context to manage the dialog state
-const DialogContext = React.createContext<{
+const DialogContext = createContext<{
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
@@ -27,10 +34,10 @@ function Dialog({
   onOpenChange: controlledOnOpenChange,
   ...props
 }: DialogProps) {
-  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
 
   const open = controlledOpen !== undefined ? controlledOpen : uncontrolledOpen;
-  const setOpen = React.useCallback(
+  const setOpen = useCallback(
     (value: boolean | ((prevState: boolean) => boolean)) => {
       if (controlledOnOpenChange) {
         const nextValue = typeof value === "function" ? value(open) : value;
@@ -84,10 +91,11 @@ function DialogContent({
   showCloseButton = true,
   ...props
 }: DialogContentProps) {
-  const { open } = React.useContext(DialogContext);
+  const { open } = useContext(DialogContext);
 
   return (
     <AnimatePresence>
+      {/* <Activity mode={open ? "visible" : "hidden"}> */}
       {open && (
         <DialogPrimitive.Portal forceMount>
           {/* Background overlay that dims and scales the window behind */}
@@ -133,6 +141,7 @@ function DialogContent({
           </DialogPrimitive.Content>
         </DialogPrimitive.Portal>
       )}
+      {/* </Activity> */}
     </AnimatePresence>
   );
 }
@@ -188,7 +197,7 @@ interface WithVisionDialogEffectProps {
 }
 
 function WithDialogEffect({ children }: WithVisionDialogEffectProps) {
-  const { open } = React.useContext(DialogContext);
+  const { open } = useContext(DialogContext);
 
   return (
     <motion.div

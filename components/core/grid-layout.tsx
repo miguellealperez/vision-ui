@@ -25,6 +25,7 @@ import useWindowSize from "@/hooks/use-window-size";
 import { useIsMounted } from "@/hooks/use-is-mounted";
 import { useRouter } from "next/navigation";
 import { debugModeAtom } from "@/lib/atoms";
+import Link from "next/link";
 
 // ------------------------------------------------------------------
 // 1. CONTEXT SETUP
@@ -577,25 +578,10 @@ function HoneycombCell({
 
   const isOnFirstPage = pageOffset === 0;
 
-  const handleClick = () => {
-    if (item.onClick) {
-      item.onClick();
-    }
-    if (item.href) {
-      const href = item.href;
-      setTimeout(() => {
-        setAnimateOverwrite(true);
-        router.push(href, {
-          scroll: false,
-        });
-      }, 200);
-    }
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      handleClick();
+      onNavigate(e);
     }
 
     // Arrow key navigation
@@ -659,6 +645,25 @@ function HoneycombCell({
     exit: { scale: 0.95, opacity: 0, transition: { duration: 0.2 } },
   };
 
+  const onClick = () => {
+    if (item.onClick) {
+      item.onClick();
+    }
+  };
+
+  const onNavigate = (e: { preventDefault: () => void }) => {
+    if (item.href) {
+      e.preventDefault();
+      const href = item.href;
+      setAnimateOverwrite(true);
+      setTimeout(() => {
+        router.push(href, {
+          scroll: false,
+        });
+      }, 600);
+    }
+  };
+
   return (
     <motion.li
       ref={cellRef}
@@ -689,110 +694,115 @@ function HoneycombCell({
         "group/cell outline-none",
         debug && ["outline", "outline-pink-500"],
       )}
-      onClick={handleClick}
-      tabIndex={0}
       role="button"
       aria-label={item.label}
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
       onKeyDown={handleKeyDown}
     >
-      {/* Icon bubble */}
-      <motion.div
-        variants={tapVariants}
-        animate={isMouseDown ? "tap" : undefined}
-        whileHover={isMouseDown ? undefined : "hover"}
-        transition={tapVariants.hover.transition}
-        className={cn(
-          "group/icon relative",
-          cellXclassName[orderX.toString() as keyof typeof cellXclassName],
-          cellYclassName[orderY.toString() as keyof typeof cellYclassName],
-        )}
+      <Link
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        href={item.href ?? ""}
+        onNavigate={onNavigate}
+        onClick={onClick}
+        data-cursor-disabled
       >
-        {/* iOS-style focus ring */}
+        {/* Icon bubble */}
         <motion.div
+          variants={tapVariants}
+          animate={isMouseDown ? "tap" : undefined}
+          whileHover={isMouseDown ? undefined : "hover"}
+          transition={tapVariants.hover.transition}
           className={cn(
-            "absolute inset-[-1px] rounded-full",
-            "bg-gradient-to-t from-white/25 to-white/5",
-            "shadow-[0_0_18px_6px_rgba(255,255,255,0.32)]",
-            "z-10",
+            "group/icon relative",
+            cellXclassName[orderX.toString() as keyof typeof cellXclassName],
+            cellYclassName[orderY.toString() as keyof typeof cellYclassName],
           )}
-          initial="initial"
-          animate={isFocused ? "animate" : "initial"}
-          exit="exit"
-          variants={pulseAnimation}
-          aria-hidden="true"
-        />
-        <Window
-          className={cn(
-            "rounded-full backdrop-blur [--diameter:96px] [--radius:48px] before:rounded-full",
-            isFocused &&
-              "ring-1 ring-white/50 ring-offset-1 ring-offset-transparent",
-          )}
-          thickness="none"
-          style={{
-            width: itemSize,
-            height: itemSize,
-            opacity,
-            filter,
-            position: "relative",
-            zIndex: 20,
-            transition: "all 0.3s ease-out",
-          }}
         >
-          <div className="relative h-full w-full overflow-hidden rounded-full">
-            {debug && (
-              <span className="absolute inset-0 flex h-full w-full items-center justify-center rounded-full bg-black/50 text-center font-mono text-xs font-light text-white/85 tabular-nums">
-                {Math.round(cellX)},{Math.round(cellY)}
-                <br />
-                row:{row} col:{col}
-                {isMouseDown ? " 👆" : ""}
-                {isFocused ? " 🔍" : ""}
-              </span>
+          {/* iOS-style focus ring */}
+          <motion.div
+            className={cn(
+              "absolute inset-[-1px] rounded-full",
+              "bg-gradient-to-t from-white/25 to-white/5",
+              "shadow-[0_0_18px_6px_rgba(255,255,255,0.32)]",
+              "z-10",
             )}
-            {item.background && (
-              <div className={"pointer-events-none absolute inset-0"}>
-                {item.background}
+            initial="initial"
+            animate={isFocused ? "animate" : "initial"}
+            exit="exit"
+            variants={pulseAnimation}
+            aria-hidden="true"
+          />
+          <Window
+            className={cn(
+              "rounded-full backdrop-blur [--diameter:96px] [--radius:48px] before:rounded-full",
+              isFocused &&
+                "ring-1 ring-white/50 ring-offset-1 ring-offset-transparent",
+            )}
+            thickness="none"
+            style={{
+              width: itemSize,
+              height: itemSize,
+              opacity,
+              filter,
+              position: "relative",
+              zIndex: 20,
+              transition: "all 0.3s ease-out",
+            }}
+          >
+            <div className="relative h-full w-full overflow-hidden rounded-full">
+              {debug && (
+                <span className="absolute inset-0 flex h-full w-full items-center justify-center rounded-full bg-black/50 text-center font-mono text-xs font-light text-white/85 tabular-nums">
+                  {Math.round(cellX)},{Math.round(cellY)}
+                  <br />
+                  row:{row} col:{col}
+                  {isMouseDown ? " 👆" : ""}
+                  {isFocused ? " 🔍" : ""}
+                </span>
+              )}
+              {item.background && (
+                <div className={"pointer-events-none absolute inset-0"}>
+                  {item.background}
+                  <div
+                    className={cn(
+                      "absolute inset-0 z-10 bg-white/10 opacity-0 transition-opacity duration-300",
+                      "bg-blend-overlay",
+                      "group-hover/cell:opacity-100",
+                      isFocused ? "opacity-100" : "",
+                    )}
+                  />
+                </div>
+              )}
+              {item.icon && (
                 <div
                   className={cn(
-                    "absolute inset-0 z-10 bg-white/10 opacity-0 transition-opacity duration-300",
-                    "bg-blend-overlay",
-                    "group-hover/cell:opacity-100",
-                    isFocused ? "opacity-100" : "",
+                    "absolute inset-0 z-[11] transition-all duration-300",
+                    isFocused && "scale-105 brightness-110",
                   )}
-                />
-              </div>
-            )}
-            {item.icon && (
-              <div
-                className={cn(
-                  "absolute inset-0 z-[11] transition-all duration-300",
-                  isFocused && "scale-105 brightness-110",
-                )}
-              >
-                {item.icon}
-              </div>
-            )}
-          </div>
-        </Window>
-      </motion.div>
+                >
+                  {item.icon}
+                </div>
+              )}
+            </div>
+          </Window>
+        </motion.div>
 
-      {/* Label */}
-      <motion.div
-        className={cn(
-          "text-shadow-md pointer-events-none flex translate-y-0.5 items-center justify-center text-center text-xs font-medium text-white/65 transition-all duration-300 group-hover/cell:text-white/85",
-          "!delay-0 !duration-0",
-          isFocused && "translate-y-1 font-semibold text-white",
-        )}
-        style={{
-          height: labelSize,
-          width: itemSize,
-          opacity,
-          filter,
-        }}
-      >
-        {item.label}
-      </motion.div>
+        {/* Label */}
+        <motion.div
+          className={cn(
+            "pointer-events-none flex translate-y-0.5 items-center justify-center text-center text-xs font-medium text-white/65 transition-all duration-300 text-shadow-md group-hover/cell:text-white/85",
+            "!delay-0 !duration-0",
+            isFocused && "translate-y-1 font-semibold text-white",
+          )}
+          style={{
+            height: labelSize,
+            width: itemSize,
+            opacity,
+            filter,
+          }}
+        >
+          {item.label}
+        </motion.div>
+      </Link>
     </motion.li>
   );
 }

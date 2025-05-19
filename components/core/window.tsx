@@ -9,12 +9,14 @@ import React, {
   useImperativeHandle,
   useRef,
   useEffect,
+  useState,
 } from "react";
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
 import { ScrollBar } from "@/components/ui/scroll-area";
 import { useResizeObserver } from "@/hooks/use-resize-observer";
 import { useRouter } from "next/navigation";
 import { XIcon } from "lucide-react";
+import Link from "next/link";
 
 type GlassThickness =
   | "none"
@@ -209,11 +211,15 @@ const WindowContext = React.createContext<{
   scrollY: MotionValue<number>;
   width: number | undefined;
   height: number | undefined;
+  visible: boolean;
+  setVisible: (visible: boolean) => void;
   windowId: string;
 }>({
   scrollY: new MotionValue(0),
   width: 0,
   height: 0,
+  visible: false,
+  setVisible: () => {},
   windowId: "",
 });
 
@@ -241,6 +247,7 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
   ) => {
     const windowId = useId();
     const localRef = useRef<HTMLDivElement>(null);
+    const [visible, setVisible] = useState(true);
     // strip out *-h-*, h-* classes classes
     const scrollWindowRegex =
       /-h-.*|h-.*|^max-h-.*|^min-h-.*|^h-.*|h-.*|max-h-.*|min-h-.*/g;
@@ -265,13 +272,26 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
     const { role, "aria-label": ariaLabel, ...restProps } = props;
 
     return (
-      <WindowContext.Provider value={{ scrollY, width, height, windowId }}>
+      <WindowContext.Provider
+        value={{ scrollY, width, height, visible, setVisible, windowId }}
+      >
         <motion.div
           key={`${windowId}-wrapper`}
           className={cn(
             "relative flex flex-col items-center justify-center",
             rootClassName,
           )}
+          initial={{
+            opacity: 1,
+            scale: 1,
+          }}
+          animate={{
+            opacity: visible ? 1 : 0,
+            scale: visible ? 1 : 0.99,
+            transition: {
+              duration: 0.4,
+            },
+          }}
         >
           <motion.div
             className={cn(
@@ -378,19 +398,27 @@ Window.displayName = "Window";
 
 const WindowControls = ({ href }: { href?: string }) => {
   const router = useRouter();
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonRef = useRef<HTMLAnchorElement>(null);
+  const { setVisible } = useWindow();
 
+  const onNavigate = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setVisible(false);
+    setTimeout(() => {
+      if (href) {
+        router.push(href);
+      } else {
+        router.back();
+      }
+    }, 450);
+  };
   // Handle Escape key press
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         if (document.activeElement === buttonRef.current) {
           // If button is already focused, trigger the action
-          if (href) {
-            router.push(href);
-          } else {
-            router.back();
-          }
+          onNavigate(e);
         } else {
           // Focus the button on first Escape press
           buttonRef.current?.focus();
@@ -412,9 +440,10 @@ const WindowControls = ({ href }: { href?: string }) => {
       role="toolbar"
       aria-label="Window controls"
     >
-      <button
+      <Link
+        href={href || "/"}
         ref={buttonRef}
-        onClick={() => (href ? router.push(href) : router.back())}
+        onNavigate={onNavigate}
         className={cn(
           "h-[37px] w-[37px]",
           "group/close-btn",
@@ -439,7 +468,7 @@ const WindowControls = ({ href }: { href?: string }) => {
         >
           <XIcon className="size-3.5 text-[#333] opacity-0 group-hover/close-btn:size-3 group-hover/close-btn:opacity-100 group-focus-visible/close-btn:size-3 group-focus-visible/close-btn:opacity-100" />
         </span>
-      </button>
+      </Link>
       <div
         className={cn(
           "relative h-3.5 w-[136px] rounded-[100px] bg-white/30 backdrop-blur-[20px]",

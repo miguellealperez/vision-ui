@@ -1,5 +1,11 @@
 # vision-pro-ui
 
+## 1.6.0
+
+### Minor Changes
+
+- add page transition with onNavigate API
+
 ## 1.5.3
 
 ### Patch Changes
