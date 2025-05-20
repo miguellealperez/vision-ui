@@ -4,7 +4,6 @@ import {
   DocsBody,
   DocsTitle,
   DocsDescription,
-  DocsCategory,
 } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
@@ -12,8 +11,8 @@ import { Metadata } from "next";
 import { ComponentWrapper } from "@/components/component-wrapper";
 import { getGithubLastEdit } from "fumadocs-core/server";
 
-import { createGenerator } from 'fumadocs-typescript';
-import { AutoTypeTable } from 'fumadocs-typescript/ui';
+import { createGenerator } from "fumadocs-typescript";
+import { AutoTypeTable } from "fumadocs-typescript/ui";
 
 import defaultMdxComponents from "fumadocs-ui/mdx";
 
@@ -31,7 +30,6 @@ export default async function Page(props: {
     repo: "vision-ui",
     path: `content/docs/${page.file.path}`,
   });
-
 
   const MDX = page.data.body;
 
@@ -64,7 +62,7 @@ export default async function Page(props: {
             Tabs,
           }}
         />
-        {page.data.index ? <DocsCategory page={page} from={source} /> : null}
+        {/* {page.data.index ? <DocsCategory page={page} from={source} /> : null} */}
       </DocsBody>
     </DocsPage>
   );
