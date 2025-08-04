@@ -1,11 +1,12 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import React, { useEffect, useRef } from "react";
-import { Environment } from "./data";
-import { motion, AnimatePresence } from "motion/react";
-import { Text } from "../ui/typography";
+import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
+import type React from "react";
+import { useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
+import { Text } from "../ui/typography";
+import type { Environment } from "./data";
 
 function EnvironmentProvider({
   environment,
@@ -48,6 +49,7 @@ function EnvironmentProvider({
                 style={{
                   backgroundPosition: "center 10%",
                 }}
+                sizes="100vw"
               />
             )}
           </motion.div>
@@ -95,6 +97,7 @@ function EnvironmentProvider({
             style={{
               backgroundPosition: "center 10%",
             }}
+            sizes="100vw"
           />
         </motion.div>
       </AnimatePresence>

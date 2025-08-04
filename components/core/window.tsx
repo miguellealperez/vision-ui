@@ -1,22 +1,25 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { HTMLMotionProps, motion, MotionValue } from "motion/react";
-import { useScroll } from "motion/react";
+import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
+import { XIcon } from "lucide-react";
+import {
+  type HTMLMotionProps,
+  MotionValue,
+  motion,
+  useScroll,
+} from "motion/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, {
-  RefObject,
+  type RefObject,
+  useEffect,
   useId,
   useImperativeHandle,
   useRef,
-  useEffect,
   useState,
 } from "react";
-import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
-import { ScrollBar } from "@/components/ui/scroll-area";
 import { useResizeObserver } from "@/hooks/use-resize-observer";
-import { useRouter } from "next/navigation";
-import { XIcon } from "lucide-react";
-import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 type GlassThickness =
   | "none"
@@ -376,7 +379,7 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
                 >
                   {children}
                 </ScrollAreaPrimitive.Viewport>
-                <ScrollBar />
+                <ScrollAreaPrimitive.Scrollbar />
                 <ScrollAreaPrimitive.Corner />
               </ScrollAreaPrimitive.Root>
             ) : (

@@ -1,8 +1,10 @@
 "use client";
 
-import { HoneycombItem, HoneycombLayout } from "@/components/core/grid-layout";
-
 import Image from "next/image";
+import {
+  type HoneycombItem,
+  HoneycombLayout,
+} from "@/components/core/grid-layout";
 
 import data from "@/components/environment/data";
 import { saveEnvironment } from "./actions";
