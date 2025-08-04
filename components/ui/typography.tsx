@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot as SlotPrimitive } from "radix-ui";
 import { cva, VariantProps } from "class-variance-authority";
 import React from "react";
 
@@ -60,7 +60,7 @@ export interface TextProps
 
 const Text = React.forwardRef<HTMLParagraphElement, TextProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "p";
+    const Comp = asChild ? SlotPrimitive.Slot : "p";
     return (
       <Comp
         className={cn(
