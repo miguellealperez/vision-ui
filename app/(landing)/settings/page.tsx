@@ -1,18 +1,15 @@
 "use client";
 
-import ExampleDialog from "./example-dialog";
 import {
   List,
+  type ListDataItem,
   ListItem,
-  ListRenderItemProps,
+  type ListRenderItemProps,
   ListSectionHeader,
-  ListDataItem,
 } from "@/components/core/list";
-import {
-  NavigationBar,
-  NavigationBarTitle,
-} from "@/components/core/navigation-bar";
+import { NavigationBar, NavigationBarTitle } from "@/components/core/navigation-bar";
 import { SidebarTrigger } from "@/components/core/sidebar";
+import ExampleDialog from "./example-dialog";
 
 export const dynamic = "force-dynamic";
 
@@ -92,11 +89,5 @@ function renderItem<T extends ListDataItem>(info: ListRenderItemProps<T>) {
   if (typeof info.item === "string") {
     return <ListSectionHeader {...info} />;
   }
-  return (
-    <ListItem
-      leftView={info.item.leftView}
-      rightView={info.item.rightView}
-      {...info}
-    />
-  );
+  return <ListItem leftView={info.item.leftView} rightView={info.item.rightView} {...info} />;
 }

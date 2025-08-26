@@ -1,19 +1,14 @@
 "use client";
 
-import {
-  NavigationBar,
-  NavigationBarTitle,
-} from "../../../components/core/navigation-bar";
-import { Button, ButtonGroup } from "../../../components/core/button";
-import { HeroDropdownMenu } from "../../../components/landing/hero-dropdown-menu";
 import Image from "next/image";
-
-import { Text } from "../../../components/ui/typography";
-
-import forest from "@/public/assets/demo/forest.avif";
-import { AspectRatio } from "../../../components/ui/aspect-ratio";
-import { Toolbar } from "../../../components/core/toolbar";
 import { useState } from "react";
+import forest from "@/public/assets/demo/forest.avif";
+import { Button, ButtonGroup } from "../../../components/core/button";
+import { NavigationBar, NavigationBarTitle } from "../../../components/core/navigation-bar";
+import { Toolbar } from "../../../components/core/toolbar";
+import { HeroDropdownMenu } from "../../../components/landing/hero-dropdown-menu";
+import { AspectRatio } from "../../../components/ui/aspect-ratio";
+import { Text } from "../../../components/ui/typography";
 
 import img1 from "./unsplash/aaron-burden-unsplash.avif";
 import img2 from "./unsplash/aaron-burden-unsplash-2.avif";
@@ -22,9 +17,9 @@ import img4 from "./unsplash/damiano-baschiera-unsplash.avif";
 import img5 from "./unsplash/dominik-schroder-unsplash.avif";
 import img6 from "./unsplash/kenrick-mills-unsplash.avif";
 import img7 from "./unsplash/matthew-smith-unsplash.avif";
+import img10 from "./unsplash/michael-olsen-unsplash.avif";
 import img8 from "./unsplash/shifaaz-shamoon-unsplash.avif";
 import img9 from "./unsplash/wil-stewart-unsplash.avif";
-import img10 from "./unsplash/michael-olsen-unsplash.avif";
 
 const memories = [
   {
@@ -92,20 +87,14 @@ const MemoriesView = () => {
         </div>
         <Image
           src={forest}
-          alt={
-            "A small boat of fisherman in Fuvahmulah, Maldives heading out for the days work."
-          }
+          alt={"A small boat of fisherman in Fuvahmulah, Maldives heading out for the days work."}
           className="h-[25vw] w-full object-cover"
         />
       </div>
       <div className="mb-36 grid grid-cols-5">
         {memories.map((memory, index) => (
           <AspectRatio ratio={1 / 1} key={`memory-${index}`}>
-            <Image
-              src={memory.src}
-              alt={memory.alt}
-              className="h-full w-full object-cover"
-            />
+            <Image src={memory.src} alt={memory.alt} className="h-full w-full object-cover" />
           </AspectRatio>
         ))}
       </div>

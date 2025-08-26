@@ -1,5 +1,5 @@
 "use client";
-import { motion, Variants } from "motion/react";
+import { motion, type Variants } from "motion/react";
 import React from "react";
 
 type PresetType = "blur" | "shake" | "scale" | "fade" | "slide";
@@ -32,10 +32,7 @@ const defaultItemVariants: Variants = {
   },
 };
 
-const presetVariants: Record<
-  PresetType,
-  { container: Variants; item: Variants }
-> = {
+const presetVariants: Record<PresetType, { container: Variants; item: Variants }> = {
   blur: {
     container: defaultContainerVariants,
     item: {
@@ -80,11 +77,7 @@ const AnimationComponent: React.FC<{
 }> = React.memo(({ word, variants, per }) => {
   if (per === "word") {
     return (
-      <motion.span
-        aria-hidden="true"
-        variants={variants}
-        className="inline-block whitespace-pre"
-      >
+      <motion.span aria-hidden="true" variants={variants} className="inline-block whitespace-pre">
         {word}
       </motion.span>
     );

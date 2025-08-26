@@ -1,31 +1,24 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-  ReactNode,
-} from "react";
+import { useAtomValue } from "jotai";
 import {
   animate,
+  type MotionProps,
+  type MotionValue,
   motion,
-  MotionProps,
-  MotionValue,
   useMotionValue,
   useMotionValueEvent,
   useTransform,
 } from "motion/react";
-import { useAtomValue } from "jotai";
-
-import { Window } from "./window";
-import { cn } from "@/lib/utils";
-import useWindowSize from "@/hooks/use-window-size";
-import { useIsMounted } from "@/hooks/use-is-mounted";
-import { useRouter } from "next/navigation";
-import { debugModeAtom } from "@/lib/atoms";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type React from "react";
+import { createContext, type ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { useIsMounted } from "@/hooks/use-is-mounted";
+import useWindowSize from "@/hooks/use-window-size";
+import { debugModeAtom } from "@/lib/atoms";
+import { cn } from "@/lib/utils";
+import { Window } from "./window";
 
 // ------------------------------------------------------------------
 // 1. CONTEXT SETUP
@@ -48,16 +41,12 @@ interface HoneycombContextValue {
 }
 
 /** Create the context object (and a safe hook to consume it). */
-const HoneycombContext = createContext<HoneycombContextValue | undefined>(
-  undefined,
-);
+const HoneycombContext = createContext<HoneycombContextValue | undefined>(undefined);
 
 function useHoneycombContext() {
   const value = useContext(HoneycombContext);
   if (!value) {
-    throw new Error(
-      "useHoneycombContext must be used within a HoneycombProvider.",
-    );
+    throw new Error("useHoneycombContext must be used within a HoneycombProvider.");
   }
   return value;
 }
@@ -70,11 +59,7 @@ function HoneycombProvider({
   value: HoneycombContextValue;
   children: ReactNode;
 }) {
-  return (
-    <HoneycombContext.Provider value={value}>
-      {children}
-    </HoneycombContext.Provider>
-  );
+  return <HoneycombContext.Provider value={value}>{children}</HoneycombContext.Provider>;
 }
 
 // ------------------------------------------------------------------
@@ -150,10 +135,7 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
   }
 
   // Limit the number of columns
-  const maxCols = Math.min(
-    Math.floor((containerWidth - ITEM_SIZE) / (ITEM_SIZE + GUTTER)),
-    4,
-  );
+  const maxCols = Math.min(Math.floor((containerWidth - ITEM_SIZE) / (ITEM_SIZE + GUTTER)), 4);
   // items per page (3 rows with an extra middle cell => maxCols*3 + 1)
   const itemsPerPage = maxCols * 3 + 1;
 
@@ -166,10 +148,7 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
   // Calculate actual page width
   const rawPageWidth = maxCols * (ITEM_SIZE + GUTTER) + PAGE_GUTTER;
   // "padding" keeps pages from overshooting container width
-  const padding = Math.max(
-    0,
-    containerWidth - rawPageWidth - ITEM_SIZE + PAGE_GUTTER,
-  );
+  const padding = Math.max(0, containerWidth - rawPageWidth - ITEM_SIZE + PAGE_GUTTER);
   const pageWidth = rawPageWidth - padding;
 
   // Debug logging when x changes
@@ -177,7 +156,7 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
     if (DEBUG && containerRef.current) {
       containerRef.current.setAttribute(
         "data-debug",
-        `View(${containerWidth}px) • ${Math.round(latest)}px`,
+        `View(${containerWidth}px) • ${Math.round(latest)}px`
       );
     }
   });
@@ -230,7 +209,7 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
           "after:content-[attr(data-debug)]",
           "after:absolute after:top-0 after:left-0 after:z-40",
           "after:bg-yellow-500 after:p-2 after:text-xs after:text-yellow-900",
-        ],
+        ]
       )}
       role="region"
       aria-label="Interactive grid layout"
@@ -246,7 +225,7 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
         onDragEnd={onDragEnd}
         data-debug={`Drag Constraints • Left: ${Math.min(
           -pageWidth * (pages.length - 1),
-          0,
+          0
         )}px, Right: 0px • padding: ${padding}px`}
         className={cn(
           "relative h-full",
@@ -255,8 +234,8 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
             "outline-sky-500",
             "after:content-[attr(data-debug)]",
             "after:absolute after:top-[2rem] after:left-0 after:z-[41]",
-            "after:bg-sky-500 after:p-2 after:text-xs after:text-sky-950",
-          ],
+            "after:bg-sky-500 after:p-2 after:text-sky-950 after:text-xs",
+          ]
         )}
         style={{
           x,
@@ -281,8 +260,8 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
       </motion.div>
       {pages.length > 1 && (
         <div className="sr-only">
-          This grid can be navigated by dragging left or right. Use tab key to
-          navigate between items.
+          This grid can be navigated by dragging left or right. Use tab key to navigate between
+          items.
         </div>
       )}
     </div>
@@ -310,7 +289,7 @@ const pageVariants = {
   zoomOut: {
     scale: 1.08,
   },
-};
+} as const;
 
 function PageContent({
   pageItems,
@@ -323,17 +302,13 @@ function PageContent({
 }) {
   const isMounted = useIsMounted();
   const [show, setShow] = useState(false);
-  const { debug, pageWidth, itemSize, gutter, animateOverwrite } =
-    useHoneycombContext();
+  const { debug, pageWidth, itemSize, gutter, animateOverwrite } = useHoneycombContext();
 
   // We figure out how many columns we can have by seeing how many fits into a single page
   // For consistency, we re-derive it from (pageWidth - PAGE_GUTTER) / (itemSize+gutter) or so.
   // Or you might pass `maxCols` in context if that's simpler.
   // For brevity, let's just guess 4 columns from the original logic:
-  const maxCols = Math.min(
-    Math.floor((pageWidth - 96) / (itemSize + gutter)),
-    4,
-  );
+  const maxCols = Math.min(Math.floor((pageWidth - 96) / (itemSize + gutter)), 4);
 
   useEffect(() => {
     if (isMounted()) setShow(true);
@@ -367,8 +342,8 @@ function PageContent({
           "outline-green-500",
           "after:content-[attr(data-debug)]",
           "after:absolute after:top-[-2rem] after:left-0",
-          "after:bg-green-500 after:p-2 after:text-xs after:text-green-900",
-        ],
+          "after:bg-green-500 after:p-2 after:text-green-900 after:text-xs",
+        ]
       )}
       role="group"
       aria-label={`Page ${pageIndex + 1}`}
@@ -440,7 +415,7 @@ const tapVariants = {
       bounce: 0,
     },
   },
-};
+} as const;
 
 const cellXclassName = {
   "-4": "[--cell-x:-2.5px]",
@@ -493,10 +468,7 @@ function HoneycombCell({
 
   // Some geometry
   const halfOffset = (itemSize + gutter) / 2;
-  const cellX =
-    row === 1
-      ? col * (itemSize + gutter)
-      : halfOffset + col * (itemSize + gutter);
+  const cellX = row === 1 ? col * (itemSize + gutter) : halfOffset + col * (itemSize + gutter);
   const cellY = row * (itemSize + gutter * verticalSpacing);
 
   // 1) Opacity + scale transforms based on how far the page is from center
@@ -519,17 +491,13 @@ function HoneycombCell({
   const middleRowParallax = useTransform(
     scrollX,
     [-pageOffset - pageWidth, -pageOffset, -pageOffset + pageWidth],
-    [-itemSize * 0.7, 0, itemSize * 0.7],
+    [-itemSize * 0.7, 0, itemSize * 0.7]
   );
 
   // 3) "Center-out" reveal offsets for the first page
   const orderX = 2 * col - maxCols + (row !== 1 ? 1 : 0);
   const orderY = (row - 1) * 2;
-  const startX =
-    ITEM_SIZE *
-    -(orderX / maxCols) *
-    0.1 *
-    (Math.abs(row - 1) + Math.abs(col - 2));
+  const startX = ITEM_SIZE * -(orderX / maxCols) * 0.1 * (Math.abs(row - 1) + Math.abs(col - 2));
   const startY = -(itemSize / 3) * (row - 1);
   const wrapperVariants = {
     initialFirstPage: { x: startX, y: startY, filter: "blur(16px)" },
@@ -574,7 +542,7 @@ function HoneycombCell({
         ease: "easeOut",
       },
     },
-  };
+  } as const;
 
   const isOnFirstPage = pageOffset === 0;
 
@@ -585,12 +553,8 @@ function HoneycombCell({
     }
 
     // Arrow key navigation
-    const gridItems = Array.from(
-      document.querySelectorAll('[role="button"][tabindex="0"]'),
-    );
-    const currentIndex = gridItems.findIndex(
-      (item) => item === cellRef.current,
-    );
+    const gridItems = Array.from(document.querySelectorAll('[role="button"][tabindex="0"]'));
+    const currentIndex = gridItems.indexOf(cellRef.current as HTMLElement);
 
     let nextItem: HTMLElement | null = null;
 
@@ -625,25 +589,6 @@ function HoneycombCell({
     }
   };
 
-  // A pulse animation for the focus ring
-  const pulseAnimation = {
-    initial: { scale: 0.95, opacity: 0 },
-    animate: {
-      scale: [0.98, 1.02, 0.98],
-      opacity: 1,
-      transition: {
-        scale: {
-          repeat: Infinity,
-          duration: 2.5,
-          ease: "easeInOut",
-        },
-        opacity: {
-          duration: 0.3,
-        },
-      },
-    },
-    exit: { scale: 0.95, opacity: 0, transition: { duration: 0.2 } },
-  };
 
   const onClick = () => {
     if (item.onClick) {
@@ -657,7 +602,7 @@ function HoneycombCell({
       const href = item.href;
       setAnimateOverwrite(true);
       setTimeout(() => {
-        router.push(href, {
+        router.push(href as any, {
           scroll: false,
         });
       }, 600);
@@ -676,13 +621,7 @@ function HoneycombCell({
         scale,
       }}
       animate={
-        isFocused
-          ? "focused"
-          : animateOverwrite
-            ? "zoomOut"
-            : isOnFirstPage
-              ? "animate"
-              : undefined
+        isFocused ? "focused" : animateOverwrite ? "zoomOut" : isOnFirstPage ? "animate" : undefined
       }
       initial={isOnFirstPage ? "initialFirstPage" : "initialOtherPages"}
       exit="exit"
@@ -690,10 +629,7 @@ function HoneycombCell({
       onMouseDown={() => setIsMouseDown(true)}
       onMouseUp={() => setIsMouseDown(false)}
       onMouseLeave={() => setIsMouseDown(false)}
-      className={cn(
-        "group/cell outline-none",
-        debug && ["outline", "outline-pink-500"],
-      )}
+      className={cn("group/cell outline-none", debug && ["outline", "outline-pink-500"])}
       role="button"
       aria-label={item.label}
       onKeyDown={handleKeyDown}
@@ -701,7 +637,7 @@ function HoneycombCell({
       <Link
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        href={item.href ?? ""}
+        href={item.href ?? "" as any}
         onNavigate={onNavigate}
         onClick={onClick}
         data-cursor-disabled
@@ -715,28 +651,13 @@ function HoneycombCell({
           className={cn(
             "group/icon relative",
             cellXclassName[orderX.toString() as keyof typeof cellXclassName],
-            cellYclassName[orderY.toString() as keyof typeof cellYclassName],
+            cellYclassName[orderY.toString() as keyof typeof cellYclassName]
           )}
         >
-          {/* iOS-style focus ring */}
-          <motion.div
-            className={cn(
-              "absolute inset-[-1px] rounded-full",
-              "bg-gradient-to-t from-white/25 to-white/5",
-              "shadow-[0_0_18px_6px_rgba(255,255,255,0.32)]",
-              "z-10",
-            )}
-            initial="initial"
-            animate={isFocused ? "animate" : "initial"}
-            exit="exit"
-            variants={pulseAnimation}
-            aria-hidden="true"
-          />
           <Window
             className={cn(
               "rounded-full backdrop-blur [--diameter:96px] [--radius:48px] before:rounded-full",
-              isFocused &&
-                "ring-1 ring-white/50 ring-offset-1 ring-offset-transparent",
+              isFocused && "ring-1 ring-white/50 ring-offset-1 ring-offset-transparent"
             )}
             thickness="none"
             style={{
@@ -751,7 +672,7 @@ function HoneycombCell({
           >
             <div className="relative h-full w-full overflow-hidden rounded-full">
               {debug && (
-                <span className="absolute inset-0 flex h-full w-full items-center justify-center rounded-full bg-black/50 text-center font-mono text-xs font-light text-white/85 tabular-nums">
+                <span className="absolute inset-0 flex h-full w-full items-center justify-center rounded-full bg-black/50 text-center font-light font-mono text-white/85 text-xs tabular-nums">
                   {Math.round(cellX)},{Math.round(cellY)}
                   <br />
                   row:{row} col:{col}
@@ -767,7 +688,7 @@ function HoneycombCell({
                       "absolute inset-0 z-10 bg-white/10 opacity-0 transition-opacity duration-300",
                       "bg-blend-overlay",
                       "group-hover/cell:opacity-100",
-                      isFocused ? "opacity-100" : "",
+                      isFocused ? "opacity-100" : ""
                     )}
                   />
                 </div>
@@ -776,7 +697,7 @@ function HoneycombCell({
                 <div
                   className={cn(
                     "absolute inset-0 z-[11] transition-all duration-300",
-                    isFocused && "scale-105 brightness-110",
+                    isFocused && "scale-105 brightness-110"
                   )}
                 >
                   {item.icon}
@@ -789,9 +710,9 @@ function HoneycombCell({
         {/* Label */}
         <motion.div
           className={cn(
-            "pointer-events-none flex translate-y-0.5 items-center justify-center text-center text-xs font-medium text-white/65 transition-all duration-300 text-shadow-md group-hover/cell:text-white/85",
+            "pointer-events-none flex translate-y-0.5 items-center justify-center text-center font-medium text-shadow-md text-white/65 text-xs transition-all duration-300 group-hover/cell:text-white/85",
             "!delay-0 !duration-0",
-            isFocused && "translate-y-1 font-semibold text-white",
+            isFocused && "translate-y-1 font-semibold text-white"
           )}
           style={{
             height: labelSize,
@@ -812,5 +733,5 @@ export const honeycombIconClassName = cn(
   "translate-y-0 translate-x-0 group-hover/cell:!translate-y-[var(--cell-y,-1px)] group-hover/cell:!translate-x-[var(--cell-x,-1px)]",
   "group-focus-visible/cell:!translate-y-[var(--cell-y,-1px)] group-focus-visible/cell:!translate-x-[var(--cell-x,-1px)]",
   "[filter:drop-shadow(0px_0px_1px_rgba(12,12,12,0))] group-hover/cell:[filter:drop-shadow(calc(var(--cell-x,-1px)*-1.5)_calc(var(--cell-y,-1px)*-1.5)_1px_rgba(0,0,0,0.33))]",
-  "group-focus-visible/cell:[filter:drop-shadow(calc(var(--cell-x,-1px)*-1.5)_calc(var(--cell-y,-1px)*-1.5)_1px_rgba(0,0,0,0.33))]",
+  "group-focus-visible/cell:[filter:drop-shadow(calc(var(--cell-x,-1px)*-1.5)_calc(var(--cell-y,-1px)*-1.5)_1px_rgba(0,0,0,0.33))]"
 );

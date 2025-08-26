@@ -1,10 +1,10 @@
-import React from "react";
 import { cva } from "class-variance-authority";
+import { ChevronRightIcon } from "lucide-react";
+import React from "react";
 import { cn } from "@/lib/utils";
 import { Text } from "../ui/typography";
 import { Hoverable } from "./hoverable";
 import View from "./view";
-import { ChevronRightIcon } from "lucide-react";
 
 type ListDataItem =
   | string
@@ -45,9 +45,7 @@ type ListRenderItemProps<T extends ListDataItem> = {
   sectionHeaderAsGap?: boolean;
 };
 
-type ListRenderItem<T extends ListDataItem> = (
-  props: ListRenderItemProps<T>,
-) => React.ReactNode;
+type ListRenderItem<T extends ListDataItem> = (props: ListRenderItemProps<T>) => React.ReactNode;
 
 const rootVariants = cva("min-h-2 flex-1", {
   variants: {
@@ -82,7 +80,7 @@ function List<T extends ListDataItem>({
           variant,
           sectionHeaderAsGap,
         }),
-        rootClassName,
+        rootClassName
       )}
       style={rootStyle}
       {...props}
@@ -92,8 +90,7 @@ function List<T extends ListDataItem>({
           const key = typeof item === "string" ? item : item.id || index;
           const previousItem = data[index - 1];
           const nextItem = data[index + 1];
-          const isFirstInSection =
-            !previousItem || typeof previousItem === "string";
+          const isFirstInSection = !previousItem || typeof previousItem === "string";
           const isLastInSection = !nextItem || typeof nextItem === "string";
 
           if (renderItem) {
@@ -153,9 +150,7 @@ function ListItem<T extends ListDataItem>({
   isLastInSection,
 }: ListItemProps<T>) {
   if (typeof item === "string") {
-    console.warn(
-      "Invalid item of type 'string' was provided. Use ListSectionHeader instead.",
-    );
+    console.warn("Invalid item of type 'string' was provided. Use ListSectionHeader instead.");
     return null;
   }
   const Comp = variant === "full-width" ? "div" : View;
@@ -175,7 +170,7 @@ function ListItem<T extends ListDataItem>({
             "hover:bg-blend-color-dodge hover:[background:linear-gradient(0deg,rgba(94,94,94,0.18)0%,rgba(94,94,94,0.18)100%),rgba(255,255,255,0.07)]",
             "hover:[background-blend-mode:color-dodge,normal]",
             !leftView && "pl-6",
-            className,
+            className
           )}
         >
           <div onClick={onClick} className="flex w-full items-center text-left">
@@ -238,9 +233,7 @@ function ListSectionHeader<T extends ListDataItem>({
   sectionHeaderAsGap,
 }: ListSectionHeaderProps<T>) {
   if (typeof item !== "string") {
-    console.warn(
-      "Invalid item provided. Expected type 'string'. Use ListItem instead.",
-    );
+    console.warn("Invalid item provided. Expected type 'string'. Use ListItem instead.");
     return null;
   }
 
@@ -254,10 +247,7 @@ function ListSectionHeader<T extends ListDataItem>({
   return (
     <div className={cn("w-full pt-4 pb-4 pl-4", className)}>
       <Text
-        className={cn(
-          "text-muted-foreground text-left uppercase",
-          textClassName,
-        )}
+        className={cn("text-left text-muted-foreground uppercase", textClassName)}
         size="caption1"
       >
         {item}
@@ -267,10 +257,4 @@ function ListSectionHeader<T extends ListDataItem>({
 }
 
 export { List, ListItem, ListSectionHeader };
-export type {
-  ListDataItem,
-  ListItemProps,
-  ListProps,
-  ListRenderItemProps,
-  ListSectionHeaderProps,
-};
+export type { ListDataItem, ListItemProps, ListProps, ListRenderItemProps, ListSectionHeaderProps };

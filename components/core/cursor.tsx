@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import {
   animate,
   frame,
@@ -10,6 +9,7 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 
 const CONSTANTS = {
   TEXT_ELEMENT_TAGS: ["P", "SPAN", "H1", "H2", "H3", "H4", "TEXTAREA"],
@@ -36,32 +36,27 @@ const CursorInner = () => {
   const cursorRef = useRef(null);
   const isCursorLockedRef = useRef(false);
 
-  const [hoveredElement, setHoveredElement] = useState<HTMLElement | null>(
-    null,
-  );
+  const [hoveredElement, setHoveredElement] = useState<HTMLElement | null>(null);
 
   const cursorXSpring = useSpring(0, CONSTANTS.CURSOR_SPRING_CONFIG);
   const cursorYSpring = useSpring(0, CONSTANTS.CURSOR_SPRING_CONFIG);
   const cursorWidthSpring = useSpring(
     CONSTANTS.DEFAULT_CURSOR_SIZE,
-    CONSTANTS.CURSOR_SPRING_CONFIG,
+    CONSTANTS.CURSOR_SPRING_CONFIG
   );
   const cursorHeightSpring = useSpring(
     CONSTANTS.DEFAULT_CURSOR_SIZE,
-    CONSTANTS.CURSOR_SPRING_CONFIG,
+    CONSTANTS.CURSOR_SPRING_CONFIG
   );
   const cursorOpacitySpring = useSpring(
     CONSTANTS.DEFAULT_CURSOR_OPACITY,
-    CONSTANTS.CURSOR_SPRING_CONFIG,
+    CONSTANTS.CURSOR_SPRING_CONFIG
   );
   const cursorScaleSpring = useSpring(1, CONSTANTS.DEFAULT_SPRING_CONFIG);
   const cursorBorderRadiusSpring = useSpring(CONSTANTS.CURSOR_BORDER_RADIUS, {
     bounce: 0,
   });
-  const cursorBlurSpring = useSpring(
-    CONSTANTS.CURSOR_BLUR,
-    CONSTANTS.DEFAULT_SPRING_CONFIG,
-  );
+  const cursorBlurSpring = useSpring(CONSTANTS.CURSOR_BLUR, CONSTANTS.DEFAULT_SPRING_CONFIG);
 
   const translateX = useMotionValue(0);
   const translateY = useMotionValue(0);
@@ -76,11 +71,11 @@ const CursorInner = () => {
 
   const cursorLeft = useTransform<number, number>(
     [cursorXSpring, cursorWidthSpring],
-    ([x, width]) => x - width / 2,
+    ([x, width]) => x - width / 2
   );
   const cursorTop = useTransform<number, number>(
     [cursorYSpring, cursorHeightSpring],
-    ([y, height]) => y - height / 2,
+    ([y, height]) => y - height / 2
   );
 
   const handleElementMouseMove = (event: MouseEvent) => {
@@ -102,12 +97,10 @@ const CursorInner = () => {
         {
           x: leftOffset * CONSTANTS.HOVER_EFFECT_X_MULTIPLIER * 4,
           y: topOffset * CONSTANTS.HOVER_EFFECT_Y_MULTIPLIER,
-          "--btn-bg-translate-x":
-            -leftOffset * CONSTANTS.HOVER_EFFECT_X_MULTIPLIER * 2 + "px",
-          "--btn-bg-translate-y":
-            -topOffset * CONSTANTS.HOVER_EFFECT_Y_MULTIPLIER * 0.5 + "px",
+          "--btn-bg-translate-x": `${-leftOffset * CONSTANTS.HOVER_EFFECT_X_MULTIPLIER * 2}px`,
+          "--btn-bg-translate-y": `${-topOffset * CONSTANTS.HOVER_EFFECT_Y_MULTIPLIER * 0.5}px`,
         },
-        { type: "keyframes", duration: 0 },
+        { type: "keyframes", duration: 0 }
       );
     } else if (
       hoveredElement.className.length &&
@@ -137,24 +130,18 @@ const CursorInner = () => {
   };
 
   const handleElementMouseDown = () => {
-    if (
-      hoveredElement &&
-      CONSTANTS.HOVER_ELEMENT_TAGS.includes(hoveredElement.tagName)
-    ) {
+    if (hoveredElement && CONSTANTS.HOVER_ELEMENT_TAGS.includes(hoveredElement.tagName)) {
       animate(
         hoveredElement,
         { scale: CONSTANTS.CLICK_ELEMENT_SCALE },
-        CONSTANTS.CLICK_SPRING_CONFIG,
+        CONSTANTS.CLICK_SPRING_CONFIG
       );
       cursorScaleSpring.set(CONSTANTS.CLICK_CURSOR_SCALE);
     }
   };
 
   const handleElementMouseUp = () => {
-    if (
-      hoveredElement &&
-      CONSTANTS.HOVER_ELEMENT_TAGS.includes(hoveredElement.tagName)
-    ) {
+    if (hoveredElement && CONSTANTS.HOVER_ELEMENT_TAGS.includes(hoveredElement.tagName)) {
       animate(hoveredElement, { scale: 1 }, CONSTANTS.CLICK_SPRING_CONFIG);
       cursorScaleSpring.set(1);
     }
@@ -166,10 +153,7 @@ const CursorInner = () => {
       cursorYSpring.set(e.clientY);
     }
 
-    const element = document.elementFromPoint(
-      e.clientX,
-      e.clientY,
-    ) as HTMLElement;
+    const element = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
 
     if (hoveredElement !== element) {
       // disable if data-cursor-disabled is true
@@ -195,7 +179,7 @@ const CursorInner = () => {
           cursorWidthSpring.set((rect?.width ?? 4) - 4);
           cursorHeightSpring.set((rect?.height ?? 4) - 4);
           cursorBorderRadiusSpring.set(
-            parseInt(window.getComputedStyle(element).borderRadius) - 2,
+            parseInt(window.getComputedStyle(element).borderRadius, 10) - 2
           );
           cursorOpacitySpring.set(CONSTANTS.ACTIVE_CURSOR_OPACITY);
           cursorBlurSpring.set(CONSTANTS.CURSOR_BLUR);
@@ -232,10 +216,10 @@ const CursorInner = () => {
         {
           x: 0,
           y: 0,
-          "--btn-bg-translate-x": 0 + "px",
-          "--btn-bg-translate-y": 0 + "px",
+          "--btn-bg-translate-x": `${0}px`,
+          "--btn-bg-translate-y": `${0}px`,
         },
-        { type: "spring", duration: 0.4 },
+        { type: "spring", duration: 0.4 }
       );
     }
   };

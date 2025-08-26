@@ -1,3 +1,5 @@
+import { ButtonGroup } from "@/components/core/button";
+import { NavigationBar, NavigationBarTitle } from "@/components/core/navigation-bar";
 import {
   Ornament,
   OrnamentContent,
@@ -5,51 +7,24 @@ import {
   OrnamentTab,
   OrnamentTabs,
 } from "@/components/core/ornament";
-import { MemoriesToolbar, MemoriesView } from "./memories-view";
-import { defaultWindowProps } from "../constants";
-import {
-  NavigationBar,
-  NavigationBarTitle,
-} from "@/components/core/navigation-bar";
-import { ButtonGroup } from "@/components/core/button";
+import { CollectionsIcon, PanoIcon, PhotosIcon, SearchIcon, SpacialIcon } from "@/components/icons";
 import { HeroDropdownMenu } from "@/components/landing/hero-dropdown-menu";
-import {
-  CollectionsIcon,
-  PanoIcon,
-  PhotosIcon,
-  SearchIcon,
-  SpacialIcon,
-} from "@/components/icons";
+import { defaultWindowProps } from "../constants";
+import { MemoriesToolbar, MemoriesView } from "./memories-view";
 
 function PhotosPage() {
   return (
     <Ornament defaultTab="library">
       <OrnamentTabs>
-        <OrnamentTab
-          icon={<PhotosIcon data-slot="icon" />}
-          label="Library"
-          value="library"
-        />
+        <OrnamentTab icon={<PhotosIcon data-slot="icon" />} label="Library" value="library" />
         <OrnamentTab
           icon={<CollectionsIcon data-slot="icon" />}
           label="Collections"
           value="collections"
         />
-        <OrnamentTab
-          icon={<SpacialIcon data-slot="icon" />}
-          label="Spacial"
-          value="spacial"
-        />
-        <OrnamentTab
-          icon={<PanoIcon data-slot="icon" />}
-          label="Panoramas"
-          value="panoramas"
-        />
-        <OrnamentTab
-          icon={<SearchIcon data-slot="icon" />}
-          label="Search"
-          value="search"
-        />
+        <OrnamentTab icon={<SpacialIcon data-slot="icon" />} label="Spacial" value="spacial" />
+        <OrnamentTab icon={<PanoIcon data-slot="icon" />} label="Panoramas" value="panoramas" />
+        <OrnamentTab icon={<SearchIcon data-slot="icon" />} label="Search" value="search" />
       </OrnamentTabs>
       <OrnamentContents>
         <OrnamentContent
@@ -61,11 +36,7 @@ function PhotosPage() {
         >
           <MemoriesView />
         </OrnamentContent>
-        <OrnamentContent
-          value="collections"
-          key="collections"
-          {...defaultWindowProps}
-        >
+        <OrnamentContent value="collections" key="collections" {...defaultWindowProps}>
           <NavigationBar>
             <div />
             <NavigationBarTitle>Collections</NavigationBarTitle>
@@ -83,11 +54,7 @@ function PhotosPage() {
             </ButtonGroup>
           </NavigationBar>
         </OrnamentContent>
-        <OrnamentContent
-          value="panoramas"
-          key="panoramas"
-          {...defaultWindowProps}
-        >
+        <OrnamentContent value="panoramas" key="panoramas" {...defaultWindowProps}>
           <NavigationBar>
             <div />
             <NavigationBarTitle>Panoramas</NavigationBarTitle>

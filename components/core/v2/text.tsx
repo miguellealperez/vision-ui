@@ -65,13 +65,13 @@ const Text = React.forwardRef<HTMLParagraphElement, TextProps>(
       <Comp
         className={cn(
           textVariants({ variant, size, className }),
-          textStyles[variant ?? "default"].top,
+          textStyles[variant ?? "default"].top
         )}
         ref={ref}
         {...props}
       />
     );
-  },
+  }
 );
 
 export { Text };

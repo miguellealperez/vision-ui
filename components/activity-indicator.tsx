@@ -1,13 +1,8 @@
-import { SVGProps } from "react";
+import type { SVGProps } from "react";
 
 export const ActivityIndicator = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 28 28"
-      fill="none"
-      {...props}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" fill="none" {...props}>
       <rect
         width={3.733}
         height={9.333}

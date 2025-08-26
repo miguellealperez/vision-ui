@@ -1,6 +1,6 @@
-import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
+import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -24,7 +24,7 @@ const buttonVariants = cva(
     "before:[transform:translateX(var(--btn-bg-translate-x))_translateY(var(--btn-bg-translate-y))]",
     "before:[background-blend-mode:color-dodge,lighten] before:transition-opacity before:duration-300",
     "before:[background:linear-gradient(0deg,rgba(94,94,94,0.24)_0%,rgba(94,94,94,0.24)_100%),rgba(255,255,255,0.12)]",
-    "before:opacity-0",
+    "before:opacity-0"
   ),
   {
     variants: {
@@ -38,7 +38,7 @@ const buttonVariants = cva(
           "[&_[data-slot='icon']]:text-foreground",
           "[&_[data-slot='icon']]:opacity-[0.96]",
           //* before *//
-          "before:opacity-75 before:hover:opacity-[0.96]",
+          "before:opacity-75 before:hover:opacity-[0.96]"
         ),
         secondary: cn(
           "text-foreground/50 hover:text-foreground/90 transition-colors",
@@ -51,7 +51,7 @@ const buttonVariants = cva(
           "before:hover:[background:linear-gradient(0deg,rgba(94,94,94,0.24)_0%,rgba(94,94,94,0.24)_100%),rgba(255,255,255,0.12)]",
           //* before[data-active]
           "[&[data-active=true]]:before:opacity-40",
-          "[&[data-active=true]]:before:hover:[background:linear-gradient(0deg,rgba(94,94,94,0.24)_0%,rgba(94,94,94,0.24)_100%),rgba(255,255,255,0.12)]",
+          "[&[data-active=true]]:before:hover:[background:linear-gradient(0deg,rgba(94,94,94,0.24)_0%,rgba(94,94,94,0.24)_100%),rgba(255,255,255,0.12)]"
         ),
         /* bg-destructive text-destructive-foreground */
         destructive: cn(
@@ -62,14 +62,14 @@ const buttonVariants = cva(
           "[&_[data-slot='icon']]:hover:opacity-[0.96]",
           //* before *//
           "before:hover:opacity-50 before:opacity-0",
-          "before:hover:[background:linear-gradient(0deg,rgba(94,94,94,0.24)_0%,rgba(94,94,94,0.24)_100%),rgba(255,255,255,0.12)]",
+          "before:hover:[background:linear-gradient(0deg,rgba(94,94,94,0.24)_0%,rgba(94,94,94,0.24)_100%),rgba(255,255,255,0.12)]"
         ),
         selected: cn(
           "text-background/[0.96]",
           //* icon *//
           "[&_[data-slot='icon']]:text-background [&_[data-slot='icon']]:z-[1]",
           "before:[background:hsla(var(--foreground)/0.96)] before:text-background/90",
-          "before:hover:opacity-100 before:opacity-100",
+          "before:hover:opacity-100 before:opacity-100"
         ),
         link: cn(
           "text-[#5ac8f5]",
@@ -79,7 +79,7 @@ const buttonVariants = cva(
           "[&_[data-slot='icon']]:hover:opacity-[0.96]",
           //* before *//
           "before:hover:opacity-50 before:opacity-0",
-          "before:hover:[background:linear-gradient(0deg,rgba(94,94,94,0.24)_0%,rgba(94,94,94,0.24)_100%),rgba(255,255,255,0.12)]",
+          "before:hover:[background:linear-gradient(0deg,rgba(94,94,94,0.24)_0%,rgba(94,94,94,0.24)_100%),rgba(255,255,255,0.12)]"
         ),
       },
       /**
@@ -95,14 +95,12 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  },
+  }
 );
 
 type ButtonVariant = VariantProps<typeof buttonVariants>;
 
-interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    ButtonVariant {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariant {
   asChild?: boolean;
 }
 
@@ -127,17 +125,13 @@ function Button({
   );
 }
 
-function ButtonGroup({
-  className,
-  children,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+function ButtonGroup({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
         "flex items-center justify-center gap-2 p-3",
         "*:rounded-full [&_button:before]:rounded-full",
-        className,
+        className
       )}
       {...props}
     >

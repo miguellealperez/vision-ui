@@ -1,9 +1,9 @@
 "use client";
 import {
   List,
-  ListDataItem,
+  type ListDataItem,
   ListItem,
-  ListRenderItemProps,
+  type ListRenderItemProps,
   ListSectionHeader,
 } from "../core/list";
 import View from "../core/view";

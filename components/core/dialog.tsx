@@ -1,18 +1,19 @@
 "use client";
 
-import React, {
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { XIcon } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import type React from "react";
+import {
   // TODO: Wait for this to be stable
   // unstable_Activity as Activity,
   createContext,
-  useState,
   useCallback,
   useContext,
+  useState,
 } from "react";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { XIcon } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
-import { Window, GlassThickness } from "./window";
+import { type GlassThickness, Window } from "./window";
 
 // Context to manage the dialog state
 const DialogContext = createContext<{
@@ -23,8 +24,7 @@ const DialogContext = createContext<{
   setOpen: () => {},
 });
 
-interface DialogProps
-  extends React.ComponentProps<typeof DialogPrimitive.Root> {
+interface DialogProps extends React.ComponentProps<typeof DialogPrimitive.Root> {
   children: React.ReactNode;
 }
 
@@ -46,7 +46,7 @@ function Dialog({
         setUncontrolledOpen(value);
       }
     },
-    [controlledOnOpenChange, open],
+    [controlledOnOpenChange, open]
   );
 
   return (
@@ -58,20 +58,15 @@ function Dialog({
   );
 }
 
-function DialogTrigger({
-  ...props
-}: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
+function DialogTrigger({ ...props }: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
   return <DialogPrimitive.Trigger {...props} />;
 }
 
-function DialogClose({
-  ...props
-}: React.ComponentProps<typeof DialogPrimitive.Close>) {
+function DialogClose({ ...props }: React.ComponentProps<typeof DialogPrimitive.Close>) {
   return <DialogPrimitive.Close {...props} />;
 }
 
-interface DialogContentProps
-  extends React.ComponentProps<typeof DialogPrimitive.Content> {
+interface DialogContentProps extends React.ComponentProps<typeof DialogPrimitive.Content> {
   /**
    * The thickness of the glass effect.
    * @default "normal"
@@ -114,23 +109,19 @@ function DialogContent({
             <motion.div
               className={cn(
                 "fixed top-[50%] left-[50%] z-50 w-full max-w-md translate-x-[-50%] translate-y-[-50%]",
-                className,
+                className
               )}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1, transition: { delay: 0.3 } }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: "spring", bounce: 0 }}
             >
-              <Window
-                thickness={thickness}
-                className="overflow-hidden"
-                aria-label="Dialog"
-              >
+              <Window thickness={thickness} className="overflow-hidden" aria-label="Dialog">
                 <div className="relative flex flex-col gap-4 p-6">
                   {children}
 
                   {showCloseButton && (
-                    <DialogPrimitive.Close className="absolute top-4 right-4 rounded-full p-1.5 opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-white/50 focus:outline-none">
+                    <DialogPrimitive.Close className="absolute top-4 right-4 rounded-full p-1.5 opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-white/50">
                       <XIcon className="h-4 w-4 text-gray-500" />
                       <span className="sr-only">Close</span>
                     </DialogPrimitive.Close>
@@ -148,32 +139,23 @@ function DialogContent({
 
 function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div
-      className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
-      {...props}
-    />
+    <div className={cn("flex flex-col gap-2 text-center sm:text-left", className)} {...props} />
   );
 }
 
 function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn(
-        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
-        className,
-      )}
+      className={cn("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)}
       {...props}
     />
   );
 }
 
-function DialogTitle({
-  className,
-  ...props
-}: React.ComponentProps<typeof DialogPrimitive.Title>) {
+function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
   return (
     <DialogPrimitive.Title
-      className={cn("text-lg leading-none font-semibold", className)}
+      className={cn("font-semibold text-lg leading-none", className)}
       {...props}
     />
   );
@@ -184,10 +166,7 @@ function DialogDescription({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Description>) {
   return (
-    <DialogPrimitive.Description
-      className={cn("text-sm text-gray-500", className)}
-      {...props}
-    />
+    <DialogPrimitive.Description className={cn("text-gray-500 text-sm", className)} {...props} />
   );
 }
 

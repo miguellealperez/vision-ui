@@ -14,11 +14,10 @@ export const ComponentWrapper = ({
     <div
       className={cn(
         {
-          "bg-gradient-to-tr from-rose-700/40 via-indigo-700/40 to-cyan-700/40":
-            gradient,
+          "bg-gradient-to-tr from-rose-700/40 via-indigo-700/40 to-cyan-700/40": gradient,
         },
         "flex w-full items-center justify-center rounded-[8px] p-8",
-        className,
+        className
       )}
       {...props}
     >

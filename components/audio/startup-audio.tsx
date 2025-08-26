@@ -10,12 +10,7 @@ interface StartupAudioProps {
   onError?: (error: string) => void;
 }
 
-export function StartupAudio({
-  src,
-  volume = 0.5,
-  onPlay,
-  onError,
-}: StartupAudioProps) {
+export function StartupAudio({ src, volume = 0.5, onPlay, onError }: StartupAudioProps) {
   const [isPlayed, setIsPlayed] = useState(false);
   const { play, isLoaded, error } = useAudio({
     src,

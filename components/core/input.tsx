@@ -1,10 +1,8 @@
-import * as React from "react";
-
-import { cn } from "@/lib/utils";
 import { Mic } from "lucide-react";
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
    * Whether to show the dictation button
    * @default true
@@ -32,12 +30,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {
             "rounded-[100px]": shape === "rounded",
             "rounded-full": shape === "pill",
-          },
+          }
         )}
       >
         {dictation && (
           <div className="absolute inset-y-0 left-3 flex w-7 flex-col items-center justify-center">
-            <Mic className="size-5 shrink grow basis-0 self-stretch text-center leading-snug text-muted-foreground/60" />
+            <Mic className="size-5 shrink grow basis-0 self-stretch text-center text-muted-foreground/60 leading-snug" />
           </div>
         )}
         <input
@@ -49,16 +47,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             },
             "vision-pro-ui-hoverable",
             "caret-foreground/80",
-            "flex h-11 w-full rounded-[100px] bg-transparent py-2 pr-4 text-sm font-medium",
+            "flex h-11 w-full rounded-[100px] bg-transparent py-2 pr-4 font-medium text-sm",
             "placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20 disabled:cursor-not-allowed disabled:opacity-50",
-            className,
+            className
           )}
           ref={ref}
           {...props}
         />
       </div>
     );
-  },
+  }
 );
 Input.displayName = "Input";
 

@@ -1,12 +1,12 @@
 "use client";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
+import { AnimatePresence, motion } from "motion/react";
 import React, { createContext, useContext, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "motion/react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@radix-ui/react-tabs";
-import { Window, WindowProps } from "./window";
-import { Text } from "../ui/typography";
 import { Button } from "../core/button";
+import { Text } from "../ui/typography";
+import { Window, type WindowProps } from "./window";
 
 const CONSTANTS = {
   EXPANDED_WIDTH: "100%",
@@ -22,7 +22,7 @@ const CONSTANTS = {
     bounce: 0,
     duration: 0.7,
   },
-};
+} as const;
 
 const WINDOW_VARIANTS = {
   hidden: {
@@ -45,7 +45,7 @@ const WINDOW_VARIANTS = {
       stiffness: 90,
     },
   },
-};
+} as const;
 
 const FOOTER_VARIANTS = {
   hidden: {
@@ -66,7 +66,7 @@ const FOOTER_VARIANTS = {
     opacity: 0,
     scale: 0.95,
   },
-};
+} as const;
 
 // Create a context for the active tab
 const OrnamentContext = createContext<{
@@ -191,14 +191,13 @@ const Ornament = ({
         className={cn(
           "relative grid h-full w-full flex-1 grid-cols-[68px_1fr] place-content-center gap-4 md:gap-7 lg:ml-[-96px]",
           "max-w-3xl xl:max-w-4xl 2xl:max-w-6xl",
-          className,
+          className
         )}
         defaultValue={defaultTab}
         aria-label="Navigation and content panels"
       >
         <div className="sr-only">
-          This navigation menu expands when focused. Use tab key to navigate
-          between tabs.
+          This navigation menu expands when focused. Use tab key to navigate between tabs.
         </div>
         {children}
       </Tabs>
@@ -213,18 +212,12 @@ const OrnamentTabs = ({
   children: React.ReactNode;
   className?: string;
 }) => {
-  const {
-    isExpanded,
-    isMouseDown,
-    handleOrnamentItemFocus,
-    handleOrnamentItemBlur,
-  } = useOrnament();
+  const { isExpanded, isMouseDown, handleOrnamentItemFocus, handleOrnamentItemBlur } =
+    useOrnament();
 
   return (
     <Window
-      className={
-        "hide-scrollbar relative z-[42] mx-auto flex items-center justify-start p-3"
-      }
+      className={"hide-scrollbar relative z-[42] mx-auto flex items-center justify-start p-3"}
       initial={{
         opacity: 0,
         scale: 1,
@@ -300,9 +293,7 @@ const OrnamentTab = ({
     <motion.div
       initial={false}
       animate={{
-        width: isExpanded
-          ? CONSTANTS.EXPANDED_WIDTH
-          : CONSTANTS.COLLAPSED_WIDTH,
+        width: isExpanded ? CONSTANTS.EXPANDED_WIDTH : CONSTANTS.COLLAPSED_WIDTH,
       }}
       transition={CONSTANTS.ORNAMENT_TRANSITION_CONFIG}
     >
@@ -340,7 +331,7 @@ const OrnamentTab = ({
             <Text
               size="title3"
               variant={isHovered ? "default" : variant}
-              className="line-clamp-1 w-fit min-w-[60px] truncate leading-[24px] font-medium"
+              className="line-clamp-1 w-fit min-w-[60px] truncate font-medium leading-[24px]"
             >
               {label}
             </Text>
@@ -361,10 +352,7 @@ interface OrnamentContentsApiProps {
   contentClassName?: string;
 }
 
-const OrnamentContents = ({
-  children,
-  contentClassName,
-}: OrnamentContentsApiProps) => {
+const OrnamentContents = ({ children, contentClassName }: OrnamentContentsApiProps) => {
   const { setContentClassName } = useOrnament();
   React.useEffect(() => {
     if (contentClassName) {
@@ -413,11 +401,7 @@ const OrnamentContent = ({
           tabIndex={-1}
         >
           {HeaderComponent &&
-            (typeof HeaderComponent === "function" ? (
-              <HeaderComponent />
-            ) : (
-              HeaderComponent
-            ))}
+            (typeof HeaderComponent === "function" ? <HeaderComponent /> : HeaderComponent)}
           <Window
             className={cn(contentClassName, className)}
             rootClassName={cn("items-stretch", rootClassName)}
@@ -438,11 +422,7 @@ const OrnamentContent = ({
               }}
               className="absolute right-0 bottom-0 left-0 z-[41] flex items-center justify-center"
             >
-              {typeof FooterComponent === "function" ? (
-                <FooterComponent />
-              ) : (
-                FooterComponent
-              )}
+              {typeof FooterComponent === "function" ? <FooterComponent /> : FooterComponent}
             </motion.div>
           )}
         </TabsContent>

@@ -1,25 +1,20 @@
 "use client";
 
+import type { DropdownMenuContentProps, DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
+import * as RadixDropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
+import { AnimatePresence } from "motion/react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import {
-  DropdownMenu as DropdownMenuPrimitive,
   DropdownMenuContent as DropdownMenuContentPrimitive,
   DropdownMenuLabel,
+  DropdownMenu as DropdownMenuPrimitive,
   DropdownMenuSeparator,
   DropdownMenuTrigger as DropdownMenuTriggerPrimitive,
 } from "@/components/ui/dropdown-menu";
-
-import * as RadixDropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { AnimatePresence } from "motion/react";
-import {
-  DropdownMenuContentProps,
-  DropdownMenuProps,
-} from "@radix-ui/react-dropdown-menu";
-import { Window } from "./window";
-import { Button, ButtonProps } from "../core/button";
 import { cn } from "@/lib/utils";
+import { Button, type ButtonProps } from "../core/button";
 import { textVariants } from "../ui/typography";
+import { Window } from "./window";
 
 const DropdownMenuContext = createContext<{
   isOpen: boolean;
@@ -126,53 +121,48 @@ const DropdownMenuItem = React.forwardRef<
     inset?: boolean;
     variant?: "secondary" | "destructive";
   }
->(
-  (
-    { inset, className, children, variant, onMouseDown, onMouseUp, ...props },
-    ref,
-  ) => {
-    const { setIsMouseDown, setIsOpen } = useDropdownMenu();
-    return (
-      <RadixDropdownMenuPrimitive.Item
-        ref={ref}
-        onMouseDown={(e) => {
-          setIsMouseDown(true);
-          onMouseDown?.(e);
-        }}
-        onMouseUp={(e) => {
-          setIsMouseDown(false);
-          onMouseUp?.(e);
-        }}
-        onSelect={(e) => {
-          e.preventDefault();
-          setTimeout(() => {
-            setIsOpen(false);
-          }, 300);
-        }}
-        {...props}
-        asChild
+>(({ inset, className, children, variant, onMouseDown, onMouseUp, ...props }, ref) => {
+  const { setIsMouseDown, setIsOpen } = useDropdownMenu();
+  return (
+    <RadixDropdownMenuPrimitive.Item
+      ref={ref}
+      onMouseDown={(e) => {
+        setIsMouseDown(true);
+        onMouseDown?.(e);
+      }}
+      onMouseUp={(e) => {
+        setIsMouseDown(false);
+        onMouseUp?.(e);
+      }}
+      onSelect={(e) => {
+        e.preventDefault();
+        setTimeout(() => {
+          setIsOpen(false);
+        }, 300);
+      }}
+      {...props}
+      asChild
+    >
+      <Button
+        variant={variant ?? "secondary"}
+        size="list"
+        className={cn(
+          //TODO: hover causing focus-visiable to trigger
+          "focus-visible:ring-0 focus-visible:ring-offset-0",
+          "w-full justify-start rounded-[16px] before:rounded-[16px]",
+          "flex justify-between gap-2",
+          "[&_[data-slot='icon']]:ml-2",
+          textVariants({ size: "body" }),
+          inset && "pl-8",
+          className
+        )}
+        disabled={props?.disabled}
       >
-        <Button
-          variant={variant ?? "secondary"}
-          size="list"
-          className={cn(
-            //TODO: hover causing focus-visiable to trigger
-            "focus-visible:ring-0 focus-visible:ring-offset-0",
-            "w-full justify-start rounded-[16px] before:rounded-[16px]",
-            "flex justify-between gap-2",
-            "[&_[data-slot='icon']]:ml-2",
-            textVariants({ size: "body" }),
-            inset && "pl-8",
-            className,
-          )}
-          disabled={props?.disabled}
-        >
-          {children}
-        </Button>
-      </RadixDropdownMenuPrimitive.Item>
-    );
-  },
-);
+        {children}
+      </Button>
+    </RadixDropdownMenuPrimitive.Item>
+  );
+});
 
 DropdownMenuItem.displayName = "DropdownMenuItem";
 export {

@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
 import { Slot } from "@radix-ui/react-slot";
-import View, { ViewProps } from "./view";
 import React from "react";
+import { cn } from "@/lib/utils";
+import View, { type ViewProps } from "./view";
 
 interface HoverableProps extends ViewProps {
   asChild?: boolean;
@@ -18,7 +18,7 @@ const Hoverable = React.forwardRef<HTMLDivElement, HoverableProps>(
         {...props}
       />
     );
-  },
+  }
 );
 Hoverable.displayName = "Hoverable";
 

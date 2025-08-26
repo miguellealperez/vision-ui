@@ -9,16 +9,9 @@ export type ViewProps = React.HTMLAttributes<HTMLDivElement> & {
   material?: boolean | { thickness?: GlassThickness };
 };
 
-function View({
-  className,
-  style,
-  material = false,
-  children,
-  ...rest
-}: ViewProps) {
+function View({ className, style, material = false, children, ...rest }: ViewProps) {
   if (material) {
-    const thickness =
-      typeof material === "object" ? material.thickness : "normal";
+    const thickness = typeof material === "object" ? material.thickness : "normal";
     return (
       <Material
         thickness={thickness}
@@ -37,12 +30,8 @@ function View({
   );
 }
 
-export type ScrollViewProps = React.ComponentPropsWithoutRef<
-  typeof ScrollAreaPrimitive.Root
-> & {
-  contentProps?: React.ComponentPropsWithoutRef<
-    typeof ScrollAreaPrimitive.Viewport
-  >;
+export type ScrollViewProps = React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> & {
+  contentProps?: React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Viewport>;
   material?: boolean | { thickness?: GlassThickness };
   className?: string;
   contentClassName?: string;
@@ -70,8 +59,7 @@ function ScrollView({
   );
 
   if (material) {
-    const thickness =
-      typeof material === "object" ? material.thickness : "normal";
+    const thickness = typeof material === "object" ? material.thickness : "normal";
     return (
       <Material thickness={thickness} className={cn("[--radius:34px]")}>
         {body}

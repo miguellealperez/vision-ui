@@ -1,8 +1,8 @@
 "use client";
 
+import { useAtom } from "jotai";
 import { Switch } from "@/components/core/switch";
 import { debugModeAtom } from "@/lib/atoms";
-import { useAtom } from "jotai";
 
 export function DebugModeSwitch() {
   const [debugMode, setDebugMode] = useAtom(debugModeAtom);

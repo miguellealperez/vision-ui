@@ -1,13 +1,12 @@
-import { StaticImageData } from "next/image";
-
-import yosemiteIcon from "@/public/assets/environments/adam-kool-yosemite-icon.avif";
+import type { StaticImageData } from "next/image";
 import yosemiteBackground from "@/public/assets/environments/adam-kool-yosemite-background.avif";
-import joshuaTreeIcon from "@/public/assets/environments/cedric-letsch-joshua-tree-icon.avif";
+import yosemiteIcon from "@/public/assets/environments/adam-kool-yosemite-icon.avif";
 import joshuaTreeBackground from "@/public/assets/environments/cedric-letsch-joshua-tree-background.avif";
-import homeNightIcon from "@/public/assets/environments/home-night-icon.avif";
+import joshuaTreeIcon from "@/public/assets/environments/cedric-letsch-joshua-tree-icon.avif";
 import homeNightBackground from "@/public/assets/environments/home-night-background.avif";
-import haleakalaIcon from "@/public/assets/environments/tevin-trinh-haleakala-icon.avif";
+import homeNightIcon from "@/public/assets/environments/home-night-icon.avif";
 import haleakalaBackground from "@/public/assets/environments/tevin-trinh-haleakala-background.avif";
+import haleakalaIcon from "@/public/assets/environments/tevin-trinh-haleakala-icon.avif";
 
 export interface Environment {
   id: string;

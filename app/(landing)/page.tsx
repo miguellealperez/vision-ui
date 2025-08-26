@@ -53,7 +53,7 @@ function LandingPage() {
                 Created by{" "}
                 <Link
                   href="https://twitter.com/useOptimistic"
-                  className="text-fd-foreground font-semibold underline"
+                  className="font-semibold text-fd-foreground underline"
                 >
                   Oliver
                 </Link>
@@ -61,7 +61,7 @@ function LandingPage() {
                 Docs powered by{" "}
                 <Link
                   href="https://fumadocs.vercel.app/"
-                  className="text-fd-foreground font-semibold underline"
+                  className="font-semibold text-fd-foreground underline"
                 >
                   Fumadocs
                 </Link>

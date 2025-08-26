@@ -2,6 +2,13 @@
 
 # Vision UI
 
+> V2 coming soon and is a work in progress 🚧
+
+- [ ] More primitive & React-Native-styled components
+- [ ] Better navigation
+- [ ] Improve performance
+- [ ] Sound effects
+
 ## What is Vision UI?
 
 Vision UI is a collection of components that follow the VisionOS design language.
@@ -13,7 +20,6 @@ It uses most of the components from [shadcn/ui](https://ui.shadcn.com/) for the 
 ![Environments](https://github.com/user-attachments/assets/fb692f7b-4935-4e93-9f86-0ea8665eaeef)
 
 ![Demo](https://github.com/user-attachments/assets/cd924064-d927-47ef-919e-9d169f67c7c9)
-
 
 ## Demo Video
 

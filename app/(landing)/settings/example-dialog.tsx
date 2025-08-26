@@ -1,16 +1,16 @@
 "use client";
 
+import { DialogClose } from "@radix-ui/react-dialog";
+import { Button } from "@/components/core/button";
 import {
   DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/core/dialog";
-import { Button } from "@/components/core/button";
 import { Text } from "@/components/ui/typography";
-import { DialogClose } from "@radix-ui/react-dialog";
 
 export default function ExampleDialog() {
   return (
@@ -24,16 +24,16 @@ export default function ExampleDialog() {
         <DialogHeader>
           <DialogTitle>VisionOS Dialog</DialogTitle>
           <DialogDescription>
-            This dialog mimics the VisionOS style where the background content
-            scales down and dims when the dialog opens.
+            This dialog mimics the VisionOS style where the background content scales down and dims
+            when the dialog opens.
           </DialogDescription>
         </DialogHeader>
 
         <div className="py-4">
           <Text size="body">
-            The dialog uses the Window component with glass effect and animates
-            in and out with a smooth transition. When this dialog is open,
-            notice how the background content is scaled down and dimmed.
+            The dialog uses the Window component with glass effect and animates in and out with a
+            smooth transition. When this dialog is open, notice how the background content is scaled
+            down and dimmed.
           </Text>
         </div>
 

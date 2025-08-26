@@ -1,5 +1,5 @@
-import { type DocsLayoutProps } from "fumadocs-ui/layouts/docs";
-import { type HomeLayoutProps } from "fumadocs-ui/layouts/home";
+import type { DocsLayoutProps } from "fumadocs-ui/layouts/docs";
+import type { HomeLayoutProps } from "fumadocs-ui/layouts/home";
 import { source } from "@/app/source";
 
 // shared configuration

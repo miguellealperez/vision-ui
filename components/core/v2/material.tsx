@@ -109,14 +109,7 @@ const CONSTANTS = {
   VAR_DIAMETER: "[--diameter:68px]",
 };
 
-const maskComposite = [
-  "exclude",
-  "intersect",
-  "subtract",
-  "intersect",
-  "subtract",
-  "add",
-];
+const maskComposite = ["exclude", "intersect", "subtract", "intersect", "subtract", "add"];
 
 const defaultHighlightStyle = {
   borderRadius: `var(--radius)`,
@@ -160,13 +153,7 @@ const rightBottomHighlightStyle = {
   ...defaultHighlightStyle,
 } as React.CSSProperties;
 
-function Material({
-  thickness = "normal",
-  className,
-  style,
-  children,
-  ...rest
-}: MaterialProps) {
+function Material({ thickness = "normal", className, style, children, ...rest }: MaterialProps) {
   const blur = getThickness(thickness);
   return (
     <div
@@ -177,7 +164,7 @@ function Material({
         "min-h-[64px] min-w-[64px]",
         CONSTANTS.VAR_DIAMETER,
         CONSTANTS.VAR_RADIUS,
-        className,
+        className
       )}
       style={{
         backdropFilter:
@@ -206,7 +193,7 @@ function Material({
         className={cn(
           getHighlightStroke(thickness),
           "pointer-events-none absolute inset-[-0.75px] z-40",
-          "[--mask-inner-distance:calc(50%-var(--mask-stroke)-var(--mask-stroke))] [--mask-outer-distance:calc(50%-var(--mask-stroke))]",
+          "[--mask-inner-distance:calc(50%-var(--mask-stroke)-var(--mask-stroke))] [--mask-outer-distance:calc(50%-var(--mask-stroke))]"
         )}
         style={{
           ...leftTopHighlightStyle,
@@ -218,7 +205,7 @@ function Material({
         className={cn(
           getHighlightStroke(thickness),
           "pointer-events-none absolute inset-[-0.25px] z-40",
-          "[--mask-inner-distance:calc(50%-var(--mask-stroke)-var(--mask-stroke))] [--mask-outer-distance:calc(50%-var(--mask-stroke))]",
+          "[--mask-inner-distance:calc(50%-var(--mask-stroke)-var(--mask-stroke))] [--mask-outer-distance:calc(50%-var(--mask-stroke))]"
         )}
         style={{
           ...rightBottomHighlightStyle,

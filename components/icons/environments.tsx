@@ -1,12 +1,7 @@
-import { SVGProps } from "react";
+import type { SVGProps } from "react";
 
 const EnvironmentsIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" {...props}>
     <path
       fill="currentColor"
       d="m7.46 13.08-1.397 2.093c-.604.895-.623 2.026-.166 2.827H1.209c-1.243 0-1.537-1.37-.837-2.359l2.23-3.14c.622.045.903.841 1.897.841.982 0 1.374-.885 1.917-.885.343 0 .627.362 1.045.622Zm.081-4.366L9 10.774l-1.07 1.602c-.386-.25-.82-.738-1.514-.738-.942 0-1.406.886-1.917.886-.38 0-.752-.566-1.38-.744l2.172-3.066C5.624 8.238 6.023 8 6.416 8c.386 0 .785.238 1.125.714Z"

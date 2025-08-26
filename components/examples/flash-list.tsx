@@ -22,32 +22,24 @@ export default function FlashListExample() {
 
   const data = LARGE_DATA.slice(0, itemCount);
 
-  const renderItem = ({
-    item,
-    index,
-  }: {
-    item: (typeof data)[0];
-    index: number;
-  }) => (
-    <div className="flex items-center space-x-4 border-b border-gray-200 p-4 hover:bg-gray-50">
+  const renderItem = ({ item, index }: { item: (typeof data)[0]; index: number }) => (
+    <div className="flex items-center space-x-4 border-gray-200 border-b p-4 hover:bg-gray-50">
       <View
         className="h-12 w-12 flex-shrink-0 rounded-lg"
         style={{ backgroundColor: item.color }}
       />
       <div className="min-w-0 flex-1">
-        <h3 className="truncate text-lg font-medium text-gray-900">
-          {item.title}
-        </h3>
-        <p className="truncate text-sm text-gray-500">{item.description}</p>
+        <h3 className="truncate font-medium text-gray-900 text-lg">{item.title}</h3>
+        <p className="truncate text-gray-500 text-sm">{item.description}</p>
       </div>
-      <div className="text-sm text-gray-400">#{index}</div>
+      <div className="text-gray-400 text-sm">#{index}</div>
     </div>
   );
 
   return (
     <div className="space-y-6 p-6">
       <div className="space-y-4">
-        <h1 className="text-2xl font-bold">FlashList with Virtual Scrolling</h1>
+        <h1 className="font-bold text-2xl">FlashList with Virtual Scrolling</h1>
 
         <div className="flex items-center space-x-4">
           <label className="flex items-center space-x-2">
@@ -75,16 +67,16 @@ export default function FlashListExample() {
           </label>
         </div>
 
-        <div className="text-sm text-gray-600">
+        <div className="text-gray-600 text-sm">
           {useVirtual ? (
             <p>
-              Virtual scrolling enabled - only rendering visible items.
-              Performance optimized for large datasets.
+              Virtual scrolling enabled - only rendering visible items. Performance optimized for
+              large datasets.
             </p>
           ) : (
             <p>
-              Standard rendering - all items are rendered in the DOM. May be
-              slower with large datasets.
+              Standard rendering - all items are rendered in the DOM. May be slower with large
+              datasets.
             </p>
           )}
         </div>
@@ -104,7 +96,7 @@ export default function FlashListExample() {
         />
       </div>
 
-      <div className="text-sm text-gray-500">
+      <div className="text-gray-500 text-sm">
         <p>Total items: {data.length.toLocaleString()}</p>
         <p>Rendering mode: {useVirtual ? "Virtual" : "Standard"}</p>
       </div>

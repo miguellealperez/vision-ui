@@ -1,7 +1,7 @@
+import { ALargeSmall, ListOrdered, Redo2, Undo2 } from "lucide-react";
 import { Button, ButtonGroup } from "@/components/core/button";
-import { Undo2, Redo2, ALargeSmall, ListOrdered } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import { Window } from "@/components/core/window";
+import { Separator } from "@/components/ui/separator";
 
 export const WithButtonGroup = () => {
   return (

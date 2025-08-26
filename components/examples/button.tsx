@@ -1,6 +1,6 @@
+import { Ellipsis, PenBox, Share } from "lucide-react";
 import { Button, ButtonGroup } from "@/components/core/button";
 import { Window } from "@/components/core/window";
-import { Share, Ellipsis, PenBox } from "lucide-react";
 
 export const ButtonExample = () => {
   return (

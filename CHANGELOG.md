@@ -1,5 +1,11 @@
 # vision-pro-ui
 
+## 1.7.0
+
+### Minor Changes
+
+- Move lint to biome, fix errors, add initial v2 components
+
 ## 1.6.0
 
 ### Minor Changes

@@ -11,10 +11,7 @@ import {
   ScrollAreaViewport,
 } from "./scrollview";
 
-type FlashListRenderItem<T> = (info: {
-  item: T;
-  index: number;
-}) => React.ReactNode;
+type FlashListRenderItem<T> = (info: { item: T; index: number }) => React.ReactNode;
 
 type FlashListProps<T> = {
   data: T[];
@@ -53,37 +50,25 @@ function FlashListInner<T>({
     const el = e.currentTarget;
     if (horizontal) {
       const remaining = el.scrollWidth - el.clientWidth - el.scrollLeft;
-      if (
-        !endReachedRef.current &&
-        remaining <= el.clientWidth * onEndReachedThreshold
-      ) {
+      if (!endReachedRef.current && remaining <= el.clientWidth * onEndReachedThreshold) {
         endReachedRef.current = true;
         onEndReached?.();
       }
-      if (remaining > el.clientWidth * onEndReachedThreshold)
-        endReachedRef.current = false;
+      if (remaining > el.clientWidth * onEndReachedThreshold) endReachedRef.current = false;
     } else {
       const remaining = el.scrollHeight - el.clientHeight - el.scrollTop;
-      if (
-        !endReachedRef.current &&
-        remaining <= el.clientHeight * onEndReachedThreshold
-      ) {
+      if (!endReachedRef.current && remaining <= el.clientHeight * onEndReachedThreshold) {
         endReachedRef.current = true;
         onEndReached?.();
       }
-      if (remaining > el.clientHeight * onEndReachedThreshold)
-        endReachedRef.current = false;
+      if (remaining > el.clientHeight * onEndReachedThreshold) endReachedRef.current = false;
     }
   };
 
   const header =
-    typeof ListHeaderComponent === "function"
-      ? ListHeaderComponent()
-      : ListHeaderComponent;
+    typeof ListHeaderComponent === "function" ? ListHeaderComponent() : ListHeaderComponent;
   const footer =
-    typeof ListFooterComponent === "function"
-      ? ListFooterComponent()
-      : ListFooterComponent;
+    typeof ListFooterComponent === "function" ? ListFooterComponent() : ListFooterComponent;
 
   return (
     <ScrollAreaRoot
@@ -93,9 +78,7 @@ function FlashListInner<T>({
       {...props}
     >
       {header}
-      <ScrollAreaViewport
-        className={cn("h-[400px]", contentContainerClassName)}
-      >
+      <ScrollAreaViewport className={cn("h-[400px]", contentContainerClassName)}>
         {data.map((item, index) => (
           <div
             key={

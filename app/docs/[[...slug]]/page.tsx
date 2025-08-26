@@ -1,26 +1,17 @@
-import { source } from "@/app/source";
-import {
-  DocsPage,
-  DocsBody,
-  DocsTitle,
-  DocsDescription,
-} from "fumadocs-ui/page";
-import { notFound } from "next/navigation";
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { Metadata } from "next";
-import { ComponentWrapper } from "@/components/component-wrapper";
 import { getGithubLastEdit } from "fumadocs-core/server";
-
 import { createGenerator } from "fumadocs-typescript";
 import { AutoTypeTable } from "fumadocs-typescript/ui";
-
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import defaultMdxComponents from "fumadocs-ui/mdx";
+import { DocsBody, DocsDescription, DocsPage, DocsTitle } from "fumadocs-ui/page";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { source } from "@/app/source";
+import { ComponentWrapper } from "@/components/component-wrapper";
 
 const generator = createGenerator();
 
-export default async function Page(props: {
-  params: Promise<{ slug?: string[] }>;
-}) {
+export default async function Page(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
   const page = source.getPage(params.slug);
   if (!page) notFound();
@@ -54,9 +45,7 @@ export default async function Page(props: {
         <MDX
           components={{
             ...defaultMdxComponents,
-            AutoTypeTable: (props) => (
-              <AutoTypeTable {...props} generator={generator} />
-            ),
+            AutoTypeTable: (props) => <AutoTypeTable {...props} generator={generator} />,
             ComponentWrapper,
             Tab,
             Tabs,
@@ -72,9 +61,7 @@ export async function generateStaticParams() {
   return source.generateParams();
 }
 
-export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>;
-}) {
+export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
   const page = source.getPage(params.slug);
 

@@ -1,7 +1,7 @@
 [data-vision-os-ui],
 [data-vision-os-ui] * {
   font-family: "SF Pro", "Inter", sans-serif;
-  cursor: none !important;
+  cursor: none;
 }
 
 [data-vision-os-ui] .hide-scrollbar {

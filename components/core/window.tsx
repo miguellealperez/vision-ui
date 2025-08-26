@@ -2,12 +2,7 @@
 
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
 import { XIcon } from "lucide-react";
-import {
-  type HTMLMotionProps,
-  MotionValue,
-  motion,
-  useScroll,
-} from "motion/react";
+import { type HTMLMotionProps, MotionValue, motion, useScroll } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, {
@@ -159,14 +154,7 @@ const CONSTANTS = {
   VAR_DIAMETER: "[--diameter:68px]",
 };
 
-const maskComposite = [
-  "exclude",
-  "intersect",
-  "subtract",
-  "intersect",
-  "subtract",
-  "add",
-];
+const maskComposite = ["exclude", "intersect", "subtract", "intersect", "subtract", "add"];
 
 const defaultHighlightStyle = {
   borderRadius: `var(--radius)`,
@@ -246,16 +234,14 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
       controls = false,
       ...props
     }: WindowProps,
-    ref,
+    ref
   ) => {
     const windowId = useId();
     const localRef = useRef<HTMLDivElement>(null);
     const [visible, setVisible] = useState(true);
     // strip out *-h-*, h-* classes classes
-    const scrollWindowRegex =
-      /-h-.*|h-.*|^max-h-.*|^min-h-.*|^h-.*|h-.*|max-h-.*|min-h-.*/g;
-    const scrollWindowClassesName =
-      className?.match(scrollWindowRegex)?.join(" ") || "";
+    const scrollWindowRegex = /-h-.*|h-.*|^max-h-.*|^min-h-.*|^h-.*|h-.*|max-h-.*|min-h-.*/g;
+    const scrollWindowClassesName = className?.match(scrollWindowRegex)?.join(" ") || "";
     const restClassesName = className?.replace(scrollWindowRegex, "") || "";
     // get rounded-* classes
     const roundedRegex = /rounded-.*|^rounded/g;
@@ -275,15 +261,10 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
     const { role, "aria-label": ariaLabel, ...restProps } = props;
 
     return (
-      <WindowContext.Provider
-        value={{ scrollY, width, height, visible, setVisible, windowId }}
-      >
+      <WindowContext.Provider value={{ scrollY, width, height, visible, setVisible, windowId }}>
         <motion.div
           key={`${windowId}-wrapper`}
-          className={cn(
-            "relative flex flex-col items-center justify-center",
-            rootClassName,
-          )}
+          className={cn("relative flex flex-col items-center justify-center", rootClassName)}
           initial={{
             opacity: 1,
             scale: 1,
@@ -305,7 +286,7 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
               CONSTANTS.VAR_DIAMETER,
               CONSTANTS.VAR_RADIUS,
               restClassesName,
-              !scroll && scrollWindowClassesName,
+              !scroll && scrollWindowClassesName
             )}
             style={{
               backdropFilter:
@@ -337,7 +318,7 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
               className={cn(
                 getHighlightStroke(thickness || "normal"),
                 "pointer-events-none absolute inset-[-0.75px] z-40",
-                "[--mask-inner-distance:calc(50%-var(--mask-stroke)-var(--mask-stroke))] [--mask-outer-distance:calc(50%-var(--mask-stroke))]",
+                "[--mask-inner-distance:calc(50%-var(--mask-stroke)-var(--mask-stroke))] [--mask-outer-distance:calc(50%-var(--mask-stroke))]"
               )}
               style={{
                 ...leftTopHighlightStyle,
@@ -349,7 +330,7 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
               className={cn(
                 getHighlightStroke(thickness || "normal"),
                 "pointer-events-none absolute inset-[-0.25px] z-40",
-                "[--mask-inner-distance:calc(50%-var(--mask-stroke)-var(--mask-stroke))] [--mask-outer-distance:calc(50%-var(--mask-stroke))]",
+                "[--mask-inner-distance:calc(50%-var(--mask-stroke)-var(--mask-stroke))] [--mask-outer-distance:calc(50%-var(--mask-stroke))]"
               )}
               style={{
                 ...rightBottomHighlightStyle,
@@ -360,19 +341,15 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
             {scroll ? (
               <ScrollAreaPrimitive.Root
                 className={cn("relative", scrollWindowClassesName)}
-                aria-label={
-                  ariaLabel ? `Scrollable ${ariaLabel}` : "Scrollable content"
-                }
+                aria-label={ariaLabel ? `Scrollable ${ariaLabel}` : "Scrollable content"}
               >
                 <ScrollAreaPrimitive.Viewport
                   className={cn(
                     "h-full w-full",
-                    roundedClassesName.length > 0
-                      ? roundedClassesName
-                      : `rounded-[var(--radius)]`,
+                    roundedClassesName.length > 0 ? roundedClassesName : `rounded-[var(--radius)]`,
                     {
                       "!overflow-visible": scrollWindowClassesName.length === 0,
-                    },
+                    }
                   )}
                   ref={localRef}
                   tabIndex={0}
@@ -387,14 +364,12 @@ const Window = React.forwardRef<HTMLDivElement, WindowProps>(
             )}
           </motion.div>
           {controls && (
-            <WindowControls
-              href={typeof controls === "object" ? controls.href : undefined}
-            />
+            <WindowControls href={typeof controls === "object" ? controls.href : undefined} />
           )}
         </motion.div>
       </WindowContext.Provider>
     );
-  },
+  }
 );
 
 Window.displayName = "Window";
@@ -453,7 +428,7 @@ const WindowControls = ({ href }: { href?: string }) => {
           "peer/close-btn",
           "flex items-center justify-center",
           "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
-          "rounded-full",
+          "rounded-full"
         )}
         aria-label="Close window"
         title={href ? "Navigate to previous page" : "Go back"}
@@ -466,7 +441,7 @@ const WindowControls = ({ href }: { href?: string }) => {
             "flex items-center justify-center",
             "group-hover/close-btn:size-6 group-hover/close-btn:bg-white/100",
             "group-active/close-btn:size-4 group-active/close-btn:bg-white/100",
-            "group-focus-visible/close-btn:size-6 group-focus-visible/close-btn:bg-white/100",
+            "group-focus-visible/close-btn:size-6 group-focus-visible/close-btn:bg-white/100"
           )}
         >
           <XIcon className="size-3.5 text-[#333] opacity-0 group-hover/close-btn:size-3 group-hover/close-btn:opacity-100 group-focus-visible/close-btn:size-3 group-focus-visible/close-btn:opacity-100" />
@@ -477,7 +452,7 @@ const WindowControls = ({ href }: { href?: string }) => {
           "relative h-3.5 w-[136px] rounded-[100px] bg-white/30 backdrop-blur-[20px]",
           "transition-all duration-300",
           "peer-hover/close-btn:ml-[10px] peer-hover/close-btn:w-[126px] peer-hover/close-btn:bg-white/50",
-          "peer-focus-visible/close-btn:ml-[10px] peer-focus-visible/close-btn:w-[126px] peer-focus-visible/close-btn:bg-white/50",
+          "peer-focus-visible/close-btn:ml-[10px] peer-focus-visible/close-btn:w-[126px] peer-focus-visible/close-btn:bg-white/50"
         )}
         aria-hidden="true"
       ></div>

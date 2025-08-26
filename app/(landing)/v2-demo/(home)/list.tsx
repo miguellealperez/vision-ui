@@ -5,14 +5,8 @@ import Link from "next/link";
 import { FlashList, type FlashListRenderItem } from "@/components/core/v2";
 import { Text } from "@/components/core/v2/text";
 
-export default function List({
-  data,
-}: {
-  data: { id: string; title: string }[];
-}) {
-  const renderItem: FlashListRenderItem<{ id: string; title: string }> = ({
-    item,
-  }) => (
+export default function List({ data }: { data: { id: string; title: string }[] }) {
+  const renderItem: FlashListRenderItem<{ id: string; title: string }> = ({ item }) => (
     <Link
       href={`/v2-demo/${item.id}`}
       className="mb-2 flex justify-between rounded-lg bg-white/10 px-3 py-2"

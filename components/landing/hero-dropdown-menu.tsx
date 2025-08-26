@@ -1,4 +1,5 @@
 "use client";
+import { IconBrandGithub } from "@tabler/icons-react";
 import { Ellipsis } from "lucide-react";
 import {
   DropdownMenu,
@@ -6,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/core/dropdown-menu";
-import { IconBrandGithub } from "@tabler/icons-react";
 
 export const HeroDropdownMenu = () => {
   return (

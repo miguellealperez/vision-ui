@@ -57,11 +57,7 @@ function useStack() {
   return { ...ctx };
 }
 
-const Header = ({
-  options: screenOptions,
-}: {
-  options?: Record<string, HeaderOptions>;
-}) => {
+const Header = ({ options: screenOptions }: { options?: Record<string, HeaderOptions> }) => {
   const { options: stackOptions } = useStack();
   const currentRoute = useSelectedLayoutSegment() || "index";
   const mergedOptions = { ...stackOptions, ...screenOptions };
@@ -99,7 +95,7 @@ const Header = ({
     <div
       className={cn(
         "relative z-10 flex items-center justify-between px-4 py-3",
-        headerOptions?.className,
+        headerOptions?.className
       )}
     >
       <div className="flex min-w-[64px] items-center justify-start">{Left}</div>
@@ -128,7 +124,7 @@ const WindowControls = () => {
           "peer/close-btn",
           "flex items-center justify-center",
           "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
-          "rounded-full",
+          "rounded-full"
         )}
         aria-label="Close window"
         title="Go to home"
@@ -141,7 +137,7 @@ const WindowControls = () => {
             "flex items-center justify-center",
             "group-hover/close-btn:size-6 group-hover/close-btn:bg-white/100",
             "group-active/close-btn:size-4 group-active/close-btn:bg-white/100",
-            "group-focus-visible/close-btn:size-6 group-focus-visible/close-btn:bg-white/100",
+            "group-focus-visible/close-btn:size-6 group-focus-visible/close-btn:bg-white/100"
           )}
         >
           <XIcon className="size-3.5 text-[#333] opacity-0 group-hover/close-btn:size-3 group-hover/close-btn:opacity-100 group-focus-visible/close-btn:size-3 group-focus-visible/close-btn:opacity-100" />
@@ -152,7 +148,7 @@ const WindowControls = () => {
           "relative h-3.5 w-[136px] rounded-[100px] bg-white/30 backdrop-blur-[20px]",
           "transition-all duration-300",
           "peer-hover/close-btn:ml-[10px] peer-hover/close-btn:w-[126px] peer-hover/close-btn:bg-white/50",
-          "peer-focus-visible/close-btn:ml-[10px] peer-focus-visible/close-btn:w-[126px] peer-focus-visible/close-btn:bg-white/50",
+          "peer-focus-visible/close-btn:ml-[10px] peer-focus-visible/close-btn:w-[126px] peer-focus-visible/close-btn:bg-white/50"
         )}
         aria-hidden="true"
       ></div>
@@ -172,16 +168,8 @@ const Screen = ({ name, options }: StackScreenProps) => {
   return null;
 };
 
-const StackComponent = ({
-  children,
-  className,
-  material = true,
-  style,
-  ...rest
-}: StackProps) => {
-  const [mergedOptions, setMergedOptions] = React.useState<
-    Record<string, HeaderOptions>
-  >({});
+const StackComponent = ({ children, className, material = true, style, ...rest }: StackProps) => {
+  const [mergedOptions, setMergedOptions] = React.useState<Record<string, HeaderOptions>>({});
 
   const content = (
     <div className={cn("flex flex-col", className)} style={style} {...rest}>
@@ -190,8 +178,7 @@ const StackComponent = ({
     </div>
   );
 
-  const thickness =
-    typeof material === "object" ? material.thickness : "normal";
+  const thickness = typeof material === "object" ? material.thickness : "normal";
 
   const setScreenOptionsHandler = React.useCallback(
     (screenName: string, options: HeaderOptions) => {
@@ -200,7 +187,7 @@ const StackComponent = ({
         [screenName]: { ...prev[screenName], ...options },
       }));
     },
-    [],
+    []
   );
 
   return (
@@ -211,11 +198,7 @@ const StackComponent = ({
       }}
     >
       <div className="relative">
-        {material ? (
-          <Material thickness={thickness || "normal"}>{content}</Material>
-        ) : (
-          content
-        )}
+        {material ? <Material thickness={thickness || "normal"}>{content}</Material> : content}
         <WindowControls />
       </div>
     </StackContext.Provider>

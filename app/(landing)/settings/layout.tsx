@@ -1,3 +1,5 @@
+import { IconBellRingingFilled, IconHourglassHigh, IconMoonFilled } from "@tabler/icons-react";
+import { Dialog, WithDialogEffect } from "@/components/core/dialog";
 import {
   Sidebar,
   SidebarContent,
@@ -11,25 +13,12 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/core/sidebar";
-
-import {
-  AppStoreIcon,
-  CogIcon,
-  EnvironmentsIcon,
-  PeopleIcon,
-} from "@/components/icons";
-import { cn } from "@/lib/utils";
-import {
-  IconBellRingingFilled,
-  IconHourglassHigh,
-  IconMoonFilled,
-} from "@tabler/icons-react";
 import { Window } from "@/components/core/window";
+import { AppStoreIcon, CogIcon, EnvironmentsIcon, PeopleIcon } from "@/components/icons";
+import { Text } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 import { defaultWindowProps } from "../constants";
 import { DebugModeSwitch } from "./debug-mode-switch";
-import { Text } from "@/components/ui/typography";
-import { WithDialogEffect } from "@/components/core/dialog";
-import { Dialog } from "@/components/core/dialog";
 
 const section_1 = [
   {
@@ -75,11 +64,7 @@ const section_2 = [
   },
 ];
 
-export default function SettingsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function SettingsLayout({ children }: { children: React.ReactNode }) {
   return (
     <Dialog>
       {/* Wrap the content that should scale down when dialog opens */}
@@ -105,7 +90,7 @@ export default function SettingsLayout({
                               className={cn(
                                 "absolute top-2 left-3.5 z-[-1] size-10 rounded-full",
                                 "bg-gradient-to-b",
-                                item.gradient,
+                                item.gradient
                               )}
                             />
                             <span>{item.title}</span>
@@ -126,7 +111,7 @@ export default function SettingsLayout({
                               className={cn(
                                 "absolute top-2 left-3.5 z-[-1] size-10 rounded-full",
                                 "bg-gradient-to-b",
-                                item.gradient,
+                                item.gradient
                               )}
                             />
                             <span>{item.title}</span>

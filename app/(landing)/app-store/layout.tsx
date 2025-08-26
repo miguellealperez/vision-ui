@@ -1,5 +1,5 @@
+import type React from "react";
 import { Window } from "@/components/core/window";
-import React from "react";
 import { defaultWindowProps } from "../constants";
 import { AppStoreWrapper } from "./store-wrapper";
 

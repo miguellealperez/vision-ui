@@ -1,3 +1,4 @@
+import { IconBellRingingFilled, IconHourglassHigh, IconMoonFilled } from "@tabler/icons-react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,19 +11,8 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/core/sidebar";
-
-import {
-  AppStoreIcon,
-  CogIcon,
-  EnvironmentsIcon,
-  PeopleIcon,
-} from "@/components/icons";
+import { AppStoreIcon, CogIcon, EnvironmentsIcon, PeopleIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
-import {
-  IconBellRingingFilled,
-  IconHourglassHigh,
-  IconMoonFilled,
-} from "@tabler/icons-react";
 
 const section_1 = [
   {
@@ -90,7 +80,7 @@ function SettingsView({ children }: { children: React.ReactNode }) {
                         className={cn(
                           "absolute top-2 left-3.5 z-[-1] size-8 rounded-full",
                           "bg-gradient-to-b",
-                          item.gradient,
+                          item.gradient
                         )}
                       />
                       <span>{item.title}</span>
@@ -111,7 +101,7 @@ function SettingsView({ children }: { children: React.ReactNode }) {
                         className={cn(
                           "absolute top-2 left-3.5 z-[-1] size-8 rounded-full",
                           "bg-gradient-to-b",
-                          item.gradient,
+                          item.gradient
                         )}
                       />
                       <span>{item.title}</span>

@@ -1,24 +1,19 @@
-import {
-  NavigationBar,
-  NavigationBarTitle,
-} from "@/components/core/navigation-bar";
-import { Button, ButtonGroup } from "@/components/core/button";
-import { HeroDropdownMenu } from "@/components/landing/hero-dropdown-menu";
+import { ChevronRight } from "lucide-react";
 import Image from "next/image";
-import acmeSky from "@/public/assets/acme-sky.jpg";
+import { Button, ButtonGroup } from "@/components/core/button";
+import { Hoverable } from "@/components/core/hoverable";
+import { NavigationBar, NavigationBarTitle } from "@/components/core/navigation-bar";
+import { HeroDropdownMenu } from "@/components/landing/hero-dropdown-menu";
 import { Text } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
-import { Hoverable } from "@/components/core/hoverable";
+import acmeSky from "@/public/assets/acme-sky.jpg";
 
 export default function AppStorePage() {
   return (
     <>
       <div className="relative isolate mb-4 flex-1">
         <NavigationBar className="sticky">
-          <NavigationBarTitle variant="leading">
-            Apps & Games
-          </NavigationBarTitle>
+          <NavigationBarTitle variant="leading">Apps & Games</NavigationBarTitle>
           <ButtonGroup>
             <HeroDropdownMenu />
           </ButtonGroup>
@@ -28,7 +23,7 @@ export default function AppStorePage() {
           alt="Acme Sky"
           className={cn(
             "absolute inset-0 z-[-2] h-[550px] w-full flex-shrink-0 object-cover",
-            "[mask-image:linear-gradient(to_top,transparent,black_150px)]",
+            "[mask-image:linear-gradient(to_top,transparent,black_150px)]"
           )}
         />
         <div className="flex max-w-md flex-col items-start gap-2 px-12">
@@ -39,8 +34,7 @@ export default function AppStorePage() {
             Explore the <br /> Cosmos
           </Text>
           <Text size="body" className="text-start" variant="secondary">
-            Immerse yourself in the wonders of the cosmos with these apps and
-            games.
+            Immerse yourself in the wonders of the cosmos with these apps and games.
           </Text>
           <div className="mt-4 flex items-center justify-between gap-4 rounded-xl bg-black/30 p-4 backdrop-blur backdrop-saturate-150">
             <div>

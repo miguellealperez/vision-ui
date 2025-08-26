@@ -1,3 +1,4 @@
+import { IconHistory, IconPhotoFilled } from "@tabler/icons-react";
 import {
   Ornament,
   OrnamentContent,
@@ -5,7 +6,6 @@ import {
   OrnamentTab,
   OrnamentTabs,
 } from "../core/ornament";
-import { IconHistory, IconPhotoFilled } from "@tabler/icons-react";
 
 export const OrnamentExample = () => {
   return (
@@ -17,11 +17,7 @@ export const OrnamentExample = () => {
             label="Memories"
             value="memories"
           />
-          <OrnamentTab
-            icon={<IconHistory data-slot="icon" />}
-            label="History"
-            value="history"
-          />
+          <OrnamentTab icon={<IconHistory data-slot="icon" />} label="History" value="history" />
         </OrnamentTabs>
         <OrnamentContents contentClassName="h-[400px] min-w-64">
           <OrnamentContent value="memories" key="memories">
@@ -29,9 +25,7 @@ export const OrnamentExample = () => {
             <div className="pb-8 text-center">End</div>
           </OrnamentContent>
           <OrnamentContent value="history" key="history" scroll={false}>
-            <div className="flex h-full flex-1 items-center justify-center pt-8">
-              History
-            </div>
+            <div className="flex h-full flex-1 items-center justify-center pt-8">History</div>
           </OrnamentContent>
         </OrnamentContents>
       </Ornament>

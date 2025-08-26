@@ -1,10 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import {
-  type HoneycombItem,
-  HoneycombLayout,
-} from "@/components/core/grid-layout";
+import { type HoneycombItem, HoneycombLayout } from "@/components/core/grid-layout";
 
 import data from "@/components/environment/data";
 import { saveEnvironment } from "./actions";
@@ -16,7 +13,7 @@ const items: HoneycombItem[] = data.map((environment) => ({
   background: (
     <Image
       src={environment.icon}
-      alt={environment.label + " by " + environment.credit.name}
+      alt={`${environment.label} by ${environment.credit.name}`}
       className="size-full object-cover"
     />
   ),

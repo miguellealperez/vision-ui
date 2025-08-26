@@ -22,9 +22,7 @@ export interface ScrollAreaScrollbarProps
 }
 
 export interface ScrollAreaThumbProps
-  extends React.ComponentPropsWithoutRef<
-    typeof ScrollAreaPrimitive.ScrollAreaThumb
-  > {
+  extends React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.ScrollAreaThumb> {
   className?: string;
 }
 
@@ -39,8 +37,7 @@ const ScrollAreaRoot = ({
   children,
   ...props
 }: ScrollAreaRootProps) => {
-  const thickness =
-    typeof material === "object" ? material.thickness : "normal";
+  const thickness = typeof material === "object" ? material.thickness : "normal";
 
   const content = (
     <ScrollAreaPrimitive.Root className={cn("relative", className)} {...props}>
@@ -59,11 +56,7 @@ const ScrollAreaRoot = ({
   return content;
 };
 
-const ScrollAreaViewport = ({
-  className,
-  children,
-  ...props
-}: ScrollAreaViewportProps) => (
+const ScrollAreaViewport = ({ className, children, ...props }: ScrollAreaViewportProps) => (
   <ScrollAreaPrimitive.Viewport
     className={cn("h-full w-full rounded-[inherit]", className)}
     {...props}
@@ -72,19 +65,15 @@ const ScrollAreaViewport = ({
   </ScrollAreaPrimitive.Viewport>
 );
 
-const ScrollAreaScrollbar = ({
-  className,
-  children,
-  ...props
-}: ScrollAreaScrollbarProps) => (
+const ScrollAreaScrollbar = ({ className, children, ...props }: ScrollAreaScrollbarProps) => (
   <ScrollAreaPrimitive.Scrollbar
     className={cn(
-      "!top-1/2 mr-4 flex !h-[min(100%,100px)] !-translate-y-1/2 touch-none rounded-full bg-[#4d4d4d]/20 transition-colors select-none",
+      "!top-1/2 !h-[min(100%,100px)] !-translate-y-1/2 mr-4 flex touch-none select-none rounded-full bg-[#4d4d4d]/20 transition-colors",
       "after:absolute after:inset-0 after:rounded-full after:bg-[#fafafa]/20 after:[background-blend-mode:color-dodge]",
       "animate-fd-fade-in data-[state=hidden]:animate-fd-fade-out",
       "data-[orientation=vertical]:h-full data-[orientation=vertical]:w-3.5 data-[orientation=vertical]:p-[3px]",
       "data-[orientation=horizontal]:h-3.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:p-[3px]",
-      className,
+      className
     )}
     {...props}
   >

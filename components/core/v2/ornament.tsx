@@ -34,7 +34,7 @@ const OrnamentComponent = ({
   contentClassName,
 }: React.PropsWithChildren<OrnamentProps>) => {
   const screens = React.Children.toArray(children).filter(
-    Boolean,
+    Boolean
   ) as React.ReactElement<OrnamentScreenProps>[];
   const names = screens.map((s) => s.props.name);
   const [value, setValue] = React.useState<string>(defaultScreen || names[0]);
@@ -53,19 +53,15 @@ const OrnamentComponent = ({
         <div
           className={cn(
             "z-[42] mx-auto flex items-center justify-start gap-2 p-2",
-            orientation === "vertical" ? "flex-col" : "flex-row",
+            orientation === "vertical" ? "flex-col" : "flex-row"
           )}
           role="tablist"
         >
           {screens.map((s) => (
-            <TabsPrimitive.Trigger
-              key={s.props.name}
-              value={s.props.name}
-              asChild
-            >
+            <TabsPrimitive.Trigger key={s.props.name} value={s.props.name} asChild>
               <button
                 className={cn(
-                  "flex w-full items-center gap-2 rounded-full px-3 py-2 text-white/80 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
+                  "flex w-full items-center gap-2 rounded-full px-3 py-2 text-white/80 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
                 )}
                 aria-label={s.props.title || s.props.name}
                 type="button"
@@ -76,9 +72,7 @@ const OrnamentComponent = ({
                   </span>
                 )}
                 <Text asChild>
-                  <span className="text-sm font-medium">
-                    {s.props.title || s.props.name}
-                  </span>
+                  <span className="font-medium text-sm">{s.props.title || s.props.name}</span>
                 </Text>
               </button>
             </TabsPrimitive.Trigger>
@@ -94,8 +88,7 @@ const OrnamentComponent = ({
   );
 
   if (material) {
-    const thickness =
-      typeof material === "object" ? material.thickness : "normal";
+    const thickness = typeof material === "object" ? material.thickness : "normal";
     return <Material thickness={thickness}>{body}</Material>;
   }
   return body;
