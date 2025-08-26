@@ -34,7 +34,7 @@ export const textVariants = cva("", {
       title1: "leading-loose text-2xl font-bold",
       title2: "leading-7 text-[22px] font-bold",
       title3: "leading-normal text-[19px] font-bold",
-      largeTitle: "leading-[38px]text-[29px] font-bold",
+      largeTitle: "leading-[38px] text-[29px] font-bold",
       XLTitle1: "leading-[56px] text-5xl font-bold",
       XLTitle2: "leading-[46px] text-[38px] font-bold",
       headline: "leading-snug text-[17px] font-bold",
@@ -73,7 +73,5 @@ const Text = React.forwardRef<HTMLParagraphElement, TextProps>(
     );
   },
 );
-
-Text.displayName = "Text";
 
 export { Text };
