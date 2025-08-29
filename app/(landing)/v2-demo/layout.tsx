@@ -1,47 +1,11 @@
-"use client";
+import { IconHome, IconInfoCircle } from '@tabler/icons-react'
+import { Ornament, type OrnamentTabProps } from '@/components/core/v2/ornament'
 
-import { useRouter } from "next/navigation";
-import { Stack } from "@/components/core/v2/stack";
+const tabs: OrnamentTabProps[] = [
+  { name: 'Home', href: '/v2-demo', icon: <IconHome /> },
+  { name: 'About', href: '/v2-demo/about', icon: <IconInfoCircle /> },
+]
 
-export default function V2DemoLayout({ children }: LayoutProps<"/v2-demo">) {
-  const router = useRouter();
-  return (
-    <Stack material>
-      {/* Define screen options for each route */}
-      <Stack.Screen
-        name="(home)"
-        options={{
-          title: "Home",
-          headerShown: true,
-        }}
-      />
-      {/* Dynamic route pattern - applies to any route except explicitly defined ones */}
-      <Stack.Screen
-        name="[details]"
-        options={{
-          title: "Details", // This will be used for any dynamic route
-          headerShown: true,
-          headerLeft: () => (
-            <button
-              type="button"
-              className="text-blue-500"
-              onClick={() => {
-                router.back();
-              }}
-            >
-              Back
-            </button>
-          ),
-        }}
-      />
-      <Stack.Screen
-        name="index"
-        options={{
-          title: "Welcome",
-          headerShown: true,
-        }}
-      />
-      {children}
-    </Stack>
-  );
+export default function V2DemoLayout({ children }: { children: React.ReactNode }) {
+  return <Ornament tabs={tabs}>{children}</Ornament>
 }

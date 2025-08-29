@@ -1,68 +1,68 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import { useState } from "react";
-import forest from "@/public/assets/demo/forest.avif";
-import { Button, ButtonGroup } from "../../../components/core/button";
-import { NavigationBar, NavigationBarTitle } from "../../../components/core/navigation-bar";
-import { Toolbar } from "../../../components/core/toolbar";
-import { HeroDropdownMenu } from "../../../components/landing/hero-dropdown-menu";
-import { AspectRatio } from "../../../components/ui/aspect-ratio";
-import { Text } from "../../../components/ui/typography";
+import Image from 'next/image'
+import { useState } from 'react'
+import forest from '@/public/assets/demo/forest.avif'
+import { Button, ButtonGroup } from '../../../components/core/button'
+import { NavigationBar, NavigationBarTitle } from '../../../components/core/navigation-bar'
+import { Toolbar } from '../../../components/core/toolbar'
+import { HeroDropdownMenu } from '../../../components/landing/hero-dropdown-menu'
+import { AspectRatio } from '../../../components/ui/aspect-ratio'
+import { Text } from '../../../components/ui/typography'
 
-import img1 from "./unsplash/aaron-burden-unsplash.avif";
-import img2 from "./unsplash/aaron-burden-unsplash-2.avif";
-import img3 from "./unsplash/clement-m-unsplash.avif";
-import img4 from "./unsplash/damiano-baschiera-unsplash.avif";
-import img5 from "./unsplash/dominik-schroder-unsplash.avif";
-import img6 from "./unsplash/kenrick-mills-unsplash.avif";
-import img7 from "./unsplash/matthew-smith-unsplash.avif";
-import img10 from "./unsplash/michael-olsen-unsplash.avif";
-import img8 from "./unsplash/shifaaz-shamoon-unsplash.avif";
-import img9 from "./unsplash/wil-stewart-unsplash.avif";
+import img1 from './unsplash/aaron-burden-unsplash.avif'
+import img2 from './unsplash/aaron-burden-unsplash-2.avif'
+import img3 from './unsplash/clement-m-unsplash.avif'
+import img4 from './unsplash/damiano-baschiera-unsplash.avif'
+import img5 from './unsplash/dominik-schroder-unsplash.avif'
+import img6 from './unsplash/kenrick-mills-unsplash.avif'
+import img7 from './unsplash/matthew-smith-unsplash.avif'
+import img10 from './unsplash/michael-olsen-unsplash.avif'
+import img8 from './unsplash/shifaaz-shamoon-unsplash.avif'
+import img9 from './unsplash/wil-stewart-unsplash.avif'
 
 const memories = [
   {
-    alt: "Photo by Aaron Burden on Unsplash",
+    alt: 'Photo by Aaron Burden on Unsplash',
     src: img1,
   },
   {
-    alt: "Photo by Aaron Burden on Unsplash",
+    alt: 'Photo by Aaron Burden on Unsplash',
     src: img2,
   },
   {
-    alt: "Photo by Clement M on Unsplash",
+    alt: 'Photo by Clement M on Unsplash',
     src: img3,
   },
   {
-    alt: "Photo by Damiano Baschiera on Unsplash",
+    alt: 'Photo by Damiano Baschiera on Unsplash',
     src: img4,
   },
   {
-    alt: "Photo by Dominik Schroder on Unsplash",
+    alt: 'Photo by Dominik Schroder on Unsplash',
     src: img5,
   },
   {
-    alt: "Photo by Kenrick Mills on Unsplash",
+    alt: 'Photo by Kenrick Mills on Unsplash',
     src: img6,
   },
   {
-    alt: "Photo by Matthew Smith on Unsplash",
+    alt: 'Photo by Matthew Smith on Unsplash',
     src: img7,
   },
   {
-    alt: "Photo by Shifaaz Shamoon on Unsplash",
+    alt: 'Photo by Shifaaz Shamoon on Unsplash',
     src: img8,
   },
   {
-    alt: "Photo by Wil Stewart on Unsplash",
+    alt: 'Photo by Wil Stewart on Unsplash',
     src: img9,
   },
   {
-    alt: "Photo by Michael Olsen on Unsplash",
+    alt: 'Photo by Michael Olsen on Unsplash',
     src: img10,
   },
-];
+]
 
 const MemoriesView = () => {
   return (
@@ -87,7 +87,7 @@ const MemoriesView = () => {
         </div>
         <Image
           src={forest}
-          alt={"A small boat of fisherman in Fuvahmulah, Maldives heading out for the days work."}
+          alt={'A small boat of fisherman in Fuvahmulah, Maldives heading out for the days work.'}
           className="h-[25vw] w-full object-cover"
         />
       </div>
@@ -99,33 +99,33 @@ const MemoriesView = () => {
         ))}
       </div>
     </>
-  );
-};
+  )
+}
 
 const MemoriesToolbar = () => {
-  const [activeTab, setActiveTab] = useState<"year" | "month" | "all">("all");
+  const [activeTab, setActiveTab] = useState<'year' | 'month' | 'all'>('all')
   return (
     <Toolbar>
       <Button
-        variant={activeTab === "year" ? "default" : "secondary"}
-        onClick={() => setActiveTab("year")}
+        variant={activeTab === 'year' ? 'default' : 'secondary'}
+        onClick={() => setActiveTab('year')}
       >
         Year
       </Button>
       <Button
-        variant={activeTab === "month" ? "default" : "secondary"}
-        onClick={() => setActiveTab("month")}
+        variant={activeTab === 'month' ? 'default' : 'secondary'}
+        onClick={() => setActiveTab('month')}
       >
         Month
       </Button>
       <Button
-        variant={activeTab === "all" ? "default" : "secondary"}
-        onClick={() => setActiveTab("all")}
+        variant={activeTab === 'all' ? 'default' : 'secondary'}
+        onClick={() => setActiveTab('all')}
       >
         All
       </Button>
     </Toolbar>
-  );
-};
+  )
+}
 
-export { MemoriesView, MemoriesToolbar };
+export { MemoriesView, MemoriesToolbar }

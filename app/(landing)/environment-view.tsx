@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import { type HoneycombItem, HoneycombLayout } from "@/components/core/grid-layout";
+import Image from 'next/image'
+import { type HoneycombItem, HoneycombLayout } from '@/components/core/grid-layout'
 
-import data from "@/components/environment/data";
-import { saveEnvironment } from "./actions";
+import data from '@/components/environment/data'
+import { saveEnvironment } from './actions'
 
 const items: HoneycombItem[] = data.map((environment) => ({
   id: environment.id,
@@ -18,10 +18,10 @@ const items: HoneycombItem[] = data.map((environment) => ({
     />
   ),
   onClick: () => saveEnvironment(environment.id),
-}));
+}))
 
 function EnvironmentView() {
-  return <HoneycombLayout items={items} />;
+  return <HoneycombLayout items={items} />
 }
 
-export default EnvironmentView;
+export default EnvironmentView

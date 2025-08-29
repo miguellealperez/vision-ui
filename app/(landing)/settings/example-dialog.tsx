@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import { DialogClose } from "@radix-ui/react-dialog";
-import { Button } from "@/components/core/button";
+import { DialogClose } from '@radix-ui/react-dialog'
+import { Button } from '@/components/core/button'
 import {
   DialogContent,
   DialogDescription,
@@ -9,8 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/core/dialog";
-import { Text } from "@/components/ui/typography";
+} from '@/components/core/dialog'
+import { Text } from '@/components/ui/typography'
 
 export default function ExampleDialog() {
   return (
@@ -45,5 +45,5 @@ export default function ExampleDialog() {
         </DialogFooter>
       </DialogContent>
     </>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-import { IconBellRingingFilled, IconHourglassHigh, IconMoonFilled } from "@tabler/icons-react";
-import { Dialog, WithDialogEffect } from "@/components/core/dialog";
+import { IconBellRingingFilled, IconHourglassHigh, IconMoonFilled } from '@tabler/icons-react'
+import { Dialog, WithDialogEffect } from '@/components/core/dialog'
 import {
   Sidebar,
   SidebarContent,
@@ -12,57 +12,57 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-} from "@/components/core/sidebar";
-import { Window } from "@/components/core/window";
-import { AppStoreIcon, CogIcon, EnvironmentsIcon, PeopleIcon } from "@/components/icons";
-import { Text } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
-import { defaultWindowProps } from "../constants";
-import { DebugModeSwitch } from "./debug-mode-switch";
+} from '@/components/core/sidebar'
+import { Window } from '@/components/core/window'
+import { AppStoreIcon, CogIcon, EnvironmentsIcon, PeopleIcon } from '@/components/icons'
+import { Text } from '@/components/ui/typography'
+import { cn } from '@/lib/utils'
+import { defaultWindowProps } from '../constants'
+import { DebugModeSwitch } from './debug-mode-switch'
 
 const section_1 = [
   {
-    title: "General",
+    title: 'General',
     icon: CogIcon,
-    gradient: "from-gray-400 to-gray-600",
+    gradient: 'from-gray-400 to-gray-600',
     isActive: true,
   },
   {
-    title: "Apps",
+    title: 'Apps',
     icon: AppStoreIcon,
-    gradient: "from-sky-500 to-blue-700",
+    gradient: 'from-sky-500 to-blue-700',
   },
   {
-    title: "People",
+    title: 'People',
     icon: PeopleIcon,
-    gradient: "from-green-400 to-green-600",
+    gradient: 'from-green-400 to-green-600',
   },
   {
-    title: "Environments",
+    title: 'Environments',
     icon: EnvironmentsIcon,
-    gradient: "from-indigo-400 to-indigo-800",
+    gradient: 'from-indigo-400 to-indigo-800',
   },
-];
+]
 
 const section_2 = [
   {
-    title: "Notifications",
+    title: 'Notifications',
     icon: IconBellRingingFilled,
-    gradient: "from-rose-400 to-red-600",
+    gradient: 'from-rose-400 to-red-600',
   },
   {
-    title: "Focus",
-    href: "#",
+    title: 'Focus',
+    href: '#',
     icon: IconMoonFilled,
-    gradient: "from-indigo-400 to-indigo-800",
+    gradient: 'from-indigo-400 to-indigo-800',
   },
   {
-    title: "Screen Time",
-    href: "#",
+    title: 'Screen Time',
+    href: '#',
     icon: IconHourglassHigh,
-    gradient: "from-indigo-400 to-indigo-800",
+    gradient: 'from-indigo-400 to-indigo-800',
   },
-];
+]
 
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -88,8 +88,8 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                             <item.icon data-slot="icon" />
                             <span
                               className={cn(
-                                "absolute top-2 left-3.5 z-[-1] size-10 rounded-full",
-                                "bg-gradient-to-b",
+                                'absolute top-2 left-3.5 z-[-1] size-10 rounded-full',
+                                'bg-gradient-to-b',
                                 item.gradient
                               )}
                             />
@@ -109,8 +109,8 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                             <item.icon data-slot="icon" />
                             <span
                               className={cn(
-                                "absolute top-2 left-3.5 z-[-1] size-10 rounded-full",
-                                "bg-gradient-to-b",
+                                'absolute top-2 left-3.5 z-[-1] size-10 rounded-full',
+                                'bg-gradient-to-b',
                                 item.gradient
                               )}
                             />
@@ -138,5 +138,5 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
         </Window>
       </WithDialogEffect>
     </Dialog>
-  );
+  )
 }

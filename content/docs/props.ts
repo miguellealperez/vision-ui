@@ -1,1 +1,1 @@
-export type { ButtonVariant } from "@/components/core/button";
+export type { ButtonVariant } from '@/components/core/button'

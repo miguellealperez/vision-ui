@@ -1,9 +1,9 @@
-"use client";
+'use client'
 
-import { IconChevronRight } from "@tabler/icons-react";
-import Link from "next/link";
-import { FlashList, type FlashListRenderItem } from "@/components/core/v2";
-import { Text } from "@/components/core/v2/text";
+import { IconChevronRight } from '@tabler/icons-react'
+import Link from 'next/link'
+import { FlashList, type FlashListRenderItem } from '@/components/core/v2'
+import { Text } from '@/components/core/v2/text'
 
 export default function List({ data }: { data: { id: string; title: string }[] }) {
   const renderItem: FlashListRenderItem<{ id: string; title: string }> = ({ item }) => (
@@ -14,12 +14,12 @@ export default function List({ data }: { data: { id: string; title: string }[] }
       <Text>{item.title}</Text>
       <IconChevronRight className="size-4" />
     </Link>
-  );
+  )
   return (
     <FlashList
       data={data}
       onEndReached={() => {
-        console.log("onEndReached");
+        console.log('onEndReached')
       }}
       ListHeaderComponent={() => <Text className="p-4">Header</Text>}
       ListFooterComponent={() => <Text className="p-4">Footer</Text>}
@@ -28,5 +28,5 @@ export default function List({ data }: { data: { id: string; title: string }[] }
       keyExtractor={(item) => item.id}
       contentContainerClassName="px-4"
     />
-  );
+  )
 }

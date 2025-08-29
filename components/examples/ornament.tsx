@@ -1,11 +1,11 @@
-import { IconHistory, IconPhotoFilled } from "@tabler/icons-react";
+import { IconHistory, IconPhotoFilled } from '@tabler/icons-react'
 import {
   Ornament,
   OrnamentContent,
   OrnamentContents,
   OrnamentTab,
   OrnamentTabs,
-} from "../core/ornament";
+} from '../core/ornament'
 
 export const OrnamentExample = () => {
   return (
@@ -30,5 +30,5 @@ export const OrnamentExample = () => {
         </OrnamentContents>
       </Ornament>
     </div>
-  );
-};
+  )
+}

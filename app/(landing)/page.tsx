@@ -1,19 +1,19 @@
-import Link from "next/dist/client/link";
-import { StartupAudio } from "@/components/audio/startup-audio";
-import { Button } from "@/components/core/button";
+import Link from 'next/dist/client/link'
+import { StartupAudio } from '@/components/audio/startup-audio'
+import { Button } from '@/components/core/button'
 import {
   Ornament,
   OrnamentContentBase,
   OrnamentContents,
   OrnamentTab,
   OrnamentTabs,
-} from "@/components/core/ornament";
-import { AppStoreIcon, EnvironmentsIcon, PeopleIcon } from "@/components/icons";
-import { Text } from "@/components/ui/typography";
-import EnvironmentView from "./environment-view";
-import HomeView from "./home-view";
+} from '@/components/core/ornament'
+import { AppStoreIcon, EnvironmentsIcon, PeopleIcon } from '@/components/icons'
+import { Text } from '@/components/ui/typography'
+import EnvironmentView from './environment-view'
+import HomeView from './home-view'
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic'
 
 function LandingPage() {
   return (
@@ -50,7 +50,7 @@ function LandingPage() {
                 <Button>View Docs</Button>
               </Link>
               <p className="text-xs opacity-50">
-                Created by{" "}
+                Created by{' '}
                 <Link
                   href="https://twitter.com/useOptimistic"
                   className="font-semibold text-fd-foreground underline"
@@ -58,7 +58,7 @@ function LandingPage() {
                   Oliver
                 </Link>
                 <br />
-                Docs powered by{" "}
+                Docs powered by{' '}
                 <Link
                   href="https://fumadocs.vercel.app/"
                   className="font-semibold text-fd-foreground underline"
@@ -74,7 +74,7 @@ function LandingPage() {
         </OrnamentContents>
       </Ornament>
     </>
-  );
+  )
 }
 
-export default LandingPage;
+export default LandingPage

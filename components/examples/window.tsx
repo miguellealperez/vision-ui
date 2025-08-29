@@ -1,4 +1,4 @@
-import { Window } from "../core/window";
+import { Window } from '../core/window'
 
 export const WindowExample = () => {
   return (
@@ -28,5 +28,5 @@ export const WindowExample = () => {
         <p className="text-white/80">Thickest</p>
       </Window>
     </>
-  );
-};
+  )
+}

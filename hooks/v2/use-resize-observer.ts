@@ -1,1 +1,1 @@
-export { useResizeObserver } from "@/hooks/use-resize-observer";
+export { useResizeObserver } from '@/hooks/use-resize-observer'

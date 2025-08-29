@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import React from "react";
-import { FlashList } from "../core/v2/flash-list";
-import View from "../core/view";
+import React from 'react'
+import { FlashList } from '../core/v2/flash-list'
+import View from '../core/view'
 
 // Generate a large dataset for demonstration
 const generateData = (count: number) => {
@@ -11,16 +11,16 @@ const generateData = (count: number) => {
     title: `Item ${index}`,
     description: `This is item number ${index} with some additional text to make it longer`,
     color: `hsl(${(index * 137.5) % 360}, 70%, 60%)`,
-  }));
-};
+  }))
+}
 
-const LARGE_DATA = generateData(10000);
+const LARGE_DATA = generateData(10000)
 
 export default function FlashListExample() {
-  const [useVirtual, setUseVirtual] = React.useState(true);
-  const [itemCount, setItemCount] = React.useState(1000);
+  const [useVirtual, setUseVirtual] = React.useState(true)
+  const [itemCount, setItemCount] = React.useState(1000)
 
-  const data = LARGE_DATA.slice(0, itemCount);
+  const data = LARGE_DATA.slice(0, itemCount)
 
   const renderItem = ({ item, index }: { item: (typeof data)[0]; index: number }) => (
     <div className="flex items-center space-x-4 border-gray-200 border-b p-4 hover:bg-gray-50">
@@ -34,7 +34,7 @@ export default function FlashListExample() {
       </div>
       <div className="text-gray-400 text-sm">#{index}</div>
     </div>
-  );
+  )
 
   return (
     <div className="space-y-6 p-6">
@@ -90,7 +90,7 @@ export default function FlashListExample() {
           height={600}
           estimatedItemSize={80}
           itemSize={useVirtual ? 80 : undefined}
-          onEndReached={() => console.log("Reached end of list")}
+          onEndReached={() => console.log('Reached end of list')}
           onEndReachedThreshold={0.1}
           className="bg-white"
         />
@@ -98,8 +98,8 @@ export default function FlashListExample() {
 
       <div className="text-gray-500 text-sm">
         <p>Total items: {data.length.toLocaleString()}</p>
-        <p>Rendering mode: {useVirtual ? "Virtual" : "Standard"}</p>
+        <p>Rendering mode: {useVirtual ? 'Virtual' : 'Standard'}</p>
       </div>
     </div>
-  );
+  )
 }

@@ -1,86 +1,86 @@
-"use client";
+'use client'
 import {
   List,
   type ListDataItem,
   ListItem,
   type ListRenderItemProps,
   ListSectionHeader,
-} from "../core/list";
-import View from "../core/view";
-import { Switch } from "../ui/switch";
+} from '../core/list'
+import View from '../core/view'
+import { Switch } from '../ui/switch'
 
 type Item =
   | string
   | (ListDataItem & {
-      rightView?: React.ReactNode;
-    });
+      rightView?: React.ReactNode
+    })
 
 export default function ListScreen() {
   const DATA = [
-    "Header",
+    'Header',
     {
-      id: "1",
-      title: "Airplane Mode",
+      id: '1',
+      title: 'Airplane Mode',
       rightView: <Switch className="mr-4" />,
     },
     {
-      id: "2",
-      title: "Wi-Fi",
-      rightView: "Home",
+      id: '2',
+      title: 'Wi-Fi',
+      rightView: 'Home',
     },
     {
-      id: "3",
-      title: "Bluetooth",
-      rightView: "On",
+      id: '3',
+      title: 'Bluetooth',
+      rightView: 'On',
     },
     {
-      id: "4",
-      title: "VPN",
+      id: '4',
+      title: 'VPN',
       rightView: <Switch className="mr-4" />,
     },
-    "",
+    '',
     {
-      id: "5",
-      title: "General",
+      id: '5',
+      title: 'General',
     },
     {
-      id: "6",
-      title: "Apps",
+      id: '6',
+      title: 'Apps',
     },
     {
-      id: "7",
-      title: "Accessibility",
-      subTitle: "VoiceOver, Zoom, High Contrast",
+      id: '7',
+      title: 'Accessibility',
+      subTitle: 'VoiceOver, Zoom, High Contrast',
     },
     {
-      id: "8",
-      title: "People",
+      id: '8',
+      title: 'People',
     },
     {
-      id: "9",
-      title: "Environments",
+      id: '9',
+      title: 'Environments',
     },
-    "",
+    '',
     {
-      id: "10",
-      title: "Notifications",
-    },
-    {
-      id: "11",
-      title: "Focus",
+      id: '10',
+      title: 'Notifications',
     },
     {
-      id: "12",
-      title: "Screen Time",
+      id: '11',
+      title: 'Focus',
     },
-  ] satisfies Item[];
+    {
+      id: '12',
+      title: 'Screen Time',
+    },
+  ] satisfies Item[]
 
-  return <List data={DATA} renderItem={renderItem} />;
+  return <List data={DATA} renderItem={renderItem} />
 }
 
 function renderItem<T extends Item>(info: ListRenderItemProps<T>) {
-  if (typeof info.item === "string") {
-    return <ListSectionHeader {...info} />;
+  if (typeof info.item === 'string') {
+    return <ListSectionHeader {...info} />
   }
   return (
     <ListItem
@@ -91,7 +91,7 @@ function renderItem<T extends Item>(info: ListRenderItemProps<T>) {
       }
       rightView={info.item.rightView}
       {...info}
-      onClick={() => console.log("Item clicked")}
+      onClick={() => console.log('Item clicked')}
     />
-  );
+  )
 }

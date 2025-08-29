@@ -1,19 +1,19 @@
-"use client";
-import { motion, type Variants } from "motion/react";
-import React from "react";
+'use client'
+import { motion, type Variants } from 'motion/react'
+import React from 'react'
 
-type PresetType = "blur" | "shake" | "scale" | "fade" | "slide";
+type PresetType = 'blur' | 'shake' | 'scale' | 'fade' | 'slide'
 
 type TextEffectProps = {
-  children: string;
-  per?: "word" | "char";
+  children: string
+  per?: 'word' | 'char'
   variants?: {
-    container?: Variants;
-    item?: Variants;
-  };
-  className?: string;
-  preset?: PresetType;
-};
+    container?: Variants
+    item?: Variants
+  }
+  className?: string
+  preset?: PresetType
+}
 
 const defaultContainerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -23,21 +23,21 @@ const defaultContainerVariants: Variants = {
       staggerChildren: 0.05,
     },
   },
-};
+}
 
 const defaultItemVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
   },
-};
+}
 
 const presetVariants: Record<PresetType, { container: Variants; item: Variants }> = {
   blur: {
     container: defaultContainerVariants,
     item: {
-      hidden: { opacity: 0, filter: "blur(12px)" },
-      visible: { opacity: 1, filter: "blur(0px)" },
+      hidden: { opacity: 0, filter: 'blur(12px)' },
+      visible: { opacity: 1, filter: 'blur(0px)' },
     },
   },
   shake: {
@@ -68,24 +68,24 @@ const presetVariants: Record<PresetType, { container: Variants; item: Variants }
       visible: { opacity: 1, y: 0 },
     },
   },
-};
+}
 
 const AnimationComponent: React.FC<{
-  word: string;
-  variants: Variants;
-  per: "word" | "char";
+  word: string
+  variants: Variants
+  per: 'word' | 'char'
 }> = React.memo(({ word, variants, per }) => {
-  if (per === "word") {
+  if (per === 'word') {
     return (
       <motion.span aria-hidden="true" variants={variants} className="inline-block whitespace-pre">
         {word}
       </motion.span>
-    );
+    )
   }
 
   return (
     <span className="inline-block whitespace-pre">
-      {word.split("").map((char, charIndex) => (
+      {word.split('').map((char, charIndex) => (
         <motion.span
           key={`char-${charIndex}`}
           aria-hidden="true"
@@ -96,24 +96,24 @@ const AnimationComponent: React.FC<{
         </motion.span>
       ))}
     </span>
-  );
-});
+  )
+})
 
-AnimationComponent.displayName = "AnimationComponent";
+AnimationComponent.displayName = 'AnimationComponent'
 
 export function TextEffect({
   children,
-  per = "word",
+  per = 'word',
   variants,
   className,
   preset,
 }: TextEffectProps) {
-  const words = children.split(/(\S+)/);
+  const words = children.split(/(\S+)/)
   const selectedVariants = preset
     ? presetVariants[preset]
-    : { container: defaultContainerVariants, item: defaultItemVariants };
-  const containerVariants = variants?.container || selectedVariants.container;
-  const itemVariants = variants?.item || selectedVariants.item;
+    : { container: defaultContainerVariants, item: defaultItemVariants }
+  const containerVariants = variants?.container || selectedVariants.container
+  const itemVariants = variants?.item || selectedVariants.item
 
   return (
     <motion.div
@@ -132,5 +132,5 @@ export function TextEffect({
         />
       ))}
     </motion.div>
-  );
+  )
 }

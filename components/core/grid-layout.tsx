@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { useAtomValue } from "jotai";
+import { useAtomValue } from 'jotai'
 import {
   animate,
   type MotionProps,
@@ -9,16 +9,16 @@ import {
   useMotionValue,
   useMotionValueEvent,
   useTransform,
-} from "motion/react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import type React from "react";
-import { createContext, type ReactNode, useContext, useEffect, useRef, useState } from "react";
-import { useIsMounted } from "@/hooks/use-is-mounted";
-import useWindowSize from "@/hooks/use-window-size";
-import { debugModeAtom } from "@/lib/atoms";
-import { cn } from "@/lib/utils";
-import { Window } from "./window";
+} from 'motion/react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import type React from 'react'
+import { createContext, type ReactNode, useContext, useEffect, useRef, useState } from 'react'
+import { useIsMounted } from '@/hooks/use-is-mounted'
+import useWindowSize from '@/hooks/use-window-size'
+import { debugModeAtom } from '@/lib/atoms'
+import { cn } from '@/lib/utils'
+import { Window } from './window'
 
 // ------------------------------------------------------------------
 // 1. CONTEXT SETUP
@@ -26,29 +26,29 @@ import { Window } from "./window";
 
 /** The shape of the data we'll put in context */
 interface HoneycombContextValue {
-  debug: boolean;
-  scrollX: MotionValue<number>;
-  pageWidth: number;
-  itemSize: number;
-  labelSize: number;
-  gutter: number;
-  verticalSpacing: number;
+  debug: boolean
+  scrollX: MotionValue<number>
+  pageWidth: number
+  itemSize: number
+  labelSize: number
+  gutter: number
+  verticalSpacing: number
   /**
    * Used for exit transition when clicking on a href
    */
-  animateOverwrite: boolean;
-  setAnimateOverwrite: (value: boolean) => void;
+  animateOverwrite: boolean
+  setAnimateOverwrite: (value: boolean) => void
 }
 
 /** Create the context object (and a safe hook to consume it). */
-const HoneycombContext = createContext<HoneycombContextValue | undefined>(undefined);
+const HoneycombContext = createContext<HoneycombContextValue | undefined>(undefined)
 
 function useHoneycombContext() {
-  const value = useContext(HoneycombContext);
+  const value = useContext(HoneycombContext)
   if (!value) {
-    throw new Error("useHoneycombContext must be used within a HoneycombProvider.");
+    throw new Error('useHoneycombContext must be used within a HoneycombProvider.')
   }
-  return value;
+  return value
 }
 
 /** Wrap children in this provider once at the top of your layout. */
@@ -56,10 +56,10 @@ function HoneycombProvider({
   value,
   children,
 }: {
-  value: HoneycombContextValue;
-  children: ReactNode;
+  value: HoneycombContextValue
+  children: ReactNode
 }) {
-  return <HoneycombContext.Provider value={value}>{children}</HoneycombContext.Provider>;
+  return <HoneycombContext.Provider value={value}>{children}</HoneycombContext.Provider>
 }
 
 // ------------------------------------------------------------------
@@ -67,114 +67,114 @@ function HoneycombProvider({
 // ------------------------------------------------------------------
 
 export interface HoneycombItem extends MotionProps {
-  id: string;
-  label: string;
-  icon: React.ReactNode;
-  background?: React.ReactNode;
-  href?: string;
-  debug?: boolean;
-  onClick?: () => void;
+  id: string
+  label: string
+  icon: React.ReactNode
+  background?: React.ReactNode
+  href?: string
+  debug?: boolean
+  onClick?: () => void
 }
 
 interface HoneycombLayoutProps {
-  items: HoneycombItem[];
+  items: HoneycombItem[]
 }
 
 // Some sizing constants
-const ITEM_SIZE = 96; // icon diameter
-const LABEL_SIZE = 28;
-const GUTTER = 48;
-const PAGE_GUTTER = ITEM_SIZE * 2 + GUTTER; // spacing between pages
-const MAX_CONTAINER_WIDTH = 1024 - PAGE_GUTTER;
-const ORNAMENT_WIDTH = 68 + 16 * 2 + 1 * 16; // example offset
+const ITEM_SIZE = 96 // icon diameter
+const LABEL_SIZE = 28
+const GUTTER = 48
+const PAGE_GUTTER = ITEM_SIZE * 2 + GUTTER // spacing between pages
+const MAX_CONTAINER_WIDTH = 1024 - PAGE_GUTTER
+const ORNAMENT_WIDTH = 68 + 16 * 2 + 1 * 16 // example offset
 const GRID_VERTICAL_SPACING_FACTOR = {
   condensed: 0.9,
   default: 1.4,
-};
+}
 
 const DEBUG_CLASSNAMES = [
-  "after:absolute",
-  "after:left-0",
-  "after:top-0",
-  "after:z-40",
-  "after:text-xs",
-  "after:p-2",
-  "after:shadow-md",
-  "after:tabular-nums",
-  "outline",
-];
+  'after:absolute',
+  'after:left-0',
+  'after:top-0',
+  'after:z-40',
+  'after:text-xs',
+  'after:p-2',
+  'after:shadow-md',
+  'after:tabular-nums',
+  'outline',
+]
 
 export function HoneycombLayout({ items }: HoneycombLayoutProps) {
-  const [animateOverwrite, setAnimateOverwrite] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
+  const [animateOverwrite, setAnimateOverwrite] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const innerRef = useRef<HTMLDivElement>(null)
 
-  const DEBUG = useAtomValue(debugModeAtom);
-  const { width = 600, height = 600 } = useWindowSize();
+  const DEBUG = useAtomValue(debugModeAtom)
+  const { width = 600, height = 600 } = useWindowSize()
 
   // Motion values
-  const x = useMotionValue(0);
+  const x = useMotionValue(0)
 
   // Filter items based on debug mode
   const filteredItems = items.filter((item) => {
-    if (DEBUG) return true;
-    return !item.debug;
-  });
+    if (DEBUG) return true
+    return !item.debug
+  })
 
   // Condensed or normal spacing based on window size
-  const isCondensedWidth = width <= 896;
-  const isCondensedHeight = height <= 460;
+  const isCondensedWidth = width <= 896
+  const isCondensedHeight = height <= 460
   const verticalSpacing = isCondensedHeight
     ? GRID_VERTICAL_SPACING_FACTOR.condensed
-    : GRID_VERTICAL_SPACING_FACTOR.default;
+    : GRID_VERTICAL_SPACING_FACTOR.default
 
   // Container width
-  let containerWidth = Math.min(width, MAX_CONTAINER_WIDTH);
+  let containerWidth = Math.min(width, MAX_CONTAINER_WIDTH)
   if (isCondensedWidth) {
-    containerWidth = containerWidth - ORNAMENT_WIDTH;
+    containerWidth = containerWidth - ORNAMENT_WIDTH
   }
 
   // Limit the number of columns
-  const maxCols = Math.min(Math.floor((containerWidth - ITEM_SIZE) / (ITEM_SIZE + GUTTER)), 4);
+  const maxCols = Math.min(Math.floor((containerWidth - ITEM_SIZE) / (ITEM_SIZE + GUTTER)), 4)
   // items per page (3 rows with an extra middle cell => maxCols*3 + 1)
-  const itemsPerPage = maxCols * 3 + 1;
+  const itemsPerPage = maxCols * 3 + 1
 
   // Break items into pages
-  const pages: HoneycombItem[][] = [];
+  const pages: HoneycombItem[][] = []
   for (let i = 0; i < filteredItems.length; i += itemsPerPage) {
-    pages.push(filteredItems.slice(i, i + itemsPerPage));
+    pages.push(filteredItems.slice(i, i + itemsPerPage))
   }
 
   // Calculate actual page width
-  const rawPageWidth = maxCols * (ITEM_SIZE + GUTTER) + PAGE_GUTTER;
+  const rawPageWidth = maxCols * (ITEM_SIZE + GUTTER) + PAGE_GUTTER
   // "padding" keeps pages from overshooting container width
-  const padding = Math.max(0, containerWidth - rawPageWidth - ITEM_SIZE + PAGE_GUTTER);
-  const pageWidth = rawPageWidth - padding;
+  const padding = Math.max(0, containerWidth - rawPageWidth - ITEM_SIZE + PAGE_GUTTER)
+  const pageWidth = rawPageWidth - padding
 
   // Debug logging when x changes
-  useMotionValueEvent(x, "change", (latest) => {
+  useMotionValueEvent(x, 'change', (latest) => {
     if (DEBUG && containerRef.current) {
       containerRef.current.setAttribute(
-        "data-debug",
+        'data-debug',
         `View(${containerWidth}px) • ${Math.round(latest)}px`
-      );
+      )
     }
-  });
+  })
 
   function onDragEnd() {
-    const currentX = x.get();
-    const rawPageIndex = -currentX / pageWidth;
-    const nearestPage = Math.round(rawPageIndex);
-    const clampedPage = Math.max(0, Math.min(nearestPage, pages.length - 1));
-    const finalX = -clampedPage * pageWidth;
+    const currentX = x.get()
+    const rawPageIndex = -currentX / pageWidth
+    const nearestPage = Math.round(rawPageIndex)
+    const clampedPage = Math.max(0, Math.min(nearestPage, pages.length - 1))
+    const finalX = -clampedPage * pageWidth
     // Animate to final
-    animate(x, finalX, { type: "spring", stiffness: 90, damping: 18 });
+    animate(x, finalX, { type: 'spring', stiffness: 90, damping: 18 })
   }
 
   // Reset x on unmount
   useEffect(() => {
-    return () => x.set(0);
-  }, [x]);
+    return () => x.set(0)
+  }, [x])
 
   const providerValue: HoneycombContextValue = {
     debug: DEBUG,
@@ -186,7 +186,7 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
     verticalSpacing,
     animateOverwrite,
     setAnimateOverwrite,
-  };
+  }
 
   return (
     <div
@@ -194,10 +194,10 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
       style={{
         width: containerWidth,
         height: (ITEM_SIZE + LABEL_SIZE) * 3 + GUTTER * verticalSpacing,
-        marginLeft: "auto",
-        marginRight: "auto",
-        overflow: "visible",
-        position: "relative",
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        overflow: 'visible',
+        position: 'relative',
         paddingLeft: padding / 2,
         paddingRight: padding / 2,
       }}
@@ -205,10 +205,10 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
       className={cn(
         DEBUG && [
           ...DEBUG_CLASSNAMES,
-          "outline-yellow-500",
-          "after:content-[attr(data-debug)]",
-          "after:absolute after:top-0 after:left-0 after:z-40",
-          "after:bg-yellow-500 after:p-2 after:text-xs after:text-yellow-900",
+          'outline-yellow-500',
+          'after:content-[attr(data-debug)]',
+          'after:absolute after:top-0 after:left-0 after:z-40',
+          'after:bg-yellow-500 after:p-2 after:text-xs after:text-yellow-900',
         ]
       )}
       role="region"
@@ -228,33 +228,33 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
           0
         )}px, Right: 0px • padding: ${padding}px`}
         className={cn(
-          "relative h-full",
+          'relative h-full',
           DEBUG && [
             ...DEBUG_CLASSNAMES,
-            "outline-sky-500",
-            "after:content-[attr(data-debug)]",
-            "after:absolute after:top-[2rem] after:left-0 after:z-[41]",
-            "after:bg-sky-500 after:p-2 after:text-sky-950 after:text-xs",
+            'outline-sky-500',
+            'after:content-[attr(data-debug)]',
+            'after:absolute after:top-[2rem] after:left-0 after:z-[41]',
+            'after:bg-sky-500 after:p-2 after:text-sky-950 after:text-xs',
           ]
         )}
         style={{
           x,
-          touchAction: "none",
-          userSelect: "none",
+          touchAction: 'none',
+          userSelect: 'none',
         }}
         aria-roledescription="Draggable grid"
       >
         <HoneycombProvider value={providerValue}>
           {pages.map((pageItems, pageIndex) => {
-            const pageOffset = pageIndex * pageWidth;
+            const pageOffset = pageIndex * pageWidth
             return (
               <PageContent
-                key={pageIndex}
+                key={`page-${pageIndex}`}
                 pageItems={pageItems}
                 pageIndex={pageIndex}
                 pageOffset={pageOffset}
               />
-            );
+            )
           })}
         </HoneycombProvider>
       </motion.div>
@@ -265,7 +265,7 @@ export function HoneycombLayout({ items }: HoneycombLayoutProps) {
         </div>
       )}
     </div>
-  );
+  )
 }
 
 // ------------------------------------------------------------------
@@ -280,7 +280,7 @@ const pageVariants = {
     scale: 1,
     transition: {
       delay: 0.2,
-      type: "spring",
+      type: 'spring',
       stiffness: 80,
       damping: 18,
       mass: 1.2,
@@ -289,60 +289,60 @@ const pageVariants = {
   zoomOut: {
     scale: 1.08,
   },
-} as const;
+} as const
 
 function PageContent({
   pageItems,
   pageIndex,
   pageOffset,
 }: {
-  pageItems: HoneycombItem[];
-  pageIndex: number;
-  pageOffset: number;
+  pageItems: HoneycombItem[]
+  pageIndex: number
+  pageOffset: number
 }) {
-  const isMounted = useIsMounted();
-  const [show, setShow] = useState(false);
-  const { debug, pageWidth, itemSize, gutter, animateOverwrite } = useHoneycombContext();
+  const isMounted = useIsMounted()
+  const [show, setShow] = useState(false)
+  const { debug, pageWidth, itemSize, gutter, animateOverwrite } = useHoneycombContext()
 
   // We figure out how many columns we can have by seeing how many fits into a single page
   // For consistency, we re-derive it from (pageWidth - PAGE_GUTTER) / (itemSize+gutter) or so.
   // Or you might pass `maxCols` in context if that's simpler.
   // For brevity, let's just guess 4 columns from the original logic:
-  const maxCols = Math.min(Math.floor((pageWidth - 96) / (itemSize + gutter)), 4);
+  const maxCols = Math.min(Math.floor((pageWidth - 96) / (itemSize + gutter)), 4)
 
   useEffect(() => {
-    if (isMounted()) setShow(true);
-  }, [isMounted]);
+    if (isMounted()) setShow(true)
+  }, [isMounted])
 
-  if (!show) return null;
+  if (!show) return null
 
   return (
     <motion.div
       key={pageIndex}
       style={{
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: pageOffset,
         width: pageWidth,
-        height: "100%",
+        height: '100%',
       }}
       variants={pageVariants}
       initial="hidden"
       animate="visible"
-      exit={animateOverwrite ? "zoomOut" : "hidden"}
+      exit={animateOverwrite ? 'zoomOut' : 'hidden'}
       transition={{
         duration: 1,
-        type: "spring",
+        type: 'spring',
         bounce: 0,
       }}
       data-debug={`Page ${pageIndex}: ${pageWidth}px`}
       className={cn(
         debug && [
           ...DEBUG_CLASSNAMES,
-          "outline-green-500",
-          "after:content-[attr(data-debug)]",
-          "after:absolute after:top-[-2rem] after:left-0",
-          "after:bg-green-500 after:p-2 after:text-green-900 after:text-xs",
+          'outline-green-500',
+          'after:content-[attr(data-debug)]',
+          'after:absolute after:top-[-2rem] after:left-0',
+          'after:bg-green-500 after:p-2 after:text-green-900 after:text-xs',
         ]
       )}
       role="group"
@@ -350,41 +350,41 @@ function PageContent({
     >
       <motion.ul
         style={{
-          position: "relative",
-          width: "100%",
-          height: "100%",
+          position: 'relative',
+          width: '100%',
+          height: '100%',
         }}
         aria-label={`Grid items on page ${pageIndex + 1}`}
       >
         {pageItems.map((item, i) => {
           // Row-col math
-          let row: number;
-          let col: number;
+          let row: number
+          let col: number
           if (i < maxCols) {
-            row = 0;
-            col = i;
+            row = 0
+            col = i
           } else if (i < maxCols * 2 + 1) {
-            row = 1;
-            col = i - maxCols;
+            row = 1
+            col = i - maxCols
           } else {
-            row = 2;
-            col = i - maxCols * 2 - 1;
+            row = 2
+            col = i - maxCols * 2 - 1
           }
 
           return (
             <HoneycombCell
-              key={item.id}
+              key={`${item.id}-${pageIndex}-${i}`}
               item={item}
               row={row}
               col={col}
               maxCols={maxCols}
               pageOffset={pageOffset}
             />
-          );
+          )
         })}
       </motion.ul>
     </motion.div>
-  );
+  )
 }
 
 // ------------------------------------------------------------------
@@ -395,14 +395,14 @@ const tapVariants = {
   hover: {
     scale: 1.05,
     transition: {
-      type: "spring",
+      type: 'spring',
       bounce: 0,
     },
   },
   tap: {
     scale: 0.9,
     transition: {
-      type: "spring",
+      type: 'spring',
       stiffness: 150,
       damping: 8,
       mass: 0.1,
@@ -411,29 +411,29 @@ const tapVariants = {
   focus: {
     scale: 1.08,
     transition: {
-      type: "spring",
+      type: 'spring',
       bounce: 0,
     },
   },
-} as const;
+} as const
 
 const cellXclassName = {
-  "-4": "[--cell-x:-2.5px]",
-  "-3": "[--cell-x:-2px]",
-  "-2": "[--cell-x:-1.25px]",
-  "-1": "[--cell-x:-0.5px]",
-  "0": "[--cell-x:0px]",
-  "1": "[--cell-x:1px]",
-  "2": "[--cell-x:1.5px]",
-  "3": "[--cell-x:2.25px]",
-  "4": "[--cell-x:3px]",
-};
+  '-4': '[--cell-x:-2.5px]',
+  '-3': '[--cell-x:-2px]',
+  '-2': '[--cell-x:-1.25px]',
+  '-1': '[--cell-x:-0.5px]',
+  '0': '[--cell-x:0px]',
+  '1': '[--cell-x:1px]',
+  '2': '[--cell-x:1.5px]',
+  '3': '[--cell-x:2.25px]',
+  '4': '[--cell-x:3px]',
+}
 
 const cellYclassName = {
-  "-2": "[--cell-y:-2px]",
-  "0": "[--cell-y:-1px]",
-  "2": "[--cell-y:2px]",
-};
+  '-2': '[--cell-y:-2px]',
+  '0': '[--cell-y:-1px]',
+  '2': '[--cell-y:2px]',
+}
 
 function HoneycombCell({
   item,
@@ -442,11 +442,11 @@ function HoneycombCell({
   maxCols,
   pageOffset,
 }: {
-  item: HoneycombItem;
-  row: number;
-  col: number;
-  maxCols: number;
-  pageOffset: number;
+  item: HoneycombItem
+  row: number
+  col: number
+  maxCols: number
+  pageOffset: number
 }) {
   const {
     debug,
@@ -458,18 +458,18 @@ function HoneycombCell({
     verticalSpacing,
     animateOverwrite,
     setAnimateOverwrite,
-  } = useHoneycombContext();
+  } = useHoneycombContext()
 
-  const router = useRouter();
+  const router = useRouter()
 
-  const [isMouseDown, setIsMouseDown] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
-  const cellRef = useRef<HTMLLIElement>(null);
+  const [isMouseDown, setIsMouseDown] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const cellRef = useRef<HTMLLIElement>(null)
 
   // Some geometry
-  const halfOffset = (itemSize + gutter) / 2;
-  const cellX = row === 1 ? col * (itemSize + gutter) : halfOffset + col * (itemSize + gutter);
-  const cellY = row * (itemSize + gutter * verticalSpacing);
+  const halfOffset = (itemSize + gutter) / 2
+  const cellX = row === 1 ? col * (itemSize + gutter) : halfOffset + col * (itemSize + gutter)
+  const cellY = row * (itemSize + gutter * verticalSpacing)
 
   // 1) Opacity + scale transforms based on how far the page is from center
   const inputRange = [
@@ -477,39 +477,39 @@ function HoneycombCell({
     -cellX - pageOffset + pageWidth - itemSize,
     -cellX - pageOffset,
     -cellX - itemSize - pageOffset,
-  ];
-  const opacity = useTransform(scrollX, inputRange, [0, 1, 1, 0]);
-  const scale = useTransform(scrollX, inputRange, [0.75, 1, 1, 0.75]);
+  ]
+  const opacity = useTransform(scrollX, inputRange, [0, 1, 1, 0])
+  const scale = useTransform(scrollX, inputRange, [0.75, 1, 1, 0.75])
   const filter = useTransform(scrollX, inputRange, [
-    "blur(16px)",
-    "blur(0px)",
-    "blur(0px)",
-    "blur(16px)",
-  ]);
+    'blur(16px)',
+    'blur(0px)',
+    'blur(0px)',
+    'blur(16px)',
+  ])
 
   // 2) Middle row parallax effect
   const middleRowParallax = useTransform(
     scrollX,
     [-pageOffset - pageWidth, -pageOffset, -pageOffset + pageWidth],
     [-itemSize * 0.7, 0, itemSize * 0.7]
-  );
+  )
 
   // 3) "Center-out" reveal offsets for the first page
-  const orderX = 2 * col - maxCols + (row !== 1 ? 1 : 0);
-  const orderY = (row - 1) * 2;
-  const startX = ITEM_SIZE * -(orderX / maxCols) * 0.1 * (Math.abs(row - 1) + Math.abs(col - 2));
-  const startY = -(itemSize / 3) * (row - 1);
+  const orderX = 2 * col - maxCols + (row !== 1 ? 1 : 0)
+  const orderY = (row - 1) * 2
+  const startX = ITEM_SIZE * -(orderX / maxCols) * 0.1 * (Math.abs(row - 1) + Math.abs(col - 2))
+  const startY = -(itemSize / 3) * (row - 1)
   const wrapperVariants = {
-    initialFirstPage: { x: startX, y: startY, filter: "blur(16px)" },
-    initialOtherPages: { scale: 1, filter: "blur(0px)" },
+    initialFirstPage: { x: startX, y: startY, filter: 'blur(16px)' },
+    initialOtherPages: { scale: 1, filter: 'blur(0px)' },
     animate: {
       opacity: 1,
       x: 0,
       y: 0,
-      filter: "blur(0px)",
+      filter: 'blur(0px)',
       transition: {
         delay: 0.15 + 0.1 * (Math.abs(row - 1) + Math.abs(col - 2)),
-        type: "spring",
+        type: 'spring',
         duration: 1.2,
         bounce: 0,
       },
@@ -517,7 +517,7 @@ function HoneycombCell({
     exit: {
       x: startX,
       y: startY,
-      filter: "blur(16px)",
+      filter: 'blur(16px)',
       transition: {
         duration: 0.5,
       },
@@ -525,7 +525,7 @@ function HoneycombCell({
     zoomOut: {
       x: -startX,
       y: -startY,
-      filter: "blur(16px)",
+      filter: 'blur(16px)',
       opacity: 0,
       transition: {
         duration: 0.5,
@@ -534,102 +534,101 @@ function HoneycombCell({
     focused: {
       x: 0,
       y: 0,
-      filter: "blur(0px)",
+      filter: 'blur(0px)',
       scale: 1.02,
       opacity: 1,
       transition: {
         duration: 0.3,
-        ease: "easeOut",
+        ease: 'easeOut',
       },
     },
-  } as const;
+  } as const
 
-  const isOnFirstPage = pageOffset === 0;
+  const isOnFirstPage = pageOffset === 0
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      onNavigate(e);
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      onNavigate(e)
     }
 
     // Arrow key navigation
-    const gridItems = Array.from(document.querySelectorAll('[role="button"][tabindex="0"]'));
-    const currentIndex = gridItems.indexOf(cellRef.current as HTMLElement);
+    const gridItems = Array.from(document.querySelectorAll('[role="button"][tabindex="0"]'))
+    const currentIndex = gridItems.indexOf(cellRef.current as HTMLElement)
 
-    let nextItem: HTMLElement | null = null;
+    let nextItem: HTMLElement | null = null
 
     switch (e.key) {
-      case "ArrowRight":
+      case 'ArrowRight':
         if (currentIndex < gridItems.length - 1) {
-          nextItem = gridItems[currentIndex + 1] as HTMLElement;
+          nextItem = gridItems[currentIndex + 1] as HTMLElement
         }
-        break;
-      case "ArrowLeft":
+        break
+      case 'ArrowLeft':
         if (currentIndex > 0) {
-          nextItem = gridItems[currentIndex - 1] as HTMLElement;
+          nextItem = gridItems[currentIndex - 1] as HTMLElement
         }
-        break;
-      case "ArrowDown":
+        break
+      case 'ArrowDown':
         // Try to find an item in the next row (approximately maxCols away)
         if (currentIndex + maxCols < gridItems.length) {
-          nextItem = gridItems[currentIndex + maxCols] as HTMLElement;
+          nextItem = gridItems[currentIndex + maxCols] as HTMLElement
         }
-        break;
-      case "ArrowUp":
+        break
+      case 'ArrowUp':
         // Try to find an item in the previous row
         if (currentIndex - maxCols >= 0) {
-          nextItem = gridItems[currentIndex - maxCols] as HTMLElement;
+          nextItem = gridItems[currentIndex - maxCols] as HTMLElement
         }
-        break;
+        break
     }
 
     if (nextItem) {
-      e.preventDefault();
-      nextItem.focus();
+      e.preventDefault()
+      nextItem.focus()
     }
-  };
-
+  }
 
   const onClick = () => {
     if (item.onClick) {
-      item.onClick();
+      item.onClick()
     }
-  };
+  }
 
   const onNavigate = (e: { preventDefault: () => void }) => {
     if (item.href) {
-      e.preventDefault();
-      const href = item.href;
-      setAnimateOverwrite(true);
+      e.preventDefault()
+      const href = item.href
+      setAnimateOverwrite(true)
       setTimeout(() => {
         router.push(href as any, {
           scroll: false,
-        });
-      }, 600);
+        })
+      }, 600)
     }
-  };
+  }
 
   return (
     <motion.li
       ref={cellRef}
       {...item}
       style={{
-        position: "absolute",
+        position: 'absolute',
         left: cellX,
         top: cellY,
         x: row === 1 ? middleRowParallax : 0,
         scale,
       }}
       animate={
-        isFocused ? "focused" : animateOverwrite ? "zoomOut" : isOnFirstPage ? "animate" : undefined
+        isFocused ? 'focused' : animateOverwrite ? 'zoomOut' : isOnFirstPage ? 'animate' : undefined
       }
-      initial={isOnFirstPage ? "initialFirstPage" : "initialOtherPages"}
+      initial={isOnFirstPage ? 'initialFirstPage' : 'initialOtherPages'}
       exit="exit"
       variants={wrapperVariants}
       onMouseDown={() => setIsMouseDown(true)}
       onMouseUp={() => setIsMouseDown(false)}
       onMouseLeave={() => setIsMouseDown(false)}
-      className={cn("group/cell outline-none", debug && ["outline", "outline-pink-500"])}
+      className={cn('group/cell outline-none', debug && ['outline', 'outline-pink-500'])}
       role="button"
       aria-label={item.label}
       onKeyDown={handleKeyDown}
@@ -637,7 +636,7 @@ function HoneycombCell({
       <Link
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        href={item.href ?? "" as any}
+        href={item.href ?? ('' as any)}
         onNavigate={onNavigate}
         onClick={onClick}
         data-cursor-disabled
@@ -645,19 +644,19 @@ function HoneycombCell({
         {/* Icon bubble */}
         <motion.div
           variants={tapVariants}
-          animate={isMouseDown ? "tap" : undefined}
-          whileHover={isMouseDown ? undefined : "hover"}
+          animate={isMouseDown ? 'tap' : undefined}
+          whileHover={isMouseDown ? undefined : 'hover'}
           transition={tapVariants.hover.transition}
           className={cn(
-            "group/icon relative",
+            'group/icon relative',
             cellXclassName[orderX.toString() as keyof typeof cellXclassName],
             cellYclassName[orderY.toString() as keyof typeof cellYclassName]
           )}
         >
           <Window
             className={cn(
-              "rounded-full backdrop-blur [--diameter:96px] [--radius:48px] before:rounded-full",
-              isFocused && "ring-1 ring-white/50 ring-offset-1 ring-offset-transparent"
+              'rounded-full backdrop-blur [--diameter:96px] [--radius:48px] before:rounded-full',
+              isFocused && 'ring-1 ring-white/50 ring-offset-1 ring-offset-transparent'
             )}
             thickness="none"
             style={{
@@ -665,9 +664,9 @@ function HoneycombCell({
               height: itemSize,
               opacity,
               filter,
-              position: "relative",
+              position: 'relative',
               zIndex: 20,
-              transition: "all 0.3s ease-out",
+              transition: 'all 0.3s ease-out',
             }}
           >
             <div className="relative h-full w-full overflow-hidden rounded-full">
@@ -676,19 +675,19 @@ function HoneycombCell({
                   {Math.round(cellX)},{Math.round(cellY)}
                   <br />
                   row:{row} col:{col}
-                  {isMouseDown ? " 👆" : ""}
-                  {isFocused ? " 🔍" : ""}
+                  {isMouseDown ? ' 👆' : ''}
+                  {isFocused ? ' 🔍' : ''}
                 </span>
               )}
               {item.background && (
-                <div className={"pointer-events-none absolute inset-0"}>
+                <div className={'pointer-events-none absolute inset-0'}>
                   {item.background}
                   <div
                     className={cn(
-                      "absolute inset-0 z-10 bg-white/10 opacity-0 transition-opacity duration-300",
-                      "bg-blend-overlay",
-                      "group-hover/cell:opacity-100",
-                      isFocused ? "opacity-100" : ""
+                      'absolute inset-0 z-10 bg-white/10 opacity-0 transition-opacity duration-300',
+                      'bg-blend-overlay',
+                      'group-hover/cell:opacity-100',
+                      isFocused ? 'opacity-100' : ''
                     )}
                   />
                 </div>
@@ -696,8 +695,8 @@ function HoneycombCell({
               {item.icon && (
                 <div
                   className={cn(
-                    "absolute inset-0 z-[11] transition-all duration-300",
-                    isFocused && "scale-105 brightness-110"
+                    'absolute inset-0 z-[11] transition-all duration-300',
+                    isFocused && 'scale-105 brightness-110'
                   )}
                 >
                   {item.icon}
@@ -710,9 +709,9 @@ function HoneycombCell({
         {/* Label */}
         <motion.div
           className={cn(
-            "pointer-events-none flex translate-y-0.5 items-center justify-center text-center font-medium text-shadow-md text-white/65 text-xs transition-all duration-300 group-hover/cell:text-white/85",
-            "!delay-0 !duration-0",
-            isFocused && "translate-y-1 font-semibold text-white"
+            'pointer-events-none flex translate-y-0.5 items-center justify-center text-center font-medium text-shadow-md text-white/65 text-xs transition-all duration-300 group-hover/cell:text-white/85',
+            '!delay-0 !duration-0',
+            isFocused && 'translate-y-1 font-semibold text-white'
           )}
           style={{
             height: labelSize,
@@ -725,13 +724,13 @@ function HoneycombCell({
         </motion.div>
       </Link>
     </motion.li>
-  );
+  )
 }
 
 export const honeycombIconClassName = cn(
-  "object-contain p-3 transition-all duration-300 pointer-events-none touch-none",
-  "translate-y-0 translate-x-0 group-hover/cell:!translate-y-[var(--cell-y,-1px)] group-hover/cell:!translate-x-[var(--cell-x,-1px)]",
-  "group-focus-visible/cell:!translate-y-[var(--cell-y,-1px)] group-focus-visible/cell:!translate-x-[var(--cell-x,-1px)]",
-  "[filter:drop-shadow(0px_0px_1px_rgba(12,12,12,0))] group-hover/cell:[filter:drop-shadow(calc(var(--cell-x,-1px)*-1.5)_calc(var(--cell-y,-1px)*-1.5)_1px_rgba(0,0,0,0.33))]",
-  "group-focus-visible/cell:[filter:drop-shadow(calc(var(--cell-x,-1px)*-1.5)_calc(var(--cell-y,-1px)*-1.5)_1px_rgba(0,0,0,0.33))]"
-);
+  'object-contain p-3 transition-all duration-300 pointer-events-none touch-none',
+  'translate-y-0 translate-x-0 group-hover/cell:!translate-y-[var(--cell-y,-1px)] group-hover/cell:!translate-x-[var(--cell-x,-1px)]',
+  'group-focus-visible/cell:!translate-y-[var(--cell-y,-1px)] group-focus-visible/cell:!translate-x-[var(--cell-x,-1px)]',
+  '[filter:drop-shadow(0px_0px_1px_rgba(12,12,12,0))] group-hover/cell:[filter:drop-shadow(calc(var(--cell-x,-1px)*-1.5)_calc(var(--cell-y,-1px)*-1.5)_1px_rgba(0,0,0,0.33))]',
+  'group-focus-visible/cell:[filter:drop-shadow(calc(var(--cell-x,-1px)*-1.5)_calc(var(--cell-y,-1px)*-1.5)_1px_rgba(0,0,0,0.33))]'
+)

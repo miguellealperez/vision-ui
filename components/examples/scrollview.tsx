@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   ScrollArea,
@@ -6,11 +6,11 @@ import {
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from "@/components/core/v2/scrollview";
-import { Text } from "@/components/core/v2/text";
+} from '@/components/core/v2/scrollview'
+import { Text } from '@/components/core/v2/text'
 
 export function ScrollViewExample() {
-  const items = Array.from({ length: 50 }, (_, i) => `Item ${i + 1}`);
+  const items = Array.from({ length: 50 }, (_, i) => `Item ${i + 1}`)
 
   return (
     <div className="space-y-8 p-8">
@@ -40,7 +40,7 @@ export function ScrollViewExample() {
           <Text size="headline" className="mb-2">
             ScrollArea with Material
           </Text>
-          <ScrollArea className="h-[200px] w-[300px]" material={{ thickness: "normal" }}>
+          <ScrollArea className="h-[200px] w-[300px]" material={{ thickness: 'normal' }}>
             <div className="space-y-2 p-4">
               {items.map((item) => (
                 <div key={item} className="rounded bg-white/10 p-2">
@@ -78,7 +78,7 @@ export function ScrollViewExample() {
             Horizontal ScrollArea
           </Text>
           <ScrollArea className="h-[100px] w-[300px] rounded-lg border border-gray-200">
-            <div className="flex space-x-4 p-4" style={{ width: "max-content" }}>
+            <div className="flex space-x-4 p-4" style={{ width: 'max-content' }}>
               {items.map((item) => (
                 <div key={item} className="whitespace-nowrap rounded bg-gray-100 p-2">
                   {item}
@@ -108,5 +108,5 @@ export function ScrollViewExample() {
         </div>
       </div>
     </div>
-  );
+  )
 }

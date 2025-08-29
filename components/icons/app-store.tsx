@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import type { SVGProps } from 'react'
 
 const AppStoreIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" {...props}>
@@ -11,5 +11,5 @@ const AppStoreIcon = (props: SVGProps<SVGSVGElement>) => (
       d="m13.822 8.858.606-1 3.463 5.863h3.642c.81 0 1.467.652 1.467 1.455s-.657 1.455-1.467 1.455H19.61l1.28 2.168c.41.693.176 1.585-.523 1.99a1.472 1.472 0 0 1-.74.2c-.504 0-.993-.257-1.266-.72l-4.618-7.817a3.605 3.605 0 0 1 .079-3.594ZM3.209 18.258c.377-.118.774-.18 1.183-.17h.004c.75.023 1.377.36 1.806.856l-.79 1.336a1.471 1.471 0 0 1-2.006.52 1.448 1.448 0 0 1-.524-1.99l.327-.552Z"
     />
   </svg>
-);
-export default AppStoreIcon;
+)
+export default AppStoreIcon

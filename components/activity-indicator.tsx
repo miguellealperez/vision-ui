@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import type { SVGProps } from 'react'
 
 export const ActivityIndicator = (props: SVGProps<SVGSVGElement>) => {
   return (
@@ -81,5 +81,5 @@ export const ActivityIndicator = (props: SVGProps<SVGSVGElement>) => {
         rx={1.867}
       />
     </svg>
-  );
-};
+  )
+}

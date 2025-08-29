@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import type { SVGProps } from 'react'
 
 const CollectionsIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" {...props}>
@@ -11,6 +11,6 @@ const CollectionsIcon = (props: SVGProps<SVGSVGElement>) => (
       </clipPath>
     </defs>
   </svg>
-);
+)
 
-export default CollectionsIcon;
+export default CollectionsIcon

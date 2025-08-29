@@ -1,16 +1,16 @@
-import { ButtonGroup } from "@/components/core/button";
-import { NavigationBar, NavigationBarTitle } from "@/components/core/navigation-bar";
+import { ButtonGroup } from '@/components/core/button'
+import { NavigationBar, NavigationBarTitle } from '@/components/core/navigation-bar'
 import {
   Ornament,
   OrnamentContent,
   OrnamentContents,
   OrnamentTab,
   OrnamentTabs,
-} from "@/components/core/ornament";
-import { CollectionsIcon, PanoIcon, PhotosIcon, SearchIcon, SpacialIcon } from "@/components/icons";
-import { HeroDropdownMenu } from "@/components/landing/hero-dropdown-menu";
-import { defaultWindowProps } from "../constants";
-import { MemoriesToolbar, MemoriesView } from "./memories-view";
+} from '@/components/core/ornament'
+import { CollectionsIcon, PanoIcon, PhotosIcon, SearchIcon, SpacialIcon } from '@/components/icons'
+import { HeroDropdownMenu } from '@/components/landing/hero-dropdown-menu'
+import { defaultWindowProps } from '../constants'
+import { MemoriesToolbar, MemoriesView } from './memories-view'
 
 function PhotosPage() {
   return (
@@ -71,7 +71,7 @@ function PhotosPage() {
         </OrnamentContent>
       </OrnamentContents>
     </Ornament>
-  );
+  )
 }
 
-export default PhotosPage;
+export default PhotosPage

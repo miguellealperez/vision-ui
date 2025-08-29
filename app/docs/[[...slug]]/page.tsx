@@ -1,41 +1,41 @@
-import { getGithubLastEdit } from "fumadocs-core/server";
-import { createGenerator } from "fumadocs-typescript";
-import { AutoTypeTable } from "fumadocs-typescript/ui";
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import defaultMdxComponents from "fumadocs-ui/mdx";
-import { DocsBody, DocsDescription, DocsPage, DocsTitle } from "fumadocs-ui/page";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { source } from "@/app/source";
-import { ComponentWrapper } from "@/components/component-wrapper";
+import { getGithubLastEdit } from 'fumadocs-core/server'
+import { createGenerator } from 'fumadocs-typescript'
+import { AutoTypeTable } from 'fumadocs-typescript/ui'
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
+import defaultMdxComponents from 'fumadocs-ui/mdx'
+import { DocsBody, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/page'
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { source } from '@/app/source'
+import { ComponentWrapper } from '@/components/component-wrapper'
 
-const generator = createGenerator();
+const generator = createGenerator()
 
 export default async function Page(props: { params: Promise<{ slug?: string[] }> }) {
-  const params = await props.params;
-  const page = source.getPage(params.slug);
-  if (!page) notFound();
+  const params = await props.params
+  const page = source.getPage(params.slug)
+  if (!page) notFound()
 
   const time = await getGithubLastEdit({
-    owner: "fluid-design-io",
-    repo: "vision-ui",
+    owner: 'fluid-design-io',
+    repo: 'vision-ui',
     path: `content/docs/${page.file.path}`,
-  });
+  })
 
-  const MDX = page.data.body;
+  const MDX = page.data.body
 
   return (
     <DocsPage
       toc={page.data.toc}
       full={page.data.full}
       tableOfContent={{
-        style: "clerk",
+        style: 'clerk',
       }}
       lastUpdate={time ? new Date(time) : undefined}
       editOnGithub={{
-        owner: "fluid-design-io",
-        repo: "vision-ui",
-        sha: "main",
+        owner: 'fluid-design-io',
+        repo: 'vision-ui',
+        sha: 'main',
         path: `content/docs/${page.file.path}`,
       }}
     >
@@ -54,21 +54,21 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
         {/* {page.data.index ? <DocsCategory page={page} from={source} /> : null} */}
       </DocsBody>
     </DocsPage>
-  );
+  )
 }
 
 export async function generateStaticParams() {
-  return source.generateParams();
+  return source.generateParams()
 }
 
 export async function generateMetadata(props: { params: Promise<{ slug?: string[] }> }) {
-  const params = await props.params;
-  const page = source.getPage(params.slug);
+  const params = await props.params
+  const page = source.getPage(params.slug)
 
-  if (page == null) notFound();
+  if (page == null) notFound()
 
   return {
     title: page.data.title,
     description: page.data.description,
-  } satisfies Metadata;
+  } satisfies Metadata
 }

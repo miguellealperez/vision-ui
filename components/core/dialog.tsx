@@ -1,9 +1,9 @@
-"use client";
+'use client'
 
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { XIcon } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
-import type React from "react";
+import * as DialogPrimitive from '@radix-ui/react-dialog'
+import { XIcon } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import type React from 'react'
 import {
   // TODO: Wait for this to be stable
   // unstable_Activity as Activity,
@@ -11,21 +11,21 @@ import {
   useCallback,
   useContext,
   useState,
-} from "react";
-import { cn } from "@/lib/utils";
-import { type GlassThickness, Window } from "./window";
+} from 'react'
+import { cn } from '@/lib/utils'
+import { type GlassThickness, Window } from './window'
 
 // Context to manage the dialog state
 const DialogContext = createContext<{
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }>({
   open: false,
   setOpen: () => {},
-});
+})
 
 interface DialogProps extends React.ComponentProps<typeof DialogPrimitive.Root> {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 function Dialog({
@@ -34,20 +34,20 @@ function Dialog({
   onOpenChange: controlledOnOpenChange,
   ...props
 }: DialogProps) {
-  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false)
 
-  const open = controlledOpen !== undefined ? controlledOpen : uncontrolledOpen;
+  const open = controlledOpen !== undefined ? controlledOpen : uncontrolledOpen
   const setOpen = useCallback(
     (value: boolean | ((prevState: boolean) => boolean)) => {
       if (controlledOnOpenChange) {
-        const nextValue = typeof value === "function" ? value(open) : value;
-        controlledOnOpenChange(nextValue);
+        const nextValue = typeof value === 'function' ? value(open) : value
+        controlledOnOpenChange(nextValue)
       } else {
-        setUncontrolledOpen(value);
+        setUncontrolledOpen(value)
       }
     },
     [controlledOnOpenChange, open]
-  );
+  )
 
   return (
     <DialogContext.Provider value={{ open, setOpen }}>
@@ -55,15 +55,15 @@ function Dialog({
         {children}
       </DialogPrimitive.Root>
     </DialogContext.Provider>
-  );
+  )
 }
 
 function DialogTrigger({ ...props }: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
-  return <DialogPrimitive.Trigger {...props} />;
+  return <DialogPrimitive.Trigger {...props} />
 }
 
 function DialogClose({ ...props }: React.ComponentProps<typeof DialogPrimitive.Close>) {
-  return <DialogPrimitive.Close {...props} />;
+  return <DialogPrimitive.Close {...props} />
 }
 
 interface DialogContentProps extends React.ComponentProps<typeof DialogPrimitive.Content> {
@@ -71,22 +71,22 @@ interface DialogContentProps extends React.ComponentProps<typeof DialogPrimitive
    * The thickness of the glass effect.
    * @default "normal"
    */
-  thickness?: GlassThickness;
+  thickness?: GlassThickness
   /**
    * Whether to show the close button.
    * @default true
    */
-  showCloseButton?: boolean;
+  showCloseButton?: boolean
 }
 
 function DialogContent({
   className,
   children,
-  thickness = "normal",
+  thickness = 'normal',
   showCloseButton = true,
   ...props
 }: DialogContentProps) {
-  const { open } = useContext(DialogContext);
+  const { open } = useContext(DialogContext)
 
   return (
     <AnimatePresence>
@@ -97,10 +97,10 @@ function DialogContent({
           <DialogPrimitive.Overlay asChild>
             <motion.div
               className="fixed inset-0 z-50"
-              initial={{ opacity: 0, backgroundColor: "rgba(0, 0, 0, 0)" }}
-              animate={{ opacity: 1, backgroundColor: "rgba(0, 0, 0, 0.3)" }}
-              exit={{ opacity: 0, backgroundColor: "rgba(0, 0, 0, 0)" }}
-              transition={{ type: "spring", bounce: 0 }}
+              initial={{ opacity: 0, backgroundColor: 'rgba(0, 0, 0, 0)' }}
+              animate={{ opacity: 1, backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
+              exit={{ opacity: 0, backgroundColor: 'rgba(0, 0, 0, 0)' }}
+              transition={{ type: 'spring', bounce: 0 }}
             />
           </DialogPrimitive.Overlay>
 
@@ -108,13 +108,13 @@ function DialogContent({
           <DialogPrimitive.Content asChild {...props}>
             <motion.div
               className={cn(
-                "fixed top-[50%] left-[50%] z-50 w-full max-w-md translate-x-[-50%] translate-y-[-50%]",
+                'fixed top-[50%] left-[50%] z-50 w-full max-w-md translate-x-[-50%] translate-y-[-50%]',
                 className
               )}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1, transition: { delay: 0.3 } }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ type: "spring", bounce: 0 }}
+              transition={{ type: 'spring', bounce: 0 }}
             >
               <Window thickness={thickness} className="overflow-hidden" aria-label="Dialog">
                 <div className="relative flex flex-col gap-4 p-6">
@@ -134,31 +134,31 @@ function DialogContent({
       )}
       {/* </Activity> */}
     </AnimatePresence>
-  );
+  )
 }
 
-function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
+function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
-    <div className={cn("flex flex-col gap-2 text-center sm:text-left", className)} {...props} />
-  );
+    <div className={cn('flex flex-col gap-2 text-center sm:text-left', className)} {...props} />
+  )
 }
 
-function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
+function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      className={cn("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)}
+      className={cn('flex flex-col-reverse gap-2 sm:flex-row sm:justify-end', className)}
       {...props}
     />
-  );
+  )
 }
 
 function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
   return (
     <DialogPrimitive.Title
-      className={cn("font-semibold text-lg leading-none", className)}
+      className={cn('font-semibold text-lg leading-none', className)}
       {...props}
     />
-  );
+  )
 }
 
 function DialogDescription({
@@ -166,17 +166,17 @@ function DialogDescription({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Description>) {
   return (
-    <DialogPrimitive.Description className={cn("text-gray-500 text-sm", className)} {...props} />
-  );
+    <DialogPrimitive.Description className={cn('text-gray-500 text-sm', className)} {...props} />
+  )
 }
 
 // Higher-order component to apply the VisionOS effect to any content
 interface WithVisionDialogEffectProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 function WithDialogEffect({ children }: WithVisionDialogEffectProps) {
-  const { open } = useContext(DialogContext);
+  const { open } = useContext(DialogContext)
 
   return (
     <motion.div
@@ -184,11 +184,11 @@ function WithDialogEffect({ children }: WithVisionDialogEffectProps) {
         scale: open ? 0.95 : 1,
         // filter: open ? "brightness(0.9)" : "brightness(1)",
       }}
-      transition={{ type: "spring", bounce: 0 }}
+      transition={{ type: 'spring', bounce: 0 }}
     >
       {children}
     </motion.div>
-  );
+  )
 }
 
 export {
@@ -202,4 +202,4 @@ export {
   DialogDescription,
   WithDialogEffect,
   DialogContext,
-};
+}

@@ -1,8 +1,8 @@
-import { rehypeCode } from "fumadocs-core/mdx-plugins";
+import { rehypeCode } from 'fumadocs-core/mdx-plugins'
 
-import { fileGenerator, remarkDocGen } from "fumadocs-docgen";
-import { defineConfig, defineDocs, frontmatterSchema } from "fumadocs-mdx/config";
-import { z } from "zod";
+import { fileGenerator, remarkDocGen } from 'fumadocs-docgen'
+import { defineConfig, defineDocs, frontmatterSchema } from 'fumadocs-mdx/config'
+import { z } from 'zod'
 
 export const { docs, meta } = defineDocs({
   docs: {
@@ -11,11 +11,11 @@ export const { docs, meta } = defineDocs({
       index: z.boolean().default(false),
     }),
   },
-});
+})
 
 export default defineConfig({
   mdxOptions: {
     rehypePlugins: [[rehypeCode]],
     remarkPlugins: [[remarkDocGen, { generators: [fileGenerator()] }]],
   },
-});
+})

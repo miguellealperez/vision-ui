@@ -1,6 +1,6 @@
-import { Ellipsis, PenBox, Share } from "lucide-react";
-import { Button, ButtonGroup } from "@/components/core/button";
-import { Window } from "@/components/core/window";
+import { Ellipsis, PenBox, Share } from 'lucide-react'
+import { Button, ButtonGroup } from '@/components/core/button'
+import { Window } from '@/components/core/window'
 
 export const ButtonExample = () => {
   return (
@@ -25,5 +25,5 @@ export const ButtonExample = () => {
         </ButtonGroup>
       </Window>
     </div>
-  );
-};
+  )
+}

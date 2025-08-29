@@ -1,71 +1,71 @@
-import { cva } from "class-variance-authority";
-import { ChevronRightIcon } from "lucide-react";
-import React from "react";
-import { cn } from "@/lib/utils";
-import { Text } from "../ui/typography";
-import { Hoverable } from "./hoverable";
-import View from "./view";
+import { cva } from 'class-variance-authority'
+import { ChevronRightIcon } from 'lucide-react'
+import React from 'react'
+import { cn } from '@/lib/utils'
+import { Text } from '../ui/typography'
+import { Hoverable } from './hoverable'
+import View from './view'
 
 type ListDataItem =
   | string
   | {
-      id: string;
-      title: string;
-      subTitle?: string;
+      id: string
+      title: string
+      subTitle?: string
       /**
        * Whether to show a chevron icon on the right side of the item
        */
-      detail?: boolean;
+      detail?: boolean
       /**
        * A custom left view to render on the left side of the item
        */
-      leftView?: string | React.ReactNode;
+      leftView?: string | React.ReactNode
       /**
        * A custom right view to render on the right side of the item
        */
-      rightView?: string | React.ReactNode;
-    };
-type ListVariant = "insets" | "full-width";
+      rightView?: string | React.ReactNode
+    }
+type ListVariant = 'insets' | 'full-width'
 
 type ListProps<T extends ListDataItem> = {
-  data: T[];
-  renderItem?: ListRenderItem<T>;
-  variant?: ListVariant;
-  sectionHeaderAsGap?: boolean;
-  rootClassName?: string;
-  rootStyle?: React.CSSProperties;
-};
+  data: T[]
+  renderItem?: ListRenderItem<T>
+  variant?: ListVariant
+  sectionHeaderAsGap?: boolean
+  rootClassName?: string
+  rootStyle?: React.CSSProperties
+}
 
 type ListRenderItemProps<T extends ListDataItem> = {
-  item: T;
-  index: number;
-  variant?: ListVariant;
-  isFirstInSection?: boolean;
-  isLastInSection?: boolean;
-  sectionHeaderAsGap?: boolean;
-};
+  item: T
+  index: number
+  variant?: ListVariant
+  isFirstInSection?: boolean
+  isLastInSection?: boolean
+  sectionHeaderAsGap?: boolean
+}
 
-type ListRenderItem<T extends ListDataItem> = (props: ListRenderItemProps<T>) => React.ReactNode;
+type ListRenderItem<T extends ListDataItem> = (props: ListRenderItemProps<T>) => React.ReactNode
 
-const rootVariants = cva("min-h-2 flex-1", {
+const rootVariants = cva('min-h-2 flex-1', {
   variants: {
     variant: {
-      insets: "px-6",
-      "full-width": "",
+      insets: 'px-6',
+      'full-width': '',
     },
     sectionHeaderAsGap: {
-      true: "",
-      false: "",
+      true: '',
+      false: '',
     },
   },
   defaultVariants: {
-    variant: "full-width",
+    variant: 'full-width',
     sectionHeaderAsGap: false,
   },
-});
+})
 
 function List<T extends ListDataItem>({
-  variant = "full-width",
+  variant = 'full-width',
   rootClassName,
   rootStyle,
   renderItem,
@@ -87,11 +87,11 @@ function List<T extends ListDataItem>({
     >
       <ul className="flex flex-col gap-0.5 px-2">
         {data.map((item, index) => {
-          const key = typeof item === "string" ? item : item.id || index;
-          const previousItem = data[index - 1];
-          const nextItem = data[index + 1];
-          const isFirstInSection = !previousItem || typeof previousItem === "string";
-          const isLastInSection = !nextItem || typeof nextItem === "string";
+          const key = typeof item === 'string' ? item : item.id || index
+          const previousItem = data[index - 1]
+          const nextItem = data[index + 1]
+          const isFirstInSection = !previousItem || typeof previousItem === 'string'
+          const isLastInSection = !nextItem || typeof nextItem === 'string'
 
           if (renderItem) {
             return (
@@ -105,34 +105,34 @@ function List<T extends ListDataItem>({
                   sectionHeaderAsGap,
                 })}
               </React.Fragment>
-            );
+            )
           } else {
-            return null;
+            return null
           }
         })}
       </ul>
     </div>
-  );
+  )
 }
 
 type ListItemProps<T extends ListDataItem> = {
-  item: T;
-  index: number;
-  variant?: ListVariant;
-  isFirstInSection?: boolean;
-  isLastInSection?: boolean;
-  sectionHeaderAsGap?: boolean;
-  className?: string;
-  titleClassName?: string;
-  titleStyle?: React.CSSProperties;
-  subTitleClassName?: string;
-  subTitleStyle?: React.CSSProperties;
-  textContentClassName?: string;
-  leftView?: string | React.ReactNode;
-  rightView?: string | React.ReactNode;
-  removeSeparator?: boolean;
-  onClick?: () => void;
-};
+  item: T
+  index: number
+  variant?: ListVariant
+  isFirstInSection?: boolean
+  isLastInSection?: boolean
+  sectionHeaderAsGap?: boolean
+  className?: string
+  titleClassName?: string
+  titleStyle?: React.CSSProperties
+  subTitleClassName?: string
+  subTitleStyle?: React.CSSProperties
+  textContentClassName?: string
+  leftView?: string | React.ReactNode
+  rightView?: string | React.ReactNode
+  removeSeparator?: boolean
+  onClick?: () => void
+}
 
 function ListItem<T extends ListDataItem>({
   item,
@@ -149,33 +149,33 @@ function ListItem<T extends ListDataItem>({
   isFirstInSection,
   isLastInSection,
 }: ListItemProps<T>) {
-  if (typeof item === "string") {
-    console.warn("Invalid item of type 'string' was provided. Use ListSectionHeader instead.");
-    return null;
+  if (typeof item === 'string') {
+    console.warn("Invalid item of type 'string' was provided. Use ListSectionHeader instead.")
+    return null
   }
-  const Comp = variant === "full-width" ? "div" : View;
+  const Comp = variant === 'full-width' ? 'div' : View
   return (
     <Comp asChild>
       <Hoverable enabled={onClick !== undefined} asChild>
         <li
           className={cn(
-            "min-h-14 py-2",
-            "flex items-center transition-all",
-            "[&_button]:pointer-events-auto [&_div]:pointer-events-none [&_p]:pointer-events-none",
+            'min-h-14 py-2',
+            'flex items-center transition-all',
+            '[&_button]:pointer-events-auto [&_div]:pointer-events-none [&_p]:pointer-events-none',
             {
-              "rounded-xl": variant === "full-width",
-              "rounded-t-xl": isFirstInSection && variant === "insets",
-              "rounded-b-xl": isLastInSection && variant === "insets",
+              'rounded-xl': variant === 'full-width',
+              'rounded-t-xl': isFirstInSection && variant === 'insets',
+              'rounded-b-xl': isLastInSection && variant === 'insets',
             },
-            "hover:bg-blend-color-dodge hover:[background:linear-gradient(0deg,rgba(94,94,94,0.18)0%,rgba(94,94,94,0.18)100%),rgba(255,255,255,0.07)]",
-            "hover:[background-blend-mode:color-dodge,normal]",
-            !leftView && "pl-6",
+            'hover:bg-blend-color-dodge hover:[background:linear-gradient(0deg,rgba(94,94,94,0.18)0%,rgba(94,94,94,0.18)100%),rgba(255,255,255,0.07)]',
+            'hover:[background-blend-mode:color-dodge,normal]',
+            !leftView && 'pl-6',
             className
           )}
         >
           <div onClick={onClick} className="flex w-full items-center text-left">
             {leftView && <div>{leftView}</div>}
-            <div className={cn("flex flex-1", textContentClassName)}>
+            <div className={cn('flex flex-1', textContentClassName)}>
               <div className="flex-1">
                 <Text style={titleStyle} className={titleClassName} size="body">
                   {item.title}
@@ -193,7 +193,7 @@ function ListItem<T extends ListDataItem>({
               </div>
               {rightView && (
                 <div className="flex items-center justify-center">
-                  {typeof rightView === "string" ? (
+                  {typeof rightView === 'string' ? (
                     <Text className="pr-4" variant="tertiary">
                       {rightView}
                     </Text>
@@ -212,19 +212,19 @@ function ListItem<T extends ListDataItem>({
         </li>
       </Hoverable>
     </Comp>
-  );
+  )
 }
 
 type ListSectionHeaderProps<T extends ListDataItem> = {
-  item: T;
-  index: number;
-  variant?: ListVariant;
-  sectionHeaderAsGap?: boolean;
-  className?: string;
-  textClassName?: string;
-  isFirstInSection?: boolean;
-  isLastInSection?: boolean;
-};
+  item: T
+  index: number
+  variant?: ListVariant
+  sectionHeaderAsGap?: boolean
+  className?: string
+  textClassName?: string
+  isFirstInSection?: boolean
+  isLastInSection?: boolean
+}
 
 function ListSectionHeader<T extends ListDataItem>({
   item,
@@ -232,9 +232,9 @@ function ListSectionHeader<T extends ListDataItem>({
   textClassName,
   sectionHeaderAsGap,
 }: ListSectionHeaderProps<T>) {
-  if (typeof item !== "string") {
-    console.warn("Invalid item provided. Expected type 'string'. Use ListItem instead.");
-    return null;
+  if (typeof item !== 'string') {
+    console.warn("Invalid item provided. Expected type 'string'. Use ListItem instead.")
+    return null
   }
 
   if (sectionHeaderAsGap) {
@@ -242,19 +242,19 @@ function ListSectionHeader<T extends ListDataItem>({
       <div className={cn(className)}>
         <div className="h-8" />
       </div>
-    );
+    )
   }
   return (
-    <div className={cn("w-full pt-4 pb-4 pl-4", className)}>
+    <div className={cn('w-full pt-4 pb-4 pl-4', className)}>
       <Text
-        className={cn("text-left text-muted-foreground uppercase", textClassName)}
+        className={cn('text-left text-muted-foreground uppercase', textClassName)}
         size="caption1"
       >
         {item}
       </Text>
     </div>
-  );
+  )
 }
 
-export { List, ListItem, ListSectionHeader };
-export type { ListDataItem, ListItemProps, ListProps, ListRenderItemProps, ListSectionHeaderProps };
+export { List, ListItem, ListSectionHeader }
+export type { ListDataItem, ListItemProps, ListProps, ListRenderItemProps, ListSectionHeaderProps }

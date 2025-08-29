@@ -1,15 +1,15 @@
-"use client";
+'use client'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
-import { AnimatePresence, motion } from "motion/react";
-import React, { createContext, useContext, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
-import { Button } from "../core/button";
-import { Text } from "../ui/typography";
-import { Window, type WindowProps } from "./window";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
+import { AnimatePresence, motion } from 'motion/react'
+import React, { createContext, useContext, useRef, useState } from 'react'
+import { cn } from '@/lib/utils'
+import { Button } from '../core/button'
+import { Text } from '../ui/typography'
+import { Window, type WindowProps } from './window'
 
 const CONSTANTS = {
-  EXPANDED_WIDTH: "100%",
+  EXPANDED_WIDTH: '100%',
   COLLAPSED_WIDTH: 44,
   ENTERANCE_TIMEOUT: 700,
   EXITANCE_TIMEOUT: 500,
@@ -18,11 +18,11 @@ const CONSTANTS = {
     duration: 0.4,
   },
   ORNAMENT_TRANSITION_CONFIG: {
-    type: "spring",
+    type: 'spring',
     bounce: 0,
     duration: 0.7,
   },
-} as const;
+} as const
 
 const WINDOW_VARIANTS = {
   hidden: {
@@ -31,7 +31,7 @@ const WINDOW_VARIANTS = {
   visible: {
     opacity: 1,
     transition: {
-      type: "spring",
+      type: 'spring',
       damping: 18,
       stiffness: 90,
       delay: 0.25,
@@ -40,12 +40,12 @@ const WINDOW_VARIANTS = {
   exit: {
     opacity: 0,
     transition: {
-      type: "spring",
+      type: 'spring',
       damping: 18,
       stiffness: 90,
     },
   },
-} as const;
+} as const
 
 const FOOTER_VARIANTS = {
   hidden: {
@@ -56,7 +56,7 @@ const FOOTER_VARIANTS = {
     opacity: 1,
     scale: 1,
     transition: {
-      type: "spring",
+      type: 'spring',
       duration: 0.2,
       bounce: 0,
       delay: 0.7,
@@ -66,31 +66,31 @@ const FOOTER_VARIANTS = {
     opacity: 0,
     scale: 0.95,
   },
-} as const;
+} as const
 
 // Create a context for the active tab
 const OrnamentContext = createContext<{
-  activeTab: string;
-  isExpanded: boolean;
-  isMouseDown: boolean;
-  isUnmounting: boolean;
-  contentClassName?: string;
-  setIsMouseDown: React.Dispatch<React.SetStateAction<boolean>>;
-  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
-  setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
-  setContentClassName: React.Dispatch<React.SetStateAction<string>>;
-  setIsUnmounting: React.Dispatch<React.SetStateAction<boolean>>;
-  handleOrnamentItemClick: () => void;
-  handleOrnamentItemMouseDown: () => void;
-  handleOrnamentItemMouseUp: () => void;
-  handleOrnamentItemFocus: () => void;
-  handleOrnamentItemBlur: () => void;
+  activeTab: string
+  isExpanded: boolean
+  isMouseDown: boolean
+  isUnmounting: boolean
+  contentClassName?: string
+  setIsMouseDown: React.Dispatch<React.SetStateAction<boolean>>
+  setActiveTab: React.Dispatch<React.SetStateAction<string>>
+  setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>
+  setContentClassName: React.Dispatch<React.SetStateAction<string>>
+  setIsUnmounting: React.Dispatch<React.SetStateAction<boolean>>
+  handleOrnamentItemClick: () => void
+  handleOrnamentItemMouseDown: () => void
+  handleOrnamentItemMouseUp: () => void
+  handleOrnamentItemFocus: () => void
+  handleOrnamentItemBlur: () => void
 }>({
-  activeTab: "",
+  activeTab: '',
   isExpanded: false,
   isMouseDown: false,
   isUnmounting: false,
-  contentClassName: "",
+  contentClassName: '',
   setIsMouseDown: () => {},
   setActiveTab: () => {},
   setIsExpanded: () => {},
@@ -101,14 +101,14 @@ const OrnamentContext = createContext<{
   handleOrnamentItemMouseUp: () => {},
   handleOrnamentItemFocus: () => {},
   handleOrnamentItemBlur: () => {},
-});
+})
 
 export function useOrnament() {
-  const context = useContext(OrnamentContext);
+  const context = useContext(OrnamentContext)
   if (!context) {
-    throw new Error("useOrnament must be used within a OrnamentContext");
+    throw new Error('useOrnament must be used within a OrnamentContext')
   }
-  return context;
+  return context
 }
 
 const Ornament = ({
@@ -116,55 +116,55 @@ const Ornament = ({
   className,
   defaultTab,
 }: {
-  children: React.ReactNode;
-  className?: string;
-  defaultTab?: string;
+  children: React.ReactNode
+  className?: string
+  defaultTab?: string
 }) => {
-  const [activeTab, setActiveTab] = useState(defaultTab || "");
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isMouseDown, setIsMouseDown] = useState(false);
-  const [isUnmounting, setIsUnmounting] = useState(false);
-  const timeoutEnterRef = useRef<NodeJS.Timeout | null>(null);
-  const timeoutLeaveRef = useRef<NodeJS.Timeout | null>(null);
-  const [contentClassName, setContentClassName] = useState("");
+  const [activeTab, setActiveTab] = useState(defaultTab || '')
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [isMouseDown, setIsMouseDown] = useState(false)
+  const [isUnmounting, setIsUnmounting] = useState(false)
+  const timeoutEnterRef = useRef<NodeJS.Timeout | null>(null)
+  const timeoutLeaveRef = useRef<NodeJS.Timeout | null>(null)
+  const [contentClassName, setContentClassName] = useState('')
   const handleMouseEnter = () => {
     if (timeoutLeaveRef.current) {
-      clearTimeout(timeoutLeaveRef.current);
+      clearTimeout(timeoutLeaveRef.current)
     }
     timeoutEnterRef.current = setTimeout(() => {
-      setIsExpanded(true);
-    }, CONSTANTS.ENTERANCE_TIMEOUT);
-  };
+      setIsExpanded(true)
+    }, CONSTANTS.ENTERANCE_TIMEOUT)
+  }
 
   const handleMouseLeave = () => {
     if (timeoutEnterRef.current) {
-      clearTimeout(timeoutEnterRef.current);
+      clearTimeout(timeoutEnterRef.current)
     }
     timeoutLeaveRef.current = setTimeout(() => {
-      setIsExpanded(false);
-    }, CONSTANTS.EXITANCE_TIMEOUT);
-  };
+      setIsExpanded(false)
+    }, CONSTANTS.EXITANCE_TIMEOUT)
+  }
 
   const handleOrnamentItemMouseDown = () => {
-    setIsMouseDown(true);
-  };
+    setIsMouseDown(true)
+  }
 
   const handleOrnamentItemMouseUp = () => {
-    setIsMouseDown(false);
-  };
+    setIsMouseDown(false)
+  }
 
   const handleOrnamentItemClick = () => {
-    if (timeoutEnterRef.current) clearTimeout(timeoutEnterRef.current);
-    if (timeoutLeaveRef.current) clearTimeout(timeoutLeaveRef.current);
-  };
+    if (timeoutEnterRef.current) clearTimeout(timeoutEnterRef.current)
+    if (timeoutLeaveRef.current) clearTimeout(timeoutLeaveRef.current)
+  }
 
   const handleOrnamentItemFocus = () => {
-    handleMouseEnter();
-  };
+    handleMouseEnter()
+  }
 
   const handleOrnamentItemBlur = () => {
-    handleMouseLeave();
-  };
+    handleMouseLeave()
+  }
 
   return (
     <OrnamentContext.Provider
@@ -189,8 +189,8 @@ const Ornament = ({
       <Tabs
         orientation="vertical"
         className={cn(
-          "relative grid h-full w-full flex-1 grid-cols-[68px_1fr] place-content-center gap-4 md:gap-7 lg:ml-[-96px]",
-          "max-w-3xl xl:max-w-4xl 2xl:max-w-6xl",
+          'relative grid h-full w-full flex-1 grid-cols-[68px_1fr] place-content-center gap-4 md:gap-7 lg:ml-[-96px]',
+          'max-w-3xl xl:max-w-4xl 2xl:max-w-6xl',
           className
         )}
         defaultValue={defaultTab}
@@ -202,22 +202,21 @@ const Ornament = ({
         {children}
       </Tabs>
     </OrnamentContext.Provider>
-  );
-};
+  )
+}
 
 const OrnamentTabs = ({
   children,
   className,
 }: {
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactNode
+  className?: string
 }) => {
-  const { isExpanded, isMouseDown, handleOrnamentItemFocus, handleOrnamentItemBlur } =
-    useOrnament();
+  const { isExpanded, isMouseDown, handleOrnamentItemFocus, handleOrnamentItemBlur } = useOrnament()
 
   return (
     <Window
-      className={"hide-scrollbar relative z-[42] mx-auto flex items-center justify-start p-3"}
+      className={'hide-scrollbar relative z-[42] mx-auto flex items-center justify-start p-3'}
       initial={{
         opacity: 0,
         scale: 1,
@@ -236,14 +235,14 @@ const OrnamentTabs = ({
         <motion.div
           onMouseEnter={handleOrnamentItemFocus}
           onMouseLeave={handleOrnamentItemBlur}
-          className={cn("flex flex-col items-start gap-2", className)}
+          className={cn('flex flex-col items-start gap-2', className)}
         >
           {children}
         </motion.div>
       </TabsList>
     </Window>
-  );
-};
+  )
+}
 
 const OrnamentTab = ({
   icon,
@@ -251,10 +250,10 @@ const OrnamentTab = ({
   value,
   onClick,
 }: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  onClick?: () => void;
+  icon: React.ReactNode
+  label: string
+  value: string
+  onClick?: () => void
 }) => {
   const {
     activeTab,
@@ -266,28 +265,28 @@ const OrnamentTab = ({
     handleOrnamentItemMouseUp,
     handleOrnamentItemFocus,
     handleOrnamentItemBlur,
-  } = useOrnament();
-  const [isHovered, setIsHovered] = useState(false);
+  } = useOrnament()
+  const [isHovered, setIsHovered] = useState(false)
 
   const handleClick = () => {
-    setIsUnmounting(true);
+    setIsUnmounting(true)
     setTimeout(() => {
-      setActiveTab(value);
-      setIsUnmounting(false);
-    }, CONSTANTS.TAB_EXIT_TIMEOUT);
-    handleOrnamentItemClick();
-    onClick?.();
-  };
+      setActiveTab(value)
+      setIsUnmounting(false)
+    }, CONSTANTS.TAB_EXIT_TIMEOUT)
+    handleOrnamentItemClick()
+    onClick?.()
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      handleClick();
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      handleClick()
     }
-  };
+  }
 
-  const isActive = activeTab === value;
-  const variant = isHovered ? "default" : isActive ? "default" : "secondary";
+  const isActive = activeTab === value
+  const variant = isHovered ? 'default' : isActive ? 'default' : 'secondary'
 
   return (
     <motion.div
@@ -324,13 +323,13 @@ const OrnamentTab = ({
               width: 0,
             }}
             animate={{
-              width: isExpanded ? "auto" : 0,
+              width: isExpanded ? 'auto' : 0,
             }}
             transition={CONSTANTS.TEXT_TRANSITION_CONFIG}
           >
             <Text
               size="title3"
-              variant={isHovered ? "default" : variant}
+              variant={isHovered ? 'default' : variant}
               className="line-clamp-1 w-fit min-w-[60px] truncate font-medium leading-[24px]"
             >
               {label}
@@ -339,40 +338,40 @@ const OrnamentTab = ({
         </Button>
       </TabsTrigger>
     </motion.div>
-  );
-};
+  )
+}
 
 interface OrnamentContentsApiProps {
-  children: React.ReactNode;
+  children: React.ReactNode
   /**
    * A helper class name for all children `OrnamentContent` components.
    *
    * You can also customize each `OrnamentContent` component individually.
    */
-  contentClassName?: string;
+  contentClassName?: string
 }
 
 const OrnamentContents = ({ children, contentClassName }: OrnamentContentsApiProps) => {
-  const { setContentClassName } = useOrnament();
+  const { setContentClassName } = useOrnament()
   React.useEffect(() => {
     if (contentClassName) {
-      setContentClassName(contentClassName);
+      setContentClassName(contentClassName)
     }
-  }, [contentClassName, setContentClassName]);
+  }, [contentClassName, setContentClassName])
 
-  return children;
-};
+  return children
+}
 
 interface OrnamentContentApiProps {
-  value: string;
+  value: string
   /**
    * Rendered at the top of the content. Can be a React Component (e.g. SomeComponent), or a React element (e.g. <SomeComponent />).
    */
-  HeaderComponent?: React.ReactNode | React.ComponentType;
+  HeaderComponent?: React.ReactNode | React.ComponentType
   /**
    * Rendered at the bottom of the content. Can be a React Component (e.g. SomeComponent), or a React element (e.g. <SomeComponent />).
    */
-  FooterComponent?: React.ReactNode | React.ComponentType;
+  FooterComponent?: React.ReactNode | React.ComponentType
 }
 
 interface OrnamentContentProps extends WindowProps, OrnamentContentApiProps {}
@@ -385,8 +384,8 @@ const OrnamentContent = ({
   rootClassName,
   ...props
 }: OrnamentContentProps) => {
-  const { activeTab, contentClassName } = useOrnament();
-  const isActive = activeTab === value;
+  const { activeTab, contentClassName } = useOrnament()
+  const isActive = activeTab === value
 
   return (
     <AnimatePresence mode="popLayout">
@@ -395,16 +394,16 @@ const OrnamentContent = ({
           value={value}
           key={`ornament-content-${value}`}
           forceMount
-          className={cn("relative order-2 flex w-full flex-col", className)}
+          className={cn('relative order-2 flex w-full flex-col', className)}
           data-slot="content"
           id={`ornament-content-${value}`}
           tabIndex={-1}
         >
           {HeaderComponent &&
-            (typeof HeaderComponent === "function" ? <HeaderComponent /> : HeaderComponent)}
+            (typeof HeaderComponent === 'function' ? <HeaderComponent /> : HeaderComponent)}
           <Window
             className={cn(contentClassName, className)}
-            rootClassName={cn("items-stretch", rootClassName)}
+            rootClassName={cn('items-stretch', rootClassName)}
             scroll
             initial={WINDOW_VARIANTS.hidden}
             animate={WINDOW_VARIANTS.visible}
@@ -422,14 +421,14 @@ const OrnamentContent = ({
               }}
               className="absolute right-0 bottom-0 left-0 z-[41] flex items-center justify-center"
             >
-              {typeof FooterComponent === "function" ? <FooterComponent /> : FooterComponent}
+              {typeof FooterComponent === 'function' ? <FooterComponent /> : FooterComponent}
             </motion.div>
           )}
         </TabsContent>
       )}
     </AnimatePresence>
-  );
-};
+  )
+}
 
 /**
  * A motion.div without a window, header or footer.
@@ -439,12 +438,12 @@ const OrnamentContentBase = ({
   value,
   className,
 }: {
-  children: React.ReactNode;
-  value: string;
-  className?: string;
+  children: React.ReactNode
+  value: string
+  className?: string
 }) => {
-  const { activeTab, contentClassName, isUnmounting } = useOrnament();
-  const isActive = activeTab === value;
+  const { activeTab, contentClassName, isUnmounting } = useOrnament()
+  const isActive = activeTab === value
   return (
     <AnimatePresence mode="popLayout">
       {isActive && !isUnmounting && (
@@ -468,8 +467,8 @@ const OrnamentContentBase = ({
         </TabsContent>
       )}
     </AnimatePresence>
-  );
-};
+  )
+}
 
 export {
   Ornament,
@@ -478,6 +477,6 @@ export {
   OrnamentContents,
   OrnamentContent,
   OrnamentContentBase,
-};
+}
 
-export type { OrnamentContentApiProps, OrnamentContentsApiProps };
+export type { OrnamentContentApiProps, OrnamentContentsApiProps }

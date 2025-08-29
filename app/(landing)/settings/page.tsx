@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   List,
@@ -6,12 +6,12 @@ import {
   ListItem,
   type ListRenderItemProps,
   ListSectionHeader,
-} from "@/components/core/list";
-import { NavigationBar, NavigationBarTitle } from "@/components/core/navigation-bar";
-import { SidebarTrigger } from "@/components/core/sidebar";
-import ExampleDialog from "./example-dialog";
+} from '@/components/core/list'
+import { NavigationBar, NavigationBarTitle } from '@/components/core/navigation-bar'
+import { SidebarTrigger } from '@/components/core/sidebar'
+import ExampleDialog from './example-dialog'
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic'
 
 export default function Settings() {
   return (
@@ -24,52 +24,52 @@ export default function Settings() {
         <List
           data={[
             {
-              id: "about",
-              title: "About",
+              id: 'about',
+              title: 'About',
               detail: true,
             },
-            "section1",
+            'section1',
             {
-              id: "autofill",
-              title: "AutoFill & Passwords",
-              detail: true,
-            },
-            {
-              id: "dictionary",
-              title: "Dictionary",
+              id: 'autofill',
+              title: 'AutoFill & Passwords',
               detail: true,
             },
             {
-              id: "fonts",
-              title: "Fonts",
+              id: 'dictionary',
+              title: 'Dictionary',
               detail: true,
             },
             {
-              id: "keyboard",
-              title: "Keyboard",
+              id: 'fonts',
+              title: 'Fonts',
               detail: true,
             },
             {
-              id: "language-region",
-              title: "Language & Region",
+              id: 'keyboard',
+              title: 'Keyboard',
               detail: true,
             },
-            "section2",
             {
-              id: "vpns",
-              title: "VPN & Device Management",
+              id: 'language-region',
+              title: 'Language & Region',
               detail: true,
             },
-            "section3",
+            'section2',
             {
-              id: "remote-devices",
-              title: "Remote Devices",
+              id: 'vpns',
+              title: 'VPN & Device Management',
               detail: true,
             },
-            "section4",
+            'section3',
             {
-              id: "transfer-or-reset",
-              title: "Transfer or Reset Vision Pro",
+              id: 'remote-devices',
+              title: 'Remote Devices',
+              detail: true,
+            },
+            'section4',
+            {
+              id: 'transfer-or-reset',
+              title: 'Transfer or Reset Vision Pro',
               detail: true,
             },
           ]}
@@ -82,12 +82,12 @@ export default function Settings() {
       {/* Dialog example is now integrated in the list above */}
       <ExampleDialog />
     </>
-  );
+  )
 }
 
 function renderItem<T extends ListDataItem>(info: ListRenderItemProps<T>) {
-  if (typeof info.item === "string") {
-    return <ListSectionHeader {...info} />;
+  if (typeof info.item === 'string') {
+    return <ListSectionHeader {...info} />
   }
-  return <ListItem leftView={info.item.leftView} rightView={info.item.rightView} {...info} />;
+  return <ListItem leftView={info.item.leftView} rightView={info.item.rightView} {...info} />
 }
