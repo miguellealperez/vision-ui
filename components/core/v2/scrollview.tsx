@@ -46,11 +46,7 @@ const ScrollAreaRoot = ({
   )
 
   if (material) {
-    return (
-      <Material thickness={thickness} className="[--radius:34px]">
-        {content}
-      </Material>
-    )
+    return <Material thickness={thickness}>{content}</Material>
   }
 
   return content

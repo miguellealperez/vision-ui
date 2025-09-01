@@ -3,6 +3,7 @@
 import { Slot } from '@radix-ui/react-slot'
 import type * as React from 'react'
 import { cn } from '@/lib/utils'
+import type { GlassThickness } from './material'
 import { Text } from './text'
 import { View } from './view'
 
@@ -23,6 +24,7 @@ type StackProps = {
   className?: string
   options?: HeaderConfig
   asChild?: boolean
+  material?: boolean | { thickness?: GlassThickness }
 }
 
 const DEFAULT_OPTIONS: HeaderConfig = {
@@ -33,13 +35,14 @@ const DEFAULT_OPTIONS: HeaderConfig = {
 }
 
 // Stack Navigator Component
-const Stack = ({ children, className, options, asChild = false }: StackProps) => {
+const Stack = ({ children, className, options, asChild = false, material = false }: StackProps) => {
   const { headerShown, headerLeft, headerRight, title } = { ...DEFAULT_OPTIONS, ...options }
 
   const Comp = asChild ? Slot : View
 
   return (
     <Comp
+      material={material}
       className={cn(
         'flex flex-col',
         !asChild && 'h-[var(--content-height,max(300px,60dvh))]',
@@ -55,15 +58,15 @@ const Stack = ({ children, className, options, asChild = false }: StackProps) =>
       {headerShown && (
         <div
           className={cn(
-            'absolute inset-x-0 top-0 z-10 flex items-center justify-between p-5',
+            'absolute inset-x-0 top-0 z-10 flex items-start justify-between p-5',
             'ml-[var(--sidebar-width)]'
           )}
         >
           <div className="flex min-w-[64px] items-center justify-start">
             {typeof headerLeft === 'function' ? headerLeft() : headerLeft}
           </div>
-          <div className="flex-1 text-center">
-            <Text size="largeTitle">{title}</Text>
+          <div className="flex-1 pt-1 text-center">
+            <Text size="title1">{title}</Text>
           </div>
           <div className="flex min-w-[64px] items-center justify-end">
             {typeof headerRight === 'function' ? headerRight() : headerRight}

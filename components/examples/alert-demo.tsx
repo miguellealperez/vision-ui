@@ -54,7 +54,8 @@ export function AlertDemoContent() {
   const createSimpleAlert = async () => {
     const result = await Alert.alert(
       'Simple Alert',
-      'This is a simple alert with just an OK button'
+      'This is a simple alert with just an OK button',
+      [{ text: 'OK', onPress: () => console.log('OK Pressed'), style: 'primary' }]
     )
     console.log('Alert result:', result) // 0 for OK
   }

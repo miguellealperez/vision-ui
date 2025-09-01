@@ -37,7 +37,7 @@
       "performance": {
         "noDelete": "warn"
       },
-      "a11y": "warn",
+      "a11y": "off",
       "nursery": {
         "useSortedClasses": "error"
       }

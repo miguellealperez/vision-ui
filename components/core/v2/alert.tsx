@@ -13,7 +13,7 @@ import { MotionView, View } from './view'
 export interface AlertButton {
   text: string
   onPress?: () => void
-  style?: 'default' | 'cancel' | 'destructive'
+  style?: 'default' | 'primary' | 'cancel' | 'destructive'
 }
 
 export interface AlertOptions {
@@ -28,6 +28,19 @@ interface AlertContextType {
 }
 
 const AlertContext = createContext<AlertContextType | null>(null)
+
+const getButtonVariant = (style?: AlertButton['style']) => {
+  switch (style) {
+    case 'destructive':
+      return 'destructive'
+    case 'primary':
+      return 'primary'
+    case 'cancel':
+      return 'secondary'
+    default:
+      return 'default'
+  }
+}
 
 // Alert Provider Component
 export function AlertProvider({ children }: { children: React.ReactNode }) {
@@ -114,11 +127,11 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
                   )}
 
                   {/* Buttons */}
-                  <View className="space-y-3">
+                  <View className="space-y-3 overflow-visible">
                     {alertItem.buttons?.map((button, index) => (
                       <Button
                         key={index}
-                        variant={button.style === 'destructive' ? 'destructive' : 'default'}
+                        variant={getButtonVariant(button.style)}
                         className="w-full"
                         onClick={() => handleButtonPress(alertItem.id, index, button.onPress)}
                       >

@@ -96,7 +96,7 @@ export const SidebarWithSectionsExample = () => {
       }
     >
       <div className="p-8">
-        <h1 className="text-2xl font-bold">Main Content Area</h1>
+        <h1 className="font-bold text-2xl">Main Content Area</h1>
         <p className="mt-4 text-gray-600">
           This is the main content area. The sidebar on the left contains sections that can be
           collapsed and expanded.
@@ -104,7 +104,7 @@ export const SidebarWithSectionsExample = () => {
         <div className="mt-6 space-y-4">
           <div className="rounded-lg border p-4">
             <h3 className="font-semibold">Features Demonstrated:</h3>
-            <ul className="mt-2 space-y-1 text-sm text-gray-600">
+            <ul className="mt-2 space-y-1 text-gray-600 text-sm">
               <li>• Regular navigation links (Home, Photos, Documents, etc.)</li>
               <li>• Collapsible sections (Content, Account, Actions)</li>
               <li>• Action items with onClick handlers (Notifications, Download)</li>

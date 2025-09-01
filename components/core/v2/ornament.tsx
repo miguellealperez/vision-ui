@@ -89,7 +89,7 @@ const Ornament = ({
     <div
       data-ornament="root"
       className={cn(
-        'relative grid h-full w-full flex-1 place-content-center gap-4 md:gap-7',
+        'grid h-full w-full flex-1 place-content-center gap-4 md:gap-7',
         isVertical && isLeft && 'grid-cols-[68px_1fr]',
         isVertical && !isLeft && 'grid-cols-[1fr_68px]',
         !isVertical && position === 'top' && 'grid-rows-[68px_1fr]',
@@ -159,7 +159,6 @@ const Ornament = ({
       {/* Content Area */}
       <MotionView
         data-ornament="content"
-        material
         animate={tapped ? 'whileTap' : 'initial'}
         variants={{
           initial: {
@@ -182,7 +181,7 @@ const Ornament = ({
         className={cn(
           'relative w-full overflow-visible',
           'before:pointer-events-none before:absolute before:inset-0 before:z-[10] before:content-[""]',
-          'before:bg-[rgba(0,0,0,var(--overlay-opacity))]',
+          'before:rounded-[var(--view-radius,34px)] before:bg-[rgba(0,0,0,var(--overlay-opacity))]',
           // reset the overlay opacity because
           // we've handled it in the parent
           '*:[--overlay-opacity:0]',

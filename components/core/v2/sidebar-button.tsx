@@ -49,7 +49,7 @@ const SidebarButtonContent = ({ item }: { item: SidebarItemProps }) => (
       <Text
         size="title3"
         variant="secondary"
-        className="line-clamp-1 w-fit min-w-[60px] truncate font-medium leading-[24px]"
+        className="line-clamp-1 w-fit min-w-[60px] truncate font-medium"
       >
         {item.title || item.name}
       </Text>

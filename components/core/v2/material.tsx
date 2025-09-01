@@ -105,14 +105,14 @@ const getHighlightOpacity = (thickness: GlassThickness) => {
 }
 
 const CONSTANTS = {
-  VAR_RADIUS: '[--radius:34px]',
-  VAR_DIAMETER: '[--diameter:68px]',
+  VAR_RADIUS: '[--view-radius:34px]',
+  VAR_DIAMETER: '[--view-diameter:68px]',
 }
 
 const maskComposite = ['exclude', 'intersect', 'subtract', 'intersect', 'subtract', 'add']
 
 const defaultHighlightStyle = {
-  borderRadius: `var(--radius)`,
+  borderRadius: `var(--view-radius)`,
   maskSize: '100% 100%',
   WebkitMaskSize: '100% 100%',
   maskRepeat: 'no-repeat',
@@ -120,14 +120,14 @@ const defaultHighlightStyle = {
 } as const
 
 const leftTopHighlight =
-  'conic-gradient(from 270deg at var(--radius) var(--radius), transparent 0deg, white 45deg, transparent 170deg), transparent'
+  'conic-gradient(from 270deg at var(--view-radius) var(--view-radius), transparent 0deg, white 45deg, transparent 170deg), transparent'
 const leftTopMaskImage = [
   'linear-gradient(to right, black, black)',
   'linear-gradient(to right, transparent var(--mask-stroke), black calc(var(--mask-stroke) * 2))',
   'linear-gradient(to bottom, transparent var(--mask-stroke), black calc(var(--mask-stroke) * 2))',
-  'linear-gradient(to right, black calc(var(--radius) - var(--mask-stroke)), transparent var(--radius))',
-  'linear-gradient(to bottom, black calc(var(--radius) - var(--mask-stroke)), transparent var(--radius))',
-  'radial-gradient(var(--diameter) var(--diameter) at var(--radius) var(--radius), black var(--mask-inner-distance), transparent var(--mask-outer-distance))',
+  'linear-gradient(to right, black calc(var(--view-radius) - var(--mask-stroke)), transparent var(--view-radius))',
+  'linear-gradient(to bottom, black calc(var(--view-radius) - var(--mask-stroke)), transparent var(--view-radius))',
+  'radial-gradient(var(--view-diameter) var(--view-diameter) at var(--view-radius) var(--view-radius), black var(--mask-inner-distance), transparent var(--mask-outer-distance))',
 ]
 const leftTopHighlightStyle = {
   background: leftTopHighlight,
@@ -137,14 +137,14 @@ const leftTopHighlightStyle = {
 } as React.CSSProperties
 
 const rightBottomHighlight =
-  'conic-gradient(from 60deg at var(--radius) var(--radius), transparent 0deg, white 65deg, transparent 160deg), transparent'
+  'conic-gradient(from 60deg at var(--view-radius) var(--view-radius), transparent 0deg, white 65deg, transparent 160deg), transparent'
 const rightBottomMaskImage = [
   'linear-gradient(to left, black, black)',
   'linear-gradient(to left, transparent var(--mask-stroke), black calc(var(--mask-stroke) * 2))',
   'linear-gradient(to top, transparent var(--mask-stroke), black calc(var(--mask-stroke) * 2))',
-  'linear-gradient(to left, black calc(var(--radius) - var(--mask-stroke)), transparent var(--radius))',
-  'linear-gradient(to top, black calc(var(--radius) - var(--mask-stroke)), transparent var(--radius))',
-  'radial-gradient(var(--diameter) var(--diameter) at calc(100% - var(--radius)) calc(100% - var(--radius)), black var(--mask-inner-distance), transparent var(--mask-outer-distance))',
+  'linear-gradient(to left, black calc(var(--view-radius) - var(--mask-stroke)), transparent var(--view-radius))',
+  'linear-gradient(to top, black calc(var(--view-radius) - var(--mask-stroke)), transparent var(--view-radius))',
+  'radial-gradient(var(--view-diameter) var(--view-diameter) at calc(100% - var(--view-radius)) calc(100% - var(--view-radius)), black var(--mask-inner-distance), transparent var(--mask-outer-distance))',
 ]
 const rightBottomHighlightStyle = {
   background: rightBottomHighlight,
@@ -159,7 +159,7 @@ function Material({ thickness = 'normal', className, style, children, ...rest }:
     <div
       className={cn(
         'relative',
-        'before:absolute before:inset-0 before:z-[-1] before:rounded-[var(--radius)]',
+        'before:absolute before:inset-0 before:z-[-1] before:rounded-[var(--view-radius)]',
         'before:bg-[#80808030]',
         'min-h-[64px] min-w-[64px]',
         CONSTANTS.VAR_DIAMETER,
@@ -175,7 +175,7 @@ function Material({ thickness = 'normal', className, style, children, ...rest }:
           thickness === 'none'
             ? 'none'
             : `saturate(${SATURATION}) blur(${blur}px) brightness(0.85)`,
-        borderRadius: `var(--radius)`,
+        borderRadius: `var(--view-radius)`,
         ...style,
       }}
       {...rest}
@@ -184,7 +184,7 @@ function Material({ thickness = 'normal', className, style, children, ...rest }:
         className="pointer-events-none absolute inset-x-0 z-40 h-full w-full"
         style={{
           boxShadow: getRings(thickness),
-          borderRadius: `var(--radius)`,
+          borderRadius: `var(--view-radius)`,
           top: 0,
         }}
         aria-hidden="true"

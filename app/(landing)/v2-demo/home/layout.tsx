@@ -1,6 +1,7 @@
 import {
   IconBell,
   IconBolt,
+  IconDots,
   IconList,
   IconPalette,
   IconSettings,
@@ -55,7 +56,16 @@ export default function AboutLayout({ children }: { children: React.ReactNode })
   return (
     <Sidebar
       items={sidebarItems}
-      header={<SidebarHeader title="Header" headerRight={<Button>Button</Button>} />}
+      header={
+        <SidebarHeader
+          title="Header"
+          headerRight={
+            <Button size="icon">
+              <IconDots />
+            </Button>
+          }
+        />
+      }
       footer={<Text>Footer</Text>}
     >
       {children}

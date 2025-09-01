@@ -10,14 +10,13 @@ interface ViewProps extends React.HTMLAttributes<HTMLDivElement> {
   material?: boolean | { thickness?: GlassThickness }
 }
 
-function View({ className, style, material = false, children, ...rest }: ViewProps) {
+function View({ className, material = false, children, ...rest }: ViewProps) {
   if (material) {
     const thickness = typeof material === 'object' ? material.thickness : 'normal'
     return (
       <Material
         thickness={thickness}
         className={cn('overflow-hidden', className)}
-        style={style}
         {...(rest as MaterialProps)}
       >
         {children}
@@ -25,7 +24,7 @@ function View({ className, style, material = false, children, ...rest }: ViewPro
     )
   }
   return (
-    <div className={cn('overflow-hidden', className)} style={style} {...rest}>
+    <div className={cn('overflow-hidden', className)} {...rest}>
       {children}
     </div>
   )
@@ -63,11 +62,7 @@ function ScrollView({
 
   if (material) {
     const thickness = typeof material === 'object' ? material.thickness : 'normal'
-    return (
-      <Material thickness={thickness} className={cn('[--radius:34px]')}>
-        {body}
-      </Material>
-    )
+    return <Material thickness={thickness}>{body}</Material>
   }
   return body
 }

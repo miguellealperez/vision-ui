@@ -1,7 +1,7 @@
 'use client'
 
 import { IconChevronRight } from '@tabler/icons-react'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
 import { usePathname } from 'next/navigation'
 import { Collapsible } from 'radix-ui'
 import * as React from 'react'
@@ -98,7 +98,7 @@ const CollapsibleSection = ({
         key={item.name}
         item={item}
         isActive={isActive}
-        className="ml-4 flex w-full items-center justify-stretch rounded-xl px-[10px] before:rounded-xl"
+        className="flex w-full items-center justify-stretch px-[10px]"
       />
     )
   }
@@ -106,24 +106,19 @@ const CollapsibleSection = ({
   return (
     <Collapsible.Root className="w-full" open={open} onOpenChange={setOpen}>
       <Collapsible.Trigger asChild>
-        <Button
-          className="flex w-full items-center justify-between rounded-xl px-[10px] before:rounded-xl"
-          variant="secondary"
-        >
-          <Text size="body" className="font-medium text-white leading-[24px]">
-            {title}
-          </Text>
-          <motion.div
+        <Button className="flex w-full items-center justify-between px-[10px]" variant="secondary">
+          <Text size="body">{title}</Text>
+          <MotionView
             initial={false}
             animate={{ rotate: open ? 90 : 0 }}
             transition={{ duration: 0.2 }}
           >
-            <IconChevronRight className="h-4 w-4 text-white" />
-          </motion.div>
+            <IconChevronRight />
+          </MotionView>
         </Button>
       </Collapsible.Trigger>
 
-      <Collapsible.Content forceMount>
+      <Collapsible.Content forceMount asChild>
         <AnimatePresence initial={false}>
           {open && (
             <MotionView
@@ -131,7 +126,6 @@ const CollapsibleSection = ({
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.75, type: 'spring', bounce: 0 }}
-              className="space-y-1 py-2"
             >
               {items.map(renderSidebarItem)}
             </MotionView>
@@ -184,7 +178,7 @@ const renderSidebarItem = ({
           key={item.name}
           item={item}
           isActive={isActive}
-          className="flex w-full items-center justify-stretch rounded-xl px-[10px] before:rounded-xl"
+          className="flex w-full items-center justify-stretch px-[10px]"
         />
       )
     }
@@ -224,6 +218,7 @@ const Sidebar = ({
 
   return (
     <View
+      material
       data-sidebar="root"
       style={
         {
@@ -280,10 +275,14 @@ const SidebarHeader = ({ title, className, children, headerRight }: SidebarHeade
   return (
     <View
       data-sidebar="header"
-      className={cn('absolute inset-x-0 top-0 p-5', 'w-[var(--sidebar-width)]', className)}
+      className={cn('absolute inset-x-0 top-0 z-10 p-5', 'w-[var(--sidebar-width)]', className)}
     >
-      <View className="relative z-[2] flex items-center justify-between">
-        {title && <Text size="title1">{title}</Text>}
+      <View className="flex items-start justify-between overflow-visible">
+        {title && (
+          <Text size="title1" className="pt-1">
+            {title}
+          </Text>
+        )}
         {headerRight && (
           <div className="flex items-center justify-center">
             {typeof headerRight === 'function' ? headerRight() : headerRight}
