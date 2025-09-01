@@ -9,7 +9,7 @@ export default function List({ data }: { data: { id: string; title: string }[] }
   const renderItem: FlashListRenderItem<{ id: string; title: string }> = ({ item }) => (
     <Link
       href={`/v2-demo/${item.id}`}
-      className="mb-2 flex justify-between rounded-lg bg-white/10 px-3 py-2"
+      className="mb-4 flex justify-between rounded-lg bg-white/10 px-3 py-2 *:pointer-events-none"
     >
       <Text>{item.title}</Text>
       <IconChevronRight className="size-4" />
@@ -21,12 +21,11 @@ export default function List({ data }: { data: { id: string; title: string }[] }
       onEndReached={() => {
         console.log('onEndReached')
       }}
-      ListHeaderComponent={() => <Text className="p-4">Header</Text>}
-      ListFooterComponent={() => <Text className="p-4">Footer</Text>}
-      className="mt-4"
+      ListHeaderComponent={<Text>Header</Text>}
+      ListFooterComponent={<Text>Footer</Text>}
+      className="px-12"
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
-      contentContainerClassName="px-4"
     />
   )
 }

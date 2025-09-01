@@ -6,7 +6,7 @@ import type * as React from 'react'
 import { cn } from '@/lib/utils'
 import { type GlassThickness, Material, type MaterialProps } from './material'
 
-export type ViewProps = React.HTMLAttributes<HTMLDivElement> & {
+interface ViewProps extends React.HTMLAttributes<HTMLDivElement> {
   material?: boolean | { thickness?: GlassThickness }
 }
 
@@ -25,15 +25,15 @@ function View({ className, style, material = false, children, ...rest }: ViewPro
     )
   }
   return (
-    <div className={cn(className)} style={style} {...rest}>
+    <div className={cn('overflow-hidden', className)} style={style} {...rest}>
       {children}
     </div>
   )
 }
 
-const MotionView = motion(View)
+const MotionView = motion.create(View)
 
-export type ScrollViewProps = React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> & {
+interface ScrollViewProps extends React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> {
   contentProps?: React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Viewport>
   material?: boolean | { thickness?: GlassThickness }
   className?: string
@@ -72,6 +72,7 @@ function ScrollView({
   return body
 }
 
-const MotionScrollView = motion(ScrollView)
+const MotionScrollView = motion.create(ScrollView)
 
 export { View, ScrollView, MotionView, MotionScrollView }
+export type { ViewProps, ScrollViewProps }

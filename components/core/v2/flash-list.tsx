@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/a11y/useSemanticElements: <explanation> */
 'use client'
 
 import * as React from 'react'
@@ -13,34 +12,33 @@ import {
 
 type FlashListRenderItem<T> = (info: { item: T; index: number }) => React.ReactNode
 
-type FlashListProps<T> = {
+interface FlashListProps<T> extends React.ComponentPropsWithoutRef<typeof ScrollAreaRoot> {
   data: T[]
   renderItem: FlashListRenderItem<T>
   keyExtractor?: (item: T, index: number) => string
   ListHeaderComponent?: React.ReactNode | (() => React.ReactNode)
   ListFooterComponent?: React.ReactNode | (() => React.ReactNode)
-  contentContainerClassName?: string
   className?: string
-  estimatedItemSize?: number
   onEndReached?: () => void
   onEndReachedThreshold?: number // 0..1 of remaining distance
   horizontal?: boolean
   onScroll?: (e: React.UIEvent<HTMLDivElement>) => void
+  rootClassName?: string
 }
 
 /** We might use a virtualized list in the future */
-function FlashListInner<T>({
+function FlashList<T>({
   data,
   renderItem,
   keyExtractor,
   ListHeaderComponent,
   ListFooterComponent,
-  contentContainerClassName,
   className,
   onEndReached,
   onEndReachedThreshold = 0.1,
   horizontal = false,
   onScroll,
+  rootClassName,
   ...props
 }: FlashListProps<T>) {
   const endReachedRef = React.useRef(false)
@@ -72,13 +70,21 @@ function FlashListInner<T>({
 
   return (
     <ScrollAreaRoot
-      className={cn(horizontal ? 'flex-row' : 'flex-col', className)}
+      className={cn('-mt-6', horizontal ? 'flex-row' : 'flex-col', rootClassName)}
       onScroll={handleScroll}
       role="list"
       {...props}
     >
-      {header}
-      <ScrollAreaViewport className={cn('h-[400px]', contentContainerClassName)}>
+      <ScrollAreaViewport
+        className={cn(
+          '[mask-image:linear-gradient(to_bottom,transparent,black_1.5rem,black_calc(100%-1.5rem),transparent)]',
+          'h-[calc(var(--content-height,max(300px,60dvh))-var(--header-height,0px)-var(--footer-height,0px))]',
+          className
+        )}
+      >
+        {/* 1.5rem fillter for mask-image */}
+        <div className="h-6" />
+        {header}
         {data.map((item, index) => (
           <div
             key={
@@ -91,9 +97,11 @@ function FlashListInner<T>({
             {renderItem({ item, index })}
           </div>
         ))}
+        {footer}
+        <div className="h-6" />
       </ScrollAreaViewport>
-      {footer}
-      <ScrollAreaScrollbar className={cn(className)}>
+
+      <ScrollAreaScrollbar>
         <ScrollAreaThumb />
       </ScrollAreaScrollbar>
       <ScrollAreaCorner />
@@ -101,5 +109,5 @@ function FlashListInner<T>({
   )
 }
 
-export const FlashList = React.memo(FlashListInner) as typeof FlashListInner
+export { FlashList }
 export type { FlashListRenderItem, FlashListProps }

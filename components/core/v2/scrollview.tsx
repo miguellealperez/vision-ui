@@ -68,7 +68,7 @@ const ScrollAreaViewport = ({ className, children, ...props }: ScrollAreaViewpor
 const ScrollAreaScrollbar = ({ className, children, ...props }: ScrollAreaScrollbarProps) => (
   <ScrollAreaPrimitive.Scrollbar
     className={cn(
-      '!top-1/2 !h-[min(100%,100px)] !-translate-y-1/2 mr-4 flex touch-none select-none rounded-full bg-[#4d4d4d]/20 transition-colors',
+      '!top-1/2 !h-[min(100%,100px)] !-translate-y-1/2 mr-1 flex touch-none select-none rounded-full bg-[#4d4d4d]/20 transition-colors',
       'after:absolute after:inset-0 after:rounded-full after:bg-[#fafafa]/20 after:[background-blend-mode:color-dodge]',
       'animate-fd-fade-in data-[state=hidden]:animate-fd-fade-out',
       'data-[orientation=vertical]:h-full data-[orientation=vertical]:w-3.5 data-[orientation=vertical]:p-[3px]',

@@ -5,12 +5,7 @@ import Link from 'next/link'
 import { FlashList, type FlashListRenderItem } from '@/components/core/v2'
 import { Text } from '@/components/core/v2/text'
 
-const data = Array.from({ length: 24 }).map((_, i) => ({
-  id: String(i),
-  title: `Item ${i + 1}`,
-}))
-
-export default function DemoFlashlist() {
+export default function List({ data }: { data: { id: string; title: string }[] }) {
   const renderItem: FlashListRenderItem<{ id: string; title: string }> = ({ item }) => (
     <Link
       href={`/v2-demo/${item.id}`}
@@ -22,7 +17,7 @@ export default function DemoFlashlist() {
   )
   return (
     <FlashList
-      data={data ?? []}
+      data={data}
       onEndReached={() => {
         console.log('onEndReached')
       }}

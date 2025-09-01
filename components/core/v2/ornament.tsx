@@ -1,14 +1,12 @@
 'use client'
 
-import { AnimatePresence, motion } from 'motion/react'
+import { motion } from 'motion/react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import type * as React from 'react'
 import { useState } from 'react'
-import useDebounce from '@/hooks/use-debounce'
 import { cn } from '@/lib/utils'
 import { Button } from './button'
-import { type GlassThickness, Material } from './material'
 import { Text } from './text'
 import { MotionView } from './view'
 
@@ -59,7 +57,6 @@ export type OrnamentTabProps = {
 
 export type OrnamentProps = {
   children: React.ReactNode
-  material?: boolean | { thickness?: GlassThickness }
   className?: string
   contentClassName?: string
   orientation?: 'vertical' | 'horizontal'
@@ -70,7 +67,6 @@ export type OrnamentProps = {
 
 const Ornament = ({
   children,
-  material = true,
   className,
   contentClassName,
   orientation = 'vertical',
@@ -91,6 +87,7 @@ const Ornament = ({
 
   return (
     <div
+      data-ornament="root"
       className={cn(
         'relative grid h-full w-full flex-1 place-content-center gap-4 md:gap-7',
         isVertical && isLeft && 'grid-cols-[68px_1fr]',
@@ -100,11 +97,19 @@ const Ornament = ({
         'max-w-3xl xl:max-w-4xl 2xl:max-w-6xl',
         className
       )}
+      style={
+        {
+          // Usually the ornament is the top-level container,
+          // so we can use the height of the content to set the height of the ornament
+          '--content-height': 'max(300px,60dvh)',
+        } as React.CSSProperties
+      }
     >
       {/* Ornament Tab Bar */}
       <MotionView
         material
         variants={ORNAMENT_VARIANTS}
+        data-ornament="tabs"
         className="relative z-[42] self-center"
         role="tablist"
         initial="collapsed"
@@ -128,6 +133,7 @@ const Ornament = ({
               variant={activeTab?.name === tab.name ? 'default' : 'secondary'}
               aria-label={tab.title || tab.name}
               asChild
+              key={tab.name}
             >
               <Link href={tab.href}>
                 <div
@@ -152,7 +158,8 @@ const Ornament = ({
       </MotionView>
       {/* Content Area */}
       <MotionView
-        material={material}
+        data-ornament="content"
+        material
         animate={tapped ? 'whileTap' : 'initial'}
         variants={{
           initial: {
@@ -172,7 +179,15 @@ const Ornament = ({
             },
           },
         }}
-        className={cn('relative w-full overflow-visible', contentClassName)}
+        className={cn(
+          'relative w-full overflow-visible',
+          'before:pointer-events-none before:absolute before:inset-0 before:z-[10] before:content-[""]',
+          'before:bg-[rgba(0,0,0,var(--overlay-opacity))]',
+          // reset the overlay opacity because
+          // we've handled it in the parent
+          '*:[--overlay-opacity:0]',
+          contentClassName
+        )}
       >
         {children}
       </MotionView>

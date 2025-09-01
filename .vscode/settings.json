@@ -1,9 +1,10 @@
 {
-  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.biome": "explicit",
-    "source.removeUnusedImports.biome": "explicit"
+    "source.organizeImports.biome": "explicit",
+    "source.removeUnusedImports": "explicit",
+    "source.fixAll.biome": "explicit"
   },
+  "editor.formatOnSave": true,
   "workbench.editor.customLabels.patterns": {
     "**/app/**/page.tsx": "${dirname) - page.tsx",
     "**/app/**/page.mdx": "${dirname) - page.mdx",
