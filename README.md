@@ -2,12 +2,9 @@
 
 # Vision UI
 
-> V2 coming soon and is a work in progress 🚧
+> OS26 coming soon and is a work in progress 🚧
 
-- [ ] More primitive & React-Native-styled components
-- [ ] Better navigation
-- [ ] Improve performance
-- [ ] Sound effects
+See the OS26 Announcement [here](#os26-updates)
 
 ## What is Vision UI?
 
@@ -20,6 +17,28 @@ It uses most of the components from [shadcn/ui](https://ui.shadcn.com/) for the 
 ![Environments](https://github.com/user-attachments/assets/fb692f7b-4935-4e93-9f86-0ea8665eaeef)
 
 ![Demo](https://github.com/user-attachments/assets/cd924064-d927-47ef-919e-9d169f67c7c9)
+
+## OS26 Updates
+
+### TL;DR
+
+OS26 is a complete rewrite of Vision UI. By merging the Vision OS UI with Next.js layout, we have improved navigation, components, and performance, while also making it more accessible.
+
+![Alert](https://github.com/user-attachments/assets/c1b349db-cef2-406d-a788-e36a08f9d128)
+
+- [ ] More primitive & React-Native-styled components
+  - [x] Alert API
+  - [x] Sidebar
+  - [x] Stack
+  - [x] Ornament
+  - [x] Button
+  - [ ] Honeycomb Grid
+- [x] Better navigation using Next JS layout as wrapper for `ornament`, `sidebar` components.
+- [ ] Improve performance
+  - [x] Clean up unessessary divs
+  - [ ] Better component refactoring
+- [ ] Sound effects
+
 
 ## Demo Video
 
