@@ -88,7 +88,7 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
         {alerts.map((alertItem) => (
           <AlertDialog.Root key={alertItem.id} open={true}>
             <AlertDialog.Portal>
-              <AlertDialog.Content asChild>
+              <AlertDialog.Content data-vision-os-ui asChild>
                 <MotionView
                   material
                   initial={{ opacity: 0, scale: 1.18 }}
