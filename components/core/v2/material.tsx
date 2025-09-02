@@ -204,12 +204,12 @@ function Material({ thickness = 'normal', className, style, children, ...rest }:
       <div
         className={cn(
           getHighlightStroke(thickness),
-          'pointer-events-none absolute inset-[-0.25px] z-40',
+          'pointer-events-none absolute inset-[-0.5px] z-40',
           '[--mask-inner-distance:calc(50%-var(--mask-stroke)-var(--mask-stroke))] [--mask-outer-distance:calc(50%-var(--mask-stroke))]'
         )}
         style={{
           ...rightBottomHighlightStyle,
-          opacity: getHighlightOpacity(thickness) - 0.05,
+          opacity: getHighlightOpacity(thickness) - 0.025,
         }}
         aria-hidden="true"
       />
