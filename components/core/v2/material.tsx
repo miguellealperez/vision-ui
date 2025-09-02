@@ -159,8 +159,8 @@ function Material({ thickness = 'normal', className, style, children, ...rest }:
     <div
       className={cn(
         'relative',
-        'before:absolute before:inset-0 before:z-[-1] before:rounded-[var(--view-radius)]',
-        'before:bg-[#80808030]',
+        // 'before:absolute before:inset-0 before:z-[-1] before:rounded-[var(--view-radius)]',
+        // 'before:bg-[#80808030]',
         'min-h-[64px] min-w-[64px]',
         CONSTANTS.VAR_DIAMETER,
         CONSTANTS.VAR_RADIUS,

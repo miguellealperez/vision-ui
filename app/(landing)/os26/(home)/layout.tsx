@@ -2,6 +2,7 @@ import {
   IconBell,
   IconBolt,
   IconDots,
+  IconEye,
   IconList,
   IconPalette,
   IconSettings,
@@ -10,21 +11,20 @@ import {
 import { Text } from '@/components/core/v2'
 import { Button } from '@/components/core/v2/button'
 import { Sidebar, SidebarHeader, type SidebarItemProps } from '@/components/core/v2/sidebar'
-
-const BASE_PATH = '/v2-demo/home'
-const genHref = (path: string) => `${BASE_PATH}/${path}`
+import { generateUrl } from '../constants'
 
 const sidebarItems: SidebarItemProps[] = [
-  { name: 'Stack', href: genHref('stack'), icon: <IconStack />, title: 'Stack' },
+  { name: 'Overview', href: generateUrl(), icon: <IconEye />, title: 'Overview' },
+  { name: 'Stack', href: generateUrl('stack'), icon: <IconStack />, title: 'Stack' },
   {
     name: 'Alert',
-    href: genHref('alert'),
+    href: generateUrl('alert'),
     icon: <IconBell />,
     title: 'Alert',
   },
   {
     name: 'FlashList',
-    href: genHref('flashlist'),
+    href: generateUrl('flashlist'),
     icon: <IconBolt />,
     title: 'FlashList',
   },
@@ -42,11 +42,16 @@ const sidebarItems: SidebarItemProps[] = [
       { name: 'Item 4', icon: <IconList />, title: 'Item 4' },
     ],
   },
-  { name: 'Settings', href: '/v2-demo/settings', icon: <IconSettings />, title: 'Settings' },
-  { name: 'Appearance', href: '/v2-demo/appearance', icon: <IconPalette />, title: 'Appearance' },
+  { name: 'Settings', href: generateUrl('settings'), icon: <IconSettings />, title: 'Settings' },
+  {
+    name: 'Appearance',
+    href: generateUrl('appearance'),
+    icon: <IconPalette />,
+    title: 'Appearance',
+  },
   ...Array.from({ length: 30 }).map((_, i) => ({
     name: `Item ${i + 1}`,
-    href: `/v2-demo/item/${i + 1}`,
+    href: generateUrl(`item/${i + 1}`),
     icon: <IconList />,
     title: `Item ${i + 1}`,
   })),
@@ -58,6 +63,7 @@ export default function AboutLayout({ children }: { children: React.ReactNode })
       items={sidebarItems}
       header={
         <SidebarHeader
+          key="header"
           title="Header"
           headerRight={
             <Button size="icon">

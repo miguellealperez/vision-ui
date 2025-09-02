@@ -80,7 +80,7 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
           '--overlay-opacity': alerts.length > 0 ? 0.28 : 0,
         }}
         transition={{ type: 'spring', bounce: 0 }}
-        className="w-full"
+        className="flex w-full flex-1 items-center justify-center"
       >
         {children}
       </motion.div>

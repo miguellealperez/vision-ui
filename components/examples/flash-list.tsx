@@ -13,7 +13,7 @@ const data = Array.from({ length: 24 }).map((_, i) => ({
 export default function DemoFlashlist() {
   const renderItem: FlashListRenderItem<{ id: string; title: string }> = ({ item }) => (
     <Link
-      href={`/v2-demo/${item.id}`}
+      href={`/os26/${item.id}`}
       className="mb-4 flex justify-between rounded-lg bg-white/10 px-3 py-2 *:pointer-events-none"
     >
       <Text>{item.title}</Text>
@@ -28,7 +28,7 @@ export default function DemoFlashlist() {
       }}
       ListHeaderComponent={<Text>Header</Text>}
       ListFooterComponent={<Text>Footer</Text>}
-      className="px-12"
+      className="px-6"
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
     />
