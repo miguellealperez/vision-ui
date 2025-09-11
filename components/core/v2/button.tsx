@@ -83,7 +83,7 @@ const buttonVariants = cva(
           'text-background/[0.96]',
           //* icon *//
           '[&_svg]:text-background [&_svg]:z-[1]',
-          'before:[background:hsla(var(--foreground)/0.96)] before:text-background/90',
+          'before:[background:var(--foreground)] before:text-background/90',
           'hover:before:opacity-100 before:opacity-100'
         ),
         link: cn(

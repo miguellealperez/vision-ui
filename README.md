@@ -24,6 +24,8 @@ It uses most of the components from [shadcn/ui](https://ui.shadcn.com/) for the 
 
 OS26 is a complete rewrite of Vision UI. By merging the Vision OS UI with Next.js layout, we have improved navigation, components, and performance, while also making it more accessible.
 
+You can checkout the WIP demo [here](https://vision.uing.dev/os26)
+
 ![Alert](https://github.com/user-attachments/assets/c1b349db-cef2-406d-a788-e36a08f9d128)
 
 - [ ] More primitive & React-Native-styled components

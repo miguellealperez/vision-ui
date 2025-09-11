@@ -9,7 +9,12 @@ import {
   IconStack,
 } from '@tabler/icons-react'
 import { Text } from '@/components/core/v2'
-import { Button } from '@/components/core/v2/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/core/v2/dropdown-menu'
 import { Sidebar, SidebarHeader, type SidebarItemProps } from '@/components/core/v2/sidebar'
 import { generateUrl } from '../constants'
 
@@ -66,9 +71,22 @@ export default function AboutLayout({ children }: { children: React.ReactNode })
           key="header"
           title="Header"
           headerRight={
-            <Button size="icon">
-              <IconDots />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger size="icon">
+                <IconDots />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <Text>Item 1</Text>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Text>Item 2</Text>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Text>Item 3</Text>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           }
         />
       }
