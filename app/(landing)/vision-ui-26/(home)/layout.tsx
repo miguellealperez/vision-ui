@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/core/v2/dropdown-menu'
 import { Sidebar, SidebarHeader, type SidebarItemProps } from '@/components/core/v2/sidebar'
+import { WindowControls } from '@/components/core/v2/window-control'
 import { generateUrl } from '../constants'
 
 const sidebarItems: SidebarItemProps[] = [
@@ -64,35 +65,38 @@ const sidebarItems: SidebarItemProps[] = [
 
 export default function AboutLayout({ children }: { children: React.ReactNode }) {
   return (
-    <Sidebar
-      items={sidebarItems}
-      header={
-        <SidebarHeader
-          key="header"
-          title="Header"
-          headerRight={
-            <DropdownMenu>
-              <DropdownMenuTrigger size="icon">
-                <IconDots />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <Text>Item 1</Text>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Text>Item 2</Text>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Text>Item 3</Text>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          }
-        />
-      }
-      footer={<Text>Footer</Text>}
-    >
-      {children}
-    </Sidebar>
+    <>
+      <Sidebar
+        items={sidebarItems}
+        header={
+          <SidebarHeader
+            key="header"
+            title="Header"
+            headerRight={
+              <DropdownMenu>
+                <DropdownMenuTrigger size="icon">
+                  <IconDots />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>
+                    <Text>Item 1</Text>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Text>Item 2</Text>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Text>Item 3</Text>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            }
+          />
+        }
+        footer={<Text>Footer</Text>}
+      >
+        {children}
+      </Sidebar>
+      <WindowControls />
+    </>
   )
 }

@@ -2,9 +2,10 @@
 
 # Vision UI
 
-> OS26 coming soon and is a work in progress 🚧
+> [!IMPORTANT]
+> 🎉 <strong>VisionUI 26 is coming soon!</strong> Star this repo or keep an eye on it to follow along.
 
-See the OS26 Announcement [here](#os26-updates)
+See the VisionUI 26 Announcement [here](#visionui-26-updates)
 
 ## What is Vision UI?
 
@@ -18,13 +19,13 @@ It uses most of the components from [shadcn/ui](https://ui.shadcn.com/) for the 
 
 ![Demo](https://github.com/user-attachments/assets/cd924064-d927-47ef-919e-9d169f67c7c9)
 
-## OS26 Updates
+## VisionUI 26 Updates
 
 ### TL;DR
 
-OS26 is a complete rewrite of Vision UI. By merging the Vision OS UI with Next.js layout, we have improved navigation, components, and performance, while also making it more accessible.
+VisionUI 26 is a complete rewrite of Vision UI. By merging the Vision OS UI with Next.js layout, we have improved navigation, components, and performance, while also making it more accessible.
 
-You can checkout the WIP demo [here](https://vision.uing.dev/os26)
+You can checkout the WIP demo [here](https://vision.uing.dev/vision-ui-26)
 
 ![Alert](https://github.com/user-attachments/assets/c1b349db-cef2-406d-a788-e36a08f9d128)
 
@@ -34,11 +35,12 @@ You can checkout the WIP demo [here](https://vision.uing.dev/os26)
   - [x] Stack
   - [x] Ornament
   - [x] Button
-  - [ ] Honeycomb Grid
+  - [x] Dropdown Menu
+  - [x] Grid List
 - [x] Better navigation using Next JS layout as wrapper for `ornament`, `sidebar` components.
-- [ ] Improve performance
+- [x] Improve performance
   - [x] Clean up unessessary divs
-  - [ ] Better component refactoring
+  - [x] Better component refactoring
 - [ ] Sound effects
 
 
