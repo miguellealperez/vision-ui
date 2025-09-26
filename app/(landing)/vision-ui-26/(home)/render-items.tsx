@@ -1,5 +1,6 @@
 import { motion } from 'motion/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Text } from '@/components/core/v2'
 import type { ListRenderItemInfo } from '@/components/core/v2/grid-layout'
 import { cn } from '@/lib/utils'
@@ -32,7 +33,7 @@ export const items: ItemProps[] = [
     label: 'Settings',
     background: <div className="h-full w-full bg-[#2E2E2F]"></div>,
     icon: <Image src={settingsIcon} alt="Settings" className={honeycombIconClassName} />,
-    href: '/settings',
+    href: '/vision-ui-26/components',
   },
   {
     id: 'app-store',
@@ -86,7 +87,7 @@ const colIndexClassName = {
 }
 
 export const renderCell = ({ item, rowIndex, colIndex }: ListRenderItemInfo<ItemProps>) => (
-  <div className="flex flex-col items-center justify-center gap-2">
+  <Link href={item.href ?? ''} className="flex flex-col items-center justify-center gap-2">
     <motion.div
       //! This causes firefox to not render the cell properly
       // material={{ thickness: 'thin' }}
@@ -118,10 +119,10 @@ export const renderCell = ({ item, rowIndex, colIndex }: ListRenderItemInfo<Item
           )}
         />
       </div>
-      <div className={cn('absolute inset-0 z-[11] transition-all duration-300')}>{item.icon}</div>
+      <div className="absolute inset-0 z-[11] transition-all duration-300">{item.icon}</div>
     </motion.div>
     <Text variant="secondary" size="caption1">
       {item.label}
     </Text>
-  </div>
+  </Link>
 )

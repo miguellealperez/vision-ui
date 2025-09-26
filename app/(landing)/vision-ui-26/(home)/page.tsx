@@ -1,12 +1,8 @@
-import { Text, View } from '@/components/core/v2'
-import { Stack } from '@/components/core/v2/stack'
+'use client'
 
-export default function HomePage() {
-  return (
-    <Stack options={{ title: 'Home' }} className="p-6">
-      <View>
-        <Text variant="secondary">Browse Components</Text>
-      </View>
-    </Stack>
-  )
+import { GridList } from '@/components/core/v2/grid-layout'
+import { items, renderCell } from './render-items'
+
+export default function GridListPage() {
+  return <GridList items={items} renderCell={renderCell} />
 }

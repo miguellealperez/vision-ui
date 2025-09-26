@@ -129,7 +129,7 @@ const Ornament = ({
         >
           {tabs.map((tab) => (
             <Button
-              className="flex w-full items-center justify-stretch rounded-full px-[10px] before:rounded-full"
+              className="group flex w-full items-center justify-stretch rounded-full px-[10px] before:rounded-full"
               variant={activeTab?.name === tab.name ? 'default' : 'secondary'}
               aria-label={tab.title || tab.name}
               asChild
@@ -137,7 +137,7 @@ const Ornament = ({
             >
               <Link href={tab.href}>
                 <div
-                  className="relative flex-shrink-0 [&_[data-slot='icon']]:size-6"
+                  className="relative flex-shrink-0 [&_[data-slot='icon']]:size-6 group-hover:[&_[data-slot='icon']]:opacity-95"
                   aria-hidden="true"
                 >
                   {tab.icon}
@@ -145,8 +145,7 @@ const Ornament = ({
                 <motion.span className="ml-4 flex-1 overflow-hidden text-start">
                   <Text
                     size="title3"
-                    variant="secondary"
-                    className="line-clamp-1 w-fit min-w-[60px] truncate font-medium leading-[24px]"
+                    className="line-clamp-1 w-fit min-w-[60px] truncate font-medium leading-[24px] opacity-60 group-hover:opacity-95"
                   >
                     {tab.title || tab.name}
                   </Text>
