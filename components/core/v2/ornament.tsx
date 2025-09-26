@@ -90,8 +90,8 @@ const Ornament = ({
       data-ornament="root"
       className={cn(
         'grid h-full w-full flex-1 place-content-center gap-4 md:gap-7',
-        isVertical && isLeft && 'grid-cols-[68px_1fr]',
-        isVertical && !isLeft && 'grid-cols-[1fr_68px]',
+        isVertical && isLeft && 'md:-ml-[96px] grid-cols-[68px_1fr]',
+        isVertical && !isLeft && 'md:-mr-[96px] grid-cols-[1fr_68px]',
         !isVertical && position === 'top' && 'grid-rows-[68px_1fr]',
         !isVertical && position === 'bottom' && 'grid-rows-[1fr_68px]',
         'max-w-3xl xl:max-w-4xl 2xl:max-w-6xl',

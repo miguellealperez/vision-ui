@@ -19,14 +19,12 @@ interface ItemT {
 export interface ListRenderItemInfo<T> {
   /** The item from the `items` array. */
   item: T
-  /** The index of the item. */
-  index: number
   /** True if the cell is currently being pressed down. */
   isTapping: boolean
-  /** The relative X position of the cell for hover shadow effects. */
-  cellX: number
-  /** The relative Y position of the cell for hover shadow effects. */
-  cellY: number
+  /** The row index of the cell. */
+  rowIndex: number
+  /** The column index of the cell. */
+  colIndex: number
 }
 
 /**
@@ -231,7 +229,7 @@ const PagerCell = <T extends ItemT>({
   const middleRowParallax = useTransform(
     scrollX,
     [-pageOffset - pageWidth, -pageOffset, -pageOffset + pageWidth],
-    [-itemSize * 0.25, 0, itemSize * 0.25]
+    [-itemSize * 1.5, 0, itemSize * 1.5]
   )
 
   const cellAbsoluteX = pageOffset + cellX
@@ -242,15 +240,15 @@ const PagerCell = <T extends ItemT>({
   const scrollFilter = useTransform(
     cellScreenX,
     inputRange,
-    ['blur(12px)', 'blur(0px)', 'blur(0px)', 'blur(12px)'],
+    ['blur(16px)', 'blur(0px)', 'blur(0px)', 'blur(16px)'],
     { clamp: true }
   )
 
   return (
     <motion.div
       layout
-      className="absolute cursor-pointer"
       style={{
+        position: 'absolute',
         left: cellX,
         top: cellY,
         width: itemSize,
@@ -263,10 +261,10 @@ const PagerCell = <T extends ItemT>({
       initial={
         isFirstPage
           ? {
-              x: centerX - cellX,
-              y: centerY - cellY,
+              x: (centerX - cellX) * 0.5,
+              y: (centerY - cellY) * 0.5,
               opacity: 0,
-              scale: 0.3,
+              scale: 0.5,
             }
           : undefined
       }
@@ -296,10 +294,9 @@ const PagerCell = <T extends ItemT>({
       >
         {renderCell({
           item,
-          index,
+          rowIndex,
+          colIndex,
           isTapping,
-          cellX: attractionEffect.shiftX,
-          cellY: attractionEffect.shiftY,
         })}
       </motion.div>
     </motion.div>
@@ -328,32 +325,30 @@ const Pager = <T extends ItemT>(props: PagerProps<T>) => {
 
   return (
     <div className="absolute top-0 h-full" style={{ left: pageOffset, width: props.pageWidth }}>
-      <div className="relative h-full w-full">
-        {items.map((item, i) => {
-          const overallIndex = pageIndex * itemsPerPage + i
-          const { rowIndex, colIndex } = getCellLayoutProps(
-            overallIndex,
-            itemsPerPage,
-            topBottomRowCols,
-            middleRowCols
-          )
+      {items.map((item, i) => {
+        const overallIndex = pageIndex * itemsPerPage + i
+        const { rowIndex, colIndex } = getCellLayoutProps(
+          overallIndex,
+          itemsPerPage,
+          topBottomRowCols,
+          middleRowCols
+        )
 
-          return (
-            <PagerCell
-              key={item.id}
-              {...{
-                ...props,
-                item,
-                index: overallIndex,
-                pageIndex,
-                rowIndex,
-                colIndex,
-                pageOffset,
-              }}
-            />
-          )
-        })}
-      </div>
+        return (
+          <PagerCell
+            key={item.id}
+            {...{
+              ...props,
+              item,
+              index: overallIndex,
+              pageIndex,
+              rowIndex,
+              colIndex,
+              pageOffset,
+            }}
+          />
+        )
+      })}
     </div>
   )
 }
@@ -404,9 +399,8 @@ export const GridList = <T extends ItemT>({
   }
 
   return (
-    // <AnimatePresence initial={false}>
     <div
-      className="relative flex h-max w-full items-center justify-center overflow-visible"
+      className="relative flex h-max w-full items-center justify-center"
       onMouseUp={() => setTappingIndex(null)}
     >
       <div className="relative" style={{ width: pageWidth, height: totalHeight }}>
@@ -447,6 +441,5 @@ export const GridList = <T extends ItemT>({
         </div>
       )}
     </div>
-    // </AnimatePresence>
   )
 }
