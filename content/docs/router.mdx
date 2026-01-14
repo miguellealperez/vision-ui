@@ -27,7 +27,7 @@ The Vision UI Router provides a comprehensive navigation solution that merges th
 Wrap your application with the `RouterProvider`:
 
 ```tsx
-import { RouterProvider, NavigationContainer } from "@/components/core/v2/router";
+import { RouterProvider, NavigationContainer } from "@/components/core/router";
 
 export default function App() {
   return (
@@ -45,7 +45,7 @@ export default function App() {
 The Ornament navigator creates floating tab bars similar to SwiftUI's Ornament:
 
 ```tsx
-import { Ornament } from "@/components/core/v2/router";
+import { Ornament } from "@/components/core/router";
 
 function MyApp() {
   return (
@@ -81,7 +81,7 @@ function MyApp() {
 The Stack navigator provides hierarchical navigation with headers:
 
 ```tsx
-import { Stack } from "@/components/core/v2/router";
+import { Stack } from "@/components/core/router";
 
 function PhotosStack() {
   return (
@@ -211,7 +211,7 @@ type StackScreenProps = {
 Access navigation functions and state:
 
 ```tsx
-import { useRouter } from "@/components/core/v2/router";
+import { useRouter } from "@/components/core/router";
 
 function MyComponent() {
   const { navigate, goBack, currentPath, history } = useRouter();
@@ -369,28 +369,3 @@ Automatic Vision OS-style window controls:
   {/* Stack content */}
 </Stack>
 ```
-
-### Spatial Design
-
-The router is designed with spatial computing in mind:
-
-- Floating ornaments that maintain position
-- Smooth transitions between screens
-- Glass material effects
-- Proper z-index layering
-
-## Best Practices
-
-1. **Route Organization**: Use descriptive route names and organize them logically
-2. **Component Separation**: Keep screen components separate from navigation logic
-3. **Type Safety**: Use TypeScript for better development experience
-4. **Accessibility**: Ensure proper ARIA labels and keyboard navigation
-5. **Performance**: Lazy load components when possible
-
-## Examples
-
-See the following examples for complete implementations:
-
-- [Basic Navigation](/example) - Simple Ornament and Stack usage
-- [Nested Navigation](/example/photos) - Complex navigation patterns
-- [Dynamic Routes](/example/photos/[id]) - Parameter-based routing

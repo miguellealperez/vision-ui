@@ -19,6 +19,7 @@ export const ComponentWrapper = ({
         'flex w-full items-center justify-center rounded-[8px] p-8',
         className
       )}
+      data-vision-os-ui
       {...props}
     >
       {children}

@@ -1,6 +1,5 @@
 import './global.css'
 
-import { RootProvider } from 'fumadocs-ui/provider'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import type { ReactNode } from 'react'
@@ -20,24 +19,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <ReactScan />
-      <body
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: '100dvh',
-        }}
-      >
-        <RootProvider
-          theme={{
-            themes: ['dark'],
-            defaultTheme: 'dark',
-            enableColorScheme: false,
-            enableSystem: false,
-          }}
-        >
-          {children}
-        </RootProvider>
-      </body>
+      <body className="flex min-h-screen flex-col">{children}</body>
     </html>
   )
 }

@@ -1,7 +1,7 @@
 import { Slot } from '@radix-ui/react-slot'
 import React from 'react'
 import { cn } from '@/lib/utils'
-import View, { type ViewProps } from './view'
+import { View, type ViewProps } from './view'
 
 interface HoverableProps extends ViewProps {
   asChild?: boolean

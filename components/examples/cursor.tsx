@@ -1,11 +1,11 @@
 import { ALargeSmall, ListOrdered, Redo2, Undo2 } from 'lucide-react'
+import { Material } from '@/components/core'
 import { Button, ButtonGroup } from '@/components/core/button'
-import { Window } from '@/components/core/window'
 import { Separator } from '@/components/ui/separator'
 
 export const WithButtonGroup = () => {
   return (
-    <Window>
+    <Material>
       <ButtonGroup>
         <Button variant="secondary" size="icon">
           <Undo2 data-slot="icon" />
@@ -21,6 +21,6 @@ export const WithButtonGroup = () => {
           <ListOrdered data-slot="icon" />
         </Button>
       </ButtonGroup>
-    </Window>
+    </Material>
   )
 }

@@ -5,15 +5,10 @@ import Link from 'next/link'
 import { FlashList, type FlashListRenderItem } from '@/components/core'
 import { Text } from '@/components/core/text'
 
-const data = Array.from({ length: 24 }).map((_, i) => ({
-  id: String(i),
-  title: `Item ${i + 1}`,
-}))
-
-export default function DemoFlashlist() {
+export default function List({ data }: { data: { id: string; title: string }[] }) {
   const renderItem: FlashListRenderItem<{ id: string; title: string }> = ({ item }) => (
     <Link
-      href={`#item-${item.id}`}
+      href={`/v2-demo/${item.id}`}
       className="mb-4 flex justify-between rounded-lg bg-white/10 px-3 py-2 *:pointer-events-none"
     >
       <Text>{item.title}</Text>
@@ -22,13 +17,13 @@ export default function DemoFlashlist() {
   )
   return (
     <FlashList
-      data={data ?? []}
+      data={data}
       onEndReached={() => {
         console.log('onEndReached')
       }}
       ListHeaderComponent={<Text>Header</Text>}
       ListFooterComponent={<Text>Footer</Text>}
-      className="px-6"
+      className="px-12"
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
     />

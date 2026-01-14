@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from 'react'
 
 const CONSTANTS = {
   TEXT_ELEMENT_TAGS: ['P', 'SPAN', 'H1', 'H2', 'H3', 'H4', 'TEXTAREA'],
-  HOVER_ELEMENT_TAGS: ['BUTTON', 'A', 'LABEL', 'SELECT'],
+  HOVER_ELEMENT_TAGS: ['BUTTON'],
   HOVERABLE_CLASSNAME: 'vision-pro-ui-hoverable', // No translate X or Y
   CURSOR_SPRING_CONFIG: { stiffness: 90, damping: 2, mass: 0.01 },
   DEFAULT_SPRING_CONFIG: { stiffness: 90, damping: 8, mass: 0.2 },

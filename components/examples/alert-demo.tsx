@@ -1,9 +1,9 @@
 'use client'
 
-import { Alert, AlertProvider } from '@/components/core/v2/alert'
-import { Button } from '@/components/core/v2/button'
-import { Text } from '@/components/core/v2/text'
-import { View } from '@/components/core/v2/view'
+import { Alert, AlertProvider } from '@/components/core/alert'
+import { Button } from '@/components/core/button'
+import { Text } from '@/components/core/text'
+import { View } from '@/components/core/view'
 
 // Demo component that uses the Alert system
 export function AlertDemoContent() {

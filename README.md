@@ -3,9 +3,8 @@
 # Vision UI
 
 > [!IMPORTANT]
-> 🎉 <strong>VisionUI 26 is coming soon!</strong> Star this repo or keep an eye on it to follow along.
+> 🎉 <strong>VisionUI 26 is here!</strong> Check out the [demo](https://vision.uing.dev) and [documentation](https://vision.uing.dev/docs).
 
-See the VisionUI 26 Announcement [here](#visionui-26-updates)
 
 ## What is Vision UI?
 
@@ -24,25 +23,6 @@ It uses most of the components from [shadcn/ui](https://ui.shadcn.com/) for the 
 ### TL;DR
 
 VisionUI 26 is a complete rewrite of Vision UI. By merging the Vision OS UI with Next.js layout, we have improved navigation, components, and performance, while also making it more accessible.
-
-You can checkout the WIP demo [here](https://vision.uing.dev/vision-ui-26)
-
-![Alert](https://github.com/user-attachments/assets/c1b349db-cef2-406d-a788-e36a08f9d128)
-
-- [ ] More primitive & React-Native-styled components
-  - [x] Alert API
-  - [x] Sidebar
-  - [x] Stack
-  - [x] Ornament
-  - [x] Button
-  - [x] Dropdown Menu
-  - [x] Grid List
-- [x] Better navigation using Next JS layout as wrapper for `ornament`, `sidebar` components.
-- [x] Improve performance
-  - [x] Clean up unessessary divs
-  - [x] Better component refactoring
-- [ ] Sound effects
-
 
 ## Demo Video
 

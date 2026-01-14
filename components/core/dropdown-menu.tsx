@@ -1,20 +1,14 @@
 'use client'
 
 import type { DropdownMenuContentProps, DropdownMenuProps } from '@radix-ui/react-dropdown-menu'
-import * as RadixDropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
+import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
 import { AnimatePresence } from 'motion/react'
-import React, { createContext, useContext, useEffect, useState } from 'react'
-import {
-  DropdownMenuContent as DropdownMenuContentPrimitive,
-  DropdownMenuLabel,
-  DropdownMenu as DropdownMenuPrimitive,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger as DropdownMenuTriggerPrimitive,
-} from '@/components/ui/dropdown-menu'
+import type React from 'react'
+import { createContext, useContext, useState } from 'react'
+
 import { cn } from '@/lib/utils'
-import { Button, type ButtonProps } from '../core/button'
-import { textVariants } from '../ui/typography'
-import { Window } from './window'
+import { Button, type ButtonProps } from './button'
+import { MotionView } from './view'
 
 const DropdownMenuContext = createContext<{
   isOpen: boolean
@@ -35,25 +29,15 @@ export function useDropdownMenu() {
 const DropdownMenuTrigger = ({ children, ...props }: ButtonProps) => {
   const { isOpen } = useDropdownMenu()
   return (
-    <DropdownMenuTriggerPrimitive {...props} asChild>
+    <DropdownMenuPrimitive.Trigger {...props} asChild>
       <Button variant={isOpen ? 'selected' : props.variant}>{children}</Button>
-    </DropdownMenuTriggerPrimitive>
+    </DropdownMenuPrimitive.Trigger>
   )
 }
 
 const DropdownMenu = ({ children, ...props }: DropdownMenuProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isMouseDown, setIsMouseDown] = useState(false)
-  useEffect(() => {
-    // add data-vision-os-ui to html
-    if (isOpen) {
-      document.documentElement.setAttribute('data-vision-os-ui', 'true')
-    } else {
-      setTimeout(() => {
-        document.documentElement.removeAttribute('data-vision-os-ui')
-      }, 800)
-    }
-  }, [isOpen])
   return (
     <DropdownMenuContext.Provider
       value={{
@@ -63,14 +47,12 @@ const DropdownMenu = ({ children, ...props }: DropdownMenuProps) => {
         setIsMouseDown,
       }}
     >
-      <DropdownMenuPrimitive open={isOpen} onOpenChange={setIsOpen} {...props}>
+      <DropdownMenuPrimitive.Root open={isOpen} onOpenChange={setIsOpen} {...props}>
         {children}
-      </DropdownMenuPrimitive>
+      </DropdownMenuPrimitive.Root>
     </DropdownMenuContext.Provider>
   )
 }
-
-DropdownMenu.displayName = 'DropdownMenu'
 
 const DropdownMenuContent = ({
   children,
@@ -80,52 +62,57 @@ const DropdownMenuContent = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <DropdownMenuContentPrimitive forceMount asChild {...props}>
-          <Window
-            key="dropdown-menu-content"
-            className="flex min-w-[200px] flex-col gap-2 p-4"
-            initial={{
-              opacity: 0,
-              scale: 0.65,
-              y: -30,
-            }}
-            animate={{
-              opacity: 1,
-              scale: isMouseDown ? 0.95 : 1,
-              y: 0,
-            }}
-            exit={{
-              opacity: 0,
-              scale: 0.65,
-              y: -30,
-            }}
-            transition={{
-              type: 'spring',
-              stiffness: 250,
-              damping: 22,
-            }}
-          >
-            {children}
-          </Window>
-        </DropdownMenuContentPrimitive>
+        <DropdownMenuPrimitive.Portal forceMount>
+          <DropdownMenuPrimitive.Content forceMount asChild data-vision-os-ui {...props}>
+            <MotionView
+              material
+              key="dropdown-menu-content"
+              className="flex min-w-[200px] flex-col gap-2 p-4"
+              initial={{
+                opacity: 0,
+                scale: 0.65,
+                y: props.side === 'top' ? 30 : -30,
+              }}
+              animate={{
+                opacity: 1,
+                scale: isMouseDown ? 0.95 : 1,
+                y: 0,
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0.65,
+                y: props.side === 'top' ? 30 : -30,
+              }}
+              transition={{
+                type: 'spring',
+                stiffness: 250,
+                damping: 22,
+              }}
+            >
+              {children}
+            </MotionView>
+          </DropdownMenuPrimitive.Content>
+        </DropdownMenuPrimitive.Portal>
       )}
     </AnimatePresence>
   )
 }
 
-DropdownMenuContent.displayName = 'DropdownMenuContent'
-
-const DropdownMenuItem = React.forwardRef<
-  React.ElementRef<typeof RadixDropdownMenuPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof RadixDropdownMenuPrimitive.Item> & {
-    inset?: boolean
-    variant?: 'secondary' | 'destructive'
-  }
->(({ inset, className, children, variant, onMouseDown, onMouseUp, ...props }, ref) => {
+const DropdownMenuItem = ({
+  inset,
+  className,
+  children,
+  variant,
+  onMouseDown,
+  onMouseUp,
+  ...props
+}: Omit<DropdownMenuPrimitive.DropdownMenuItemProps, 'asChild'> & {
+  inset?: boolean
+  variant?: 'secondary' | 'destructive'
+}) => {
   const { setIsMouseDown, setIsOpen } = useDropdownMenu()
   return (
-    <RadixDropdownMenuPrimitive.Item
-      ref={ref}
+    <DropdownMenuPrimitive.Item
       onMouseDown={(e) => {
         setIsMouseDown(true)
         onMouseDown?.(e)
@@ -145,14 +132,13 @@ const DropdownMenuItem = React.forwardRef<
     >
       <Button
         variant={variant ?? 'secondary'}
-        size="list"
+        size="default"
         className={cn(
           //TODO: hover causing focus-visiable to trigger
           'focus-visible:ring-0 focus-visible:ring-offset-0',
           'w-full justify-start rounded-[16px] before:rounded-[16px]',
           'flex justify-between gap-2',
           "[&_[data-slot='icon']]:ml-2",
-          textVariants({ size: 'body' }),
           inset && 'pl-8',
           className
         )}
@@ -160,16 +146,8 @@ const DropdownMenuItem = React.forwardRef<
       >
         {children}
       </Button>
-    </RadixDropdownMenuPrimitive.Item>
+    </DropdownMenuPrimitive.Item>
   )
-})
-
-DropdownMenuItem.displayName = 'DropdownMenuItem'
-export {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
 }
+
+export { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger }

@@ -39,7 +39,20 @@
       },
       "a11y": "off",
       "nursery": {
-        "useSortedClasses": "error"
+        "useSortedClasses": {
+          "level": "warn",
+          "fix": "safe",
+          "options": {
+            "attributes": [
+              "classList"
+            ],
+            "functions": [
+              "clsx",
+              "cva",
+              "cn"
+            ]
+          }
+        }
       }
     },
     "domains": {

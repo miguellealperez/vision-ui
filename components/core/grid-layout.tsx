@@ -1,736 +1,445 @@
 'use client'
 
-import { useAtomValue } from 'jotai'
-import {
-  animate,
-  type MotionProps,
-  type MotionValue,
-  motion,
-  useMotionValue,
-  useMotionValueEvent,
-  useTransform,
-} from 'motion/react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import type React from 'react'
-import { createContext, type ReactNode, useContext, useEffect, useRef, useState } from 'react'
-import { useIsMounted } from '@/hooks/use-is-mounted'
-import useWindowSize from '@/hooks/use-window-size'
-import { debugModeAtom } from '@/lib/atoms'
-import { cn } from '@/lib/utils'
-import { Window } from './window'
+import { animate, type MotionValue, motion, useMotionValue, useTransform } from 'framer-motion'
+import { useEffect, useState } from 'react'
 
-// ------------------------------------------------------------------
-// 1. CONTEXT SETUP
-// ------------------------------------------------------------------
+// --- TYPE DEFINITIONS ---
 
-/** The shape of the data we'll put in context */
-interface HoneycombContextValue {
-  debug: boolean
+/**
+ * Basic constraint for items passed to the layout.
+ * They must have a unique 'id'.
+ */
+interface ItemT {
+  id: string | number
+}
+
+/**
+ * Information object passed to the `renderCell` function.
+ */
+export interface ListRenderItemInfo<T> {
+  /** The item from the `items` array. */
+  item: T
+  /** True if the cell is currently being pressed down. */
+  isTapping: boolean
+  /** The row index of the cell. */
+  rowIndex: number
+  /** The column index of the cell. */
+  colIndex: number
+}
+
+/**
+ * Props for the main GridList component.
+ */
+interface GridListProps<T extends ItemT> {
+  /** An array of data items to render. */
+  items: T[]
+  /**
+   * A function that returns a React element to render for a given item.
+   * @param info - An object containing the item, index, and interaction states.
+   * @returns A React.ReactNode to display.
+   */
+  renderCell: (info: ListRenderItemInfo<T>) => React.ReactNode
+  /**
+   * The diameter of each cell in pixels.
+   * @default 100
+   */
+  itemSize?: number
+  /**
+   * The space between each cell in pixels.
+   * @default 48
+   */
+  gutter?: number
+  /**
+   * The vertical spacing factor between rows.
+   * @default 1.4
+   */
+  verticalSpacing?: number
+}
+
+// --- HOOKS and HELPERS ---
+
+const useWindowSize = () => {
+  const [size, setSize] = useState({ width: 0, height: 0 })
+  useEffect(() => {
+    const updateSize = () => {
+      setSize({ width: window.innerWidth, height: window.innerHeight })
+    }
+    window.addEventListener('resize', updateSize)
+    updateSize()
+    return () => window.removeEventListener('resize', updateSize)
+  }, [])
+  return size
+}
+
+const getCellLayoutProps = (
+  index: number,
+  itemsPerPage: number,
+  topBottomRowCols: number,
+  middleRowCols: number
+) => {
+  const pageIndex = Math.floor(index / itemsPerPage)
+  const indexInPage = index % itemsPerPage
+
+  let rowIndex: number, colIndex: number
+
+  if (indexInPage < topBottomRowCols) {
+    // Top Row
+    rowIndex = 0
+    colIndex = indexInPage
+  } else if (indexInPage < topBottomRowCols + middleRowCols) {
+    // Middle Row
+    rowIndex = 1
+    colIndex = indexInPage - topBottomRowCols
+  } else {
+    // Bottom Row
+    rowIndex = 2
+    colIndex = indexInPage - topBottomRowCols - middleRowCols
+  }
+
+  return { pageIndex, rowIndex, colIndex }
+}
+
+const getAttractionEffect = (
+  index: number,
+  tappingIndex: number | null,
+  itemsPerPage: number,
+  topBottomRowCols: number,
+  middleRowCols: number
+) => {
+  if (tappingIndex === null || index === tappingIndex) {
+    return { isAffected: false, intensity: 0, shiftX: 0, shiftY: 0 }
+  }
+
+  const props = getCellLayoutProps(index, itemsPerPage, topBottomRowCols, middleRowCols)
+  const tappedProps = getCellLayoutProps(
+    tappingIndex,
+    itemsPerPage,
+    topBottomRowCols,
+    middleRowCols
+  )
+
+  // Only affect cells on the same page
+  if (props.pageIndex !== tappedProps.pageIndex) {
+    return { isAffected: false, intensity: 0, shiftX: 0, shiftY: 0 }
+  }
+
+  // Calculate distance between cells
+  const deltaX = tappedProps.colIndex - props.colIndex
+  const deltaY = tappedProps.rowIndex - props.rowIndex
+  const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+
+  // Maximum distance to consider (adjust this to control the effect radius)
+  const maxDistance = 3
+  if (distance > maxDistance || distance === 0) {
+    return { isAffected: false, intensity: 0, shiftX: 0, shiftY: 0 }
+  }
+
+  // Calculate intensity based on distance (closer = stronger effect)
+  const intensity = Math.max(0, 1 - distance / maxDistance)
+
+  // Calculate shift direction and amount
+  const maxShift = 10 // Maximum shift in pixels
+  const shiftAmount = intensity * maxShift
+
+  const shiftX = distance > 0 ? (deltaX / distance) * shiftAmount : 0
+  const shiftY = distance > 0 ? (deltaY / distance) * shiftAmount : 0
+
+  return { isAffected: true, intensity, shiftX, shiftY }
+}
+
+// --- COMPONENTS ---
+
+interface PageIndicatorProps {
+  pageIndex: number
   scrollX: MotionValue<number>
   pageWidth: number
+}
+
+const PageIndicator = ({ pageIndex, scrollX, pageWidth }: PageIndicatorProps) => {
+  const pageProgress = useTransform(scrollX, (value) => {
+    const distance = Math.abs(pageIndex + value / pageWidth)
+    return Math.max(1 - distance * 0.5, 0.4)
+  })
+  return <motion.div className="h-2 w-2 rounded-full bg-white" style={{ opacity: pageProgress }} />
+}
+
+interface PagerCellProps<T extends ItemT> {
+  item: T
+  index: number
+  pageIndex: number // Added to determine if it's the first page
+  renderCell: (info: ListRenderItemInfo<T>) => React.ReactNode
+  rowIndex: number
+  colIndex: number
+  itemsPerPage: number
+  topBottomRowCols: number
+  middleRowCols: number
   itemSize: number
-  labelSize: number
   gutter: number
   verticalSpacing: number
-  /**
-   * Used for exit transition when clicking on a href
-   */
-  animateOverwrite: boolean
-  setAnimateOverwrite: (value: boolean) => void
+  scrollX: MotionValue<number>
+  pageWidth: number
+  pageOffset: number
+  tappingIndex: number | null
+  setTappingIndex: (index: number | null) => void
 }
 
-/** Create the context object (and a safe hook to consume it). */
-const HoneycombContext = createContext<HoneycombContextValue | undefined>(undefined)
+const PagerCell = <T extends ItemT>({
+  item,
+  index,
+  pageIndex,
+  renderCell,
+  rowIndex,
+  colIndex,
+  itemsPerPage,
+  topBottomRowCols,
+  middleRowCols,
+  itemSize,
+  gutter,
+  verticalSpacing,
+  scrollX,
+  pageWidth,
+  pageOffset,
+  tappingIndex,
+  setTappingIndex,
+}: PagerCellProps<T>) => {
+  const isFirstPage = pageIndex === 0
+  const isTapping = tappingIndex === index
+  const attractionEffect = getAttractionEffect(
+    index,
+    tappingIndex,
+    itemsPerPage,
+    topBottomRowCols,
+    middleRowCols
+  )
 
-function useHoneycombContext() {
-  const value = useContext(HoneycombContext)
-  if (!value) {
-    throw new Error('useHoneycombContext must be used within a HoneycombProvider.')
-  }
-  return value
+  const cellX =
+    rowIndex !== 1
+      ? colIndex * (itemSize + gutter) + (itemSize + gutter) / 2
+      : colIndex * (itemSize + gutter)
+  const cellY = rowIndex * (itemSize * verticalSpacing)
+
+  const centerCol = Math.floor(middleRowCols / 2)
+  const distance = Math.abs(rowIndex - 1) + Math.abs(colIndex - centerCol)
+  const revealDelay = isFirstPage ? 0.1 + distance * 0.08 : 0
+
+  // Calculate center position for initial animation
+  const centerX = ((middleRowCols - 1) * (itemSize + gutter)) / 2
+  const centerY = itemSize * verticalSpacing // Middle row Y position
+
+  const middleRowParallax = useTransform(
+    scrollX,
+    [-pageOffset - pageWidth, -pageOffset, -pageOffset + pageWidth],
+    [-itemSize * 1.5, 0, itemSize * 1.5]
+  )
+
+  const cellAbsoluteX = pageOffset + cellX
+  const cellScreenX = useTransform(scrollX, (value) => value + cellAbsoluteX)
+  const inputRange = [-itemSize, 0, pageWidth - itemSize, pageWidth]
+  const scrollScale = useTransform(cellScreenX, inputRange, [0.6, 1, 1, 0.6], { clamp: true })
+  const scrollOpacity = useTransform(cellScreenX, inputRange, [0, 1, 1, 0], { clamp: true })
+  const scrollFilter = useTransform(
+    cellScreenX,
+    inputRange,
+    ['blur(16px)', 'blur(0px)', 'blur(0px)', 'blur(16px)'],
+    { clamp: true }
+  )
+
+  return (
+    <motion.div
+      layout
+      style={{
+        position: 'absolute',
+        left: cellX,
+        top: cellY,
+        width: itemSize,
+        height: itemSize,
+        x: rowIndex === 1 ? middleRowParallax : 0,
+        scale: scrollScale,
+        opacity: scrollOpacity,
+        filter: scrollFilter,
+      }}
+      initial={
+        isFirstPage
+          ? {
+              x: (centerX - cellX) * 0.5,
+              y: (centerY - cellY) * 0.5,
+              opacity: 0,
+              scale: 0.5,
+            }
+          : undefined
+      }
+      animate={
+        isFirstPage
+          ? {
+              x: 0,
+              y: 0,
+              opacity: 1,
+              scale: 1,
+            }
+          : undefined
+      }
+      transition={{ type: 'spring', damping: 18, stiffness: 90, delay: revealDelay }}
+      onMouseDown={() => setTappingIndex(index)}
+      onMouseUp={() => setTappingIndex(null)}
+      onMouseLeave={() => setTappingIndex(null)}
+    >
+      <motion.div
+        className="h-full w-full"
+        animate={{
+          scale: isTapping ? 0.9 : attractionEffect.isAffected ? 0.98 : 1,
+          x: attractionEffect.shiftX,
+          y: attractionEffect.shiftY,
+        }}
+        transition={{ type: 'spring', bounce: 0 }}
+      >
+        {renderCell({
+          item,
+          rowIndex,
+          colIndex,
+          isTapping,
+        })}
+      </motion.div>
+    </motion.div>
+  )
 }
 
-/** Wrap children in this provider once at the top of your layout. */
-function HoneycombProvider({
-  value,
-  children,
-}: {
-  value: HoneycombContextValue
-  children: ReactNode
-}) {
-  return <HoneycombContext.Provider value={value}>{children}</HoneycombContext.Provider>
+interface PagerProps<T extends ItemT> {
+  items: T[]
+  pageIndex: number
+  renderCell: (info: ListRenderItemInfo<T>) => React.ReactNode
+  itemSize: number
+  gutter: number
+  verticalSpacing: number
+  scrollX: MotionValue<number>
+  pageWidth: number
+  itemsPerPage: number
+  topBottomRowCols: number
+  middleRowCols: number
+  tappingIndex: number | null
+  setTappingIndex: (index: number | null) => void
 }
 
-// ------------------------------------------------------------------
-// 2. MAIN HONEYCOMB LAYOUT
-// ------------------------------------------------------------------
+const Pager = <T extends ItemT>(props: PagerProps<T>) => {
+  const { items, pageIndex, itemsPerPage, topBottomRowCols, middleRowCols } = props
+  const pageOffset = pageIndex * props.pageWidth
 
-export interface HoneycombItem extends MotionProps {
-  id: string
-  label: string
-  icon: React.ReactNode
-  background?: React.ReactNode
-  href?: string
-  debug?: boolean
-  onClick?: () => void
+  return (
+    <div className="absolute top-0 h-full" style={{ left: pageOffset, width: props.pageWidth }}>
+      {items.map((item, i) => {
+        const overallIndex = pageIndex * itemsPerPage + i
+        const { rowIndex, colIndex } = getCellLayoutProps(
+          overallIndex,
+          itemsPerPage,
+          topBottomRowCols,
+          middleRowCols
+        )
+
+        return (
+          <PagerCell
+            key={item.id}
+            {...{
+              ...props,
+              item,
+              index: overallIndex,
+              pageIndex,
+              rowIndex,
+              colIndex,
+              pageOffset,
+            }}
+          />
+        )
+      })}
+    </div>
+  )
 }
 
-interface HoneycombLayoutProps {
-  items: HoneycombItem[]
-}
+export const GridList = <T extends ItemT>({
+  items,
+  renderCell,
+  itemSize = 100,
+  gutter = 48,
+  verticalSpacing = 1.4,
+}: GridListProps<T>) => {
+  const { width } = useWindowSize()
+  const scrollX = useMotionValue(0)
+  const [tappingIndex, setTappingIndex] = useState<number | null>(null)
+  const [isLayoutReady, setIsLayoutReady] = useState(false)
 
-// Some sizing constants
-const ITEM_SIZE = 96 // icon diameter
-const LABEL_SIZE = 28
-const GUTTER = 48
-const PAGE_GUTTER = ITEM_SIZE * 2 + GUTTER // spacing between pages
-const MAX_CONTAINER_WIDTH = 1024 - PAGE_GUTTER
-const ORNAMENT_WIDTH = 68 + 16 * 2 + 1 * 16 // example offset
-const GRID_VERTICAL_SPACING_FACTOR = {
-  condensed: 0.9,
-  default: 1.4,
-}
+  const middleRowCols =
+    width > 0 ? Math.max(3, Math.min(Math.floor((width * 0.8) / (itemSize + gutter)), 5)) : 3
+  const topBottomRowCols = middleRowCols - 1
+  const itemsPerPage = topBottomRowCols + middleRowCols + topBottomRowCols
 
-const DEBUG_CLASSNAMES = [
-  'after:absolute',
-  'after:left-0',
-  'after:top-0',
-  'after:z-40',
-  'after:text-xs',
-  'after:p-2',
-  'after:shadow-md',
-  'after:tabular-nums',
-  'outline',
-]
+  const pageWidth = middleRowCols * (itemSize + gutter) - gutter
+  const totalHeight = itemSize * 2 * verticalSpacing + itemSize
 
-export function HoneycombLayout({ items }: HoneycombLayoutProps) {
-  const [animateOverwrite, setAnimateOverwrite] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const innerRef = useRef<HTMLDivElement>(null)
-
-  const DEBUG = useAtomValue(debugModeAtom)
-  const { width = 600, height = 600 } = useWindowSize()
-
-  // Motion values
-  const x = useMotionValue(0)
-
-  // Filter items based on debug mode
-  const filteredItems = items.filter((item) => {
-    if (DEBUG) return true
-    return !item.debug
-  })
-
-  // Condensed or normal spacing based on window size
-  const isCondensedWidth = width <= 896
-  const isCondensedHeight = height <= 460
-  const verticalSpacing = isCondensedHeight
-    ? GRID_VERTICAL_SPACING_FACTOR.condensed
-    : GRID_VERTICAL_SPACING_FACTOR.default
-
-  // Container width
-  let containerWidth = Math.min(width, MAX_CONTAINER_WIDTH)
-  if (isCondensedWidth) {
-    containerWidth = containerWidth - ORNAMENT_WIDTH
-  }
-
-  // Limit the number of columns
-  const maxCols = Math.min(Math.floor((containerWidth - ITEM_SIZE) / (ITEM_SIZE + GUTTER)), 4)
-  // items per page (3 rows with an extra middle cell => maxCols*3 + 1)
-  const itemsPerPage = maxCols * 3 + 1
-
-  // Break items into pages
-  const pages: HoneycombItem[][] = []
-  for (let i = 0; i < filteredItems.length; i += itemsPerPage) {
-    pages.push(filteredItems.slice(i, i + itemsPerPage))
-  }
-
-  // Calculate actual page width
-  const rawPageWidth = maxCols * (ITEM_SIZE + GUTTER) + PAGE_GUTTER
-  // "padding" keeps pages from overshooting container width
-  const padding = Math.max(0, containerWidth - rawPageWidth - ITEM_SIZE + PAGE_GUTTER)
-  const pageWidth = rawPageWidth - padding
-
-  // Debug logging when x changes
-  useMotionValueEvent(x, 'change', (latest) => {
-    if (DEBUG && containerRef.current) {
-      containerRef.current.setAttribute(
-        'data-debug',
-        `View(${containerWidth}px) • ${Math.round(latest)}px`
-      )
-    }
-  })
-
-  function onDragEnd() {
-    const currentX = x.get()
-    const rawPageIndex = -currentX / pageWidth
-    const nearestPage = Math.round(rawPageIndex)
-    const clampedPage = Math.max(0, Math.min(nearestPage, pages.length - 1))
-    const finalX = -clampedPage * pageWidth
-    // Animate to final
-    animate(x, finalX, { type: 'spring', stiffness: 90, damping: 18 })
-  }
-
-  // Reset x on unmount
   useEffect(() => {
-    return () => x.set(0)
-  }, [x])
+    if (width > 0) {
+      setIsLayoutReady(true)
+    }
+  }, [width])
 
-  const providerValue: HoneycombContextValue = {
-    debug: DEBUG,
-    scrollX: x,
-    pageWidth,
-    itemSize: ITEM_SIZE,
-    labelSize: LABEL_SIZE,
-    gutter: GUTTER,
-    verticalSpacing,
-    animateOverwrite,
-    setAnimateOverwrite,
+  const pages: T[][] = []
+  for (let i = 0; i < items.length; i += itemsPerPage) {
+    pages.push(items.slice(i, i + itemsPerPage))
+  }
+
+  const onDragEnd = (event: any, info: { velocity: { x: number } }) => {
+    const velocity = info.velocity.x
+    const currentPage = -scrollX.get() / pageWidth
+    let targetPage =
+      Math.abs(velocity) > 300
+        ? velocity > 0
+          ? Math.floor(currentPage)
+          : Math.ceil(currentPage)
+        : Math.round(currentPage)
+
+    targetPage = Math.max(0, Math.min(pages.length - 1, targetPage))
+    animate(scrollX, -targetPage * pageWidth, { type: 'spring', damping: 25, stiffness: 200 })
   }
 
   return (
     <div
-      ref={containerRef}
-      style={{
-        width: containerWidth,
-        height: (ITEM_SIZE + LABEL_SIZE) * 3 + GUTTER * verticalSpacing,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        overflow: 'visible',
-        position: 'relative',
-        paddingLeft: padding / 2,
-        paddingRight: padding / 2,
-      }}
-      data-debug={`View(${containerWidth}px) • 0px`}
-      className={cn(
-        DEBUG && [
-          ...DEBUG_CLASSNAMES,
-          'outline-yellow-500',
-          'after:content-[attr(data-debug)]',
-          'after:absolute after:top-0 after:left-0 after:z-40',
-          'after:bg-yellow-500 after:p-2 after:text-xs after:text-yellow-900',
-        ]
-      )}
-      role="region"
-      aria-label="Interactive grid layout"
+      className="relative flex h-max w-full items-center justify-center"
+      onMouseUp={() => setTappingIndex(null)}
     >
-      <motion.div
-        ref={innerRef}
-        drag="x"
-        dragConstraints={{
-          left: Math.min(-pageWidth * (pages.length - 1), 0),
-          right: 0,
-        }}
-        dragElastic={0.25}
-        onDragEnd={onDragEnd}
-        data-debug={`Drag Constraints • Left: ${Math.min(
-          -pageWidth * (pages.length - 1),
-          0
-        )}px, Right: 0px • padding: ${padding}px`}
-        className={cn(
-          'relative h-full',
-          DEBUG && [
-            ...DEBUG_CLASSNAMES,
-            'outline-sky-500',
-            'after:content-[attr(data-debug)]',
-            'after:absolute after:top-[2rem] after:left-0 after:z-[41]',
-            'after:bg-sky-500 after:p-2 after:text-sky-950 after:text-xs',
-          ]
-        )}
-        style={{
-          x,
-          touchAction: 'none',
-          userSelect: 'none',
-        }}
-        aria-roledescription="Draggable grid"
-      >
-        <HoneycombProvider value={providerValue}>
-          {pages.map((pageItems, pageIndex) => {
-            const pageOffset = pageIndex * pageWidth
-            return (
-              <PageContent
-                key={`page-${pageIndex}`}
-                pageItems={pageItems}
-                pageIndex={pageIndex}
-                pageOffset={pageOffset}
+      <div className="relative" style={{ width: pageWidth, height: totalHeight }}>
+        <motion.div
+          className="relative flex h-full"
+          style={{ x: scrollX, width: pages.length * pageWidth }}
+          drag="x"
+          dragConstraints={{ left: -(pages.length - 1) * pageWidth, right: 0 }}
+          dragTransition={{ bounceStiffness: 600, bounceDamping: 80 }}
+          onDragEnd={onDragEnd}
+        >
+          {isLayoutReady &&
+            pages.map((pageItems, i) => (
+              <Pager
+                key={`page-${i}`}
+                pageIndex={i}
+                items={pageItems}
+                renderCell={renderCell}
+                itemSize={itemSize}
+                gutter={gutter}
+                verticalSpacing={verticalSpacing}
+                scrollX={scrollX}
+                pageWidth={pageWidth}
+                itemsPerPage={itemsPerPage}
+                topBottomRowCols={topBottomRowCols}
+                middleRowCols={middleRowCols}
+                tappingIndex={tappingIndex}
+                setTappingIndex={setTappingIndex}
               />
-            )
-          })}
-        </HoneycombProvider>
-      </motion.div>
-      {pages.length > 1 && (
-        <div className="sr-only">
-          This grid can be navigated by dragging left or right. Use tab key to navigate between
-          items.
+            ))}
+        </motion.div>
+      </div>
+      {isLayoutReady && pages.length > 1 && (
+        <div className="-translate-x-1/2 -bottom-12 absolute left-1/2 flex space-x-2">
+          {pages.map((_, i) => (
+            <PageIndicator key={i} pageIndex={i} scrollX={scrollX} pageWidth={pageWidth} />
+          ))}
         </div>
       )}
     </div>
   )
 }
-
-// ------------------------------------------------------------------
-// 3. PAGE (contains 3 rows of HoneycombCell)
-// ------------------------------------------------------------------
-
-const pageVariants = {
-  hidden: {
-    scale: 0.93,
-  },
-  visible: {
-    scale: 1,
-    transition: {
-      delay: 0.2,
-      type: 'spring',
-      stiffness: 80,
-      damping: 18,
-      mass: 1.2,
-    },
-  },
-  zoomOut: {
-    scale: 1.08,
-  },
-} as const
-
-function PageContent({
-  pageItems,
-  pageIndex,
-  pageOffset,
-}: {
-  pageItems: HoneycombItem[]
-  pageIndex: number
-  pageOffset: number
-}) {
-  const isMounted = useIsMounted()
-  const [show, setShow] = useState(false)
-  const { debug, pageWidth, itemSize, gutter, animateOverwrite } = useHoneycombContext()
-
-  // We figure out how many columns we can have by seeing how many fits into a single page
-  // For consistency, we re-derive it from (pageWidth - PAGE_GUTTER) / (itemSize+gutter) or so.
-  // Or you might pass `maxCols` in context if that's simpler.
-  // For brevity, let's just guess 4 columns from the original logic:
-  const maxCols = Math.min(Math.floor((pageWidth - 96) / (itemSize + gutter)), 4)
-
-  useEffect(() => {
-    if (isMounted()) setShow(true)
-  }, [isMounted])
-
-  if (!show) return null
-
-  return (
-    <motion.div
-      key={pageIndex}
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: pageOffset,
-        width: pageWidth,
-        height: '100%',
-      }}
-      variants={pageVariants}
-      initial="hidden"
-      animate="visible"
-      exit={animateOverwrite ? 'zoomOut' : 'hidden'}
-      transition={{
-        duration: 1,
-        type: 'spring',
-        bounce: 0,
-      }}
-      data-debug={`Page ${pageIndex}: ${pageWidth}px`}
-      className={cn(
-        debug && [
-          ...DEBUG_CLASSNAMES,
-          'outline-green-500',
-          'after:content-[attr(data-debug)]',
-          'after:absolute after:top-[-2rem] after:left-0',
-          'after:bg-green-500 after:p-2 after:text-green-900 after:text-xs',
-        ]
-      )}
-      role="group"
-      aria-label={`Page ${pageIndex + 1}`}
-    >
-      <motion.ul
-        style={{
-          position: 'relative',
-          width: '100%',
-          height: '100%',
-        }}
-        aria-label={`Grid items on page ${pageIndex + 1}`}
-      >
-        {pageItems.map((item, i) => {
-          // Row-col math
-          let row: number
-          let col: number
-          if (i < maxCols) {
-            row = 0
-            col = i
-          } else if (i < maxCols * 2 + 1) {
-            row = 1
-            col = i - maxCols
-          } else {
-            row = 2
-            col = i - maxCols * 2 - 1
-          }
-
-          return (
-            <HoneycombCell
-              key={`${item.id}-${pageIndex}-${i}`}
-              item={item}
-              row={row}
-              col={col}
-              maxCols={maxCols}
-              pageOffset={pageOffset}
-            />
-          )
-        })}
-      </motion.ul>
-    </motion.div>
-  )
-}
-
-// ------------------------------------------------------------------
-// 4. CELL (single circular icon + label)
-// ------------------------------------------------------------------
-
-const tapVariants = {
-  hover: {
-    scale: 1.05,
-    transition: {
-      type: 'spring',
-      bounce: 0,
-    },
-  },
-  tap: {
-    scale: 0.9,
-    transition: {
-      type: 'spring',
-      stiffness: 150,
-      damping: 8,
-      mass: 0.1,
-    },
-  },
-  focus: {
-    scale: 1.08,
-    transition: {
-      type: 'spring',
-      bounce: 0,
-    },
-  },
-} as const
-
-const cellXclassName = {
-  '-4': '[--cell-x:-2.5px]',
-  '-3': '[--cell-x:-2px]',
-  '-2': '[--cell-x:-1.25px]',
-  '-1': '[--cell-x:-0.5px]',
-  '0': '[--cell-x:0px]',
-  '1': '[--cell-x:1px]',
-  '2': '[--cell-x:1.5px]',
-  '3': '[--cell-x:2.25px]',
-  '4': '[--cell-x:3px]',
-}
-
-const cellYclassName = {
-  '-2': '[--cell-y:-2px]',
-  '0': '[--cell-y:-1px]',
-  '2': '[--cell-y:2px]',
-}
-
-function HoneycombCell({
-  item,
-  row,
-  col,
-  maxCols,
-  pageOffset,
-}: {
-  item: HoneycombItem
-  row: number
-  col: number
-  maxCols: number
-  pageOffset: number
-}) {
-  const {
-    debug,
-    scrollX,
-    pageWidth,
-    itemSize,
-    gutter,
-    labelSize,
-    verticalSpacing,
-    animateOverwrite,
-    setAnimateOverwrite,
-  } = useHoneycombContext()
-
-  const router = useRouter()
-
-  const [isMouseDown, setIsMouseDown] = useState(false)
-  const [isFocused, setIsFocused] = useState(false)
-  const cellRef = useRef<HTMLLIElement>(null)
-
-  // Some geometry
-  const halfOffset = (itemSize + gutter) / 2
-  const cellX = row === 1 ? col * (itemSize + gutter) : halfOffset + col * (itemSize + gutter)
-  const cellY = row * (itemSize + gutter * verticalSpacing)
-
-  // 1) Opacity + scale transforms based on how far the page is from center
-  const inputRange = [
-    -cellX - pageOffset + pageWidth,
-    -cellX - pageOffset + pageWidth - itemSize,
-    -cellX - pageOffset,
-    -cellX - itemSize - pageOffset,
-  ]
-  const opacity = useTransform(scrollX, inputRange, [0, 1, 1, 0])
-  const scale = useTransform(scrollX, inputRange, [0.75, 1, 1, 0.75])
-  const filter = useTransform(scrollX, inputRange, [
-    'blur(16px)',
-    'blur(0px)',
-    'blur(0px)',
-    'blur(16px)',
-  ])
-
-  // 2) Middle row parallax effect
-  const middleRowParallax = useTransform(
-    scrollX,
-    [-pageOffset - pageWidth, -pageOffset, -pageOffset + pageWidth],
-    [-itemSize * 0.7, 0, itemSize * 0.7]
-  )
-
-  // 3) "Center-out" reveal offsets for the first page
-  const orderX = 2 * col - maxCols + (row !== 1 ? 1 : 0)
-  const orderY = (row - 1) * 2
-  const startX = ITEM_SIZE * -(orderX / maxCols) * 0.1 * (Math.abs(row - 1) + Math.abs(col - 2))
-  const startY = -(itemSize / 3) * (row - 1)
-  const wrapperVariants = {
-    initialFirstPage: { x: startX, y: startY, filter: 'blur(16px)' },
-    initialOtherPages: { scale: 1, filter: 'blur(0px)' },
-    animate: {
-      opacity: 1,
-      x: 0,
-      y: 0,
-      filter: 'blur(0px)',
-      transition: {
-        delay: 0.15 + 0.1 * (Math.abs(row - 1) + Math.abs(col - 2)),
-        type: 'spring',
-        duration: 1.2,
-        bounce: 0,
-      },
-    },
-    exit: {
-      x: startX,
-      y: startY,
-      filter: 'blur(16px)',
-      transition: {
-        duration: 0.5,
-      },
-    },
-    zoomOut: {
-      x: -startX,
-      y: -startY,
-      filter: 'blur(16px)',
-      opacity: 0,
-      transition: {
-        duration: 0.5,
-      },
-    },
-    focused: {
-      x: 0,
-      y: 0,
-      filter: 'blur(0px)',
-      scale: 1.02,
-      opacity: 1,
-      transition: {
-        duration: 0.3,
-        ease: 'easeOut',
-      },
-    },
-  } as const
-
-  const isOnFirstPage = pageOffset === 0
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      onNavigate(e)
-    }
-
-    // Arrow key navigation
-    const gridItems = Array.from(document.querySelectorAll('[role="button"][tabindex="0"]'))
-    const currentIndex = gridItems.indexOf(cellRef.current as HTMLElement)
-
-    let nextItem: HTMLElement | null = null
-
-    switch (e.key) {
-      case 'ArrowRight':
-        if (currentIndex < gridItems.length - 1) {
-          nextItem = gridItems[currentIndex + 1] as HTMLElement
-        }
-        break
-      case 'ArrowLeft':
-        if (currentIndex > 0) {
-          nextItem = gridItems[currentIndex - 1] as HTMLElement
-        }
-        break
-      case 'ArrowDown':
-        // Try to find an item in the next row (approximately maxCols away)
-        if (currentIndex + maxCols < gridItems.length) {
-          nextItem = gridItems[currentIndex + maxCols] as HTMLElement
-        }
-        break
-      case 'ArrowUp':
-        // Try to find an item in the previous row
-        if (currentIndex - maxCols >= 0) {
-          nextItem = gridItems[currentIndex - maxCols] as HTMLElement
-        }
-        break
-    }
-
-    if (nextItem) {
-      e.preventDefault()
-      nextItem.focus()
-    }
-  }
-
-  const onClick = () => {
-    if (item.onClick) {
-      item.onClick()
-    }
-  }
-
-  const onNavigate = (e: { preventDefault: () => void }) => {
-    if (item.href) {
-      e.preventDefault()
-      const href = item.href
-      setAnimateOverwrite(true)
-      setTimeout(() => {
-        router.push(href as any, {
-          scroll: false,
-        })
-      }, 600)
-    }
-  }
-
-  return (
-    <motion.li
-      ref={cellRef}
-      {...item}
-      style={{
-        position: 'absolute',
-        left: cellX,
-        top: cellY,
-        x: row === 1 ? middleRowParallax : 0,
-        scale,
-      }}
-      animate={
-        isFocused ? 'focused' : animateOverwrite ? 'zoomOut' : isOnFirstPage ? 'animate' : undefined
-      }
-      initial={isOnFirstPage ? 'initialFirstPage' : 'initialOtherPages'}
-      exit="exit"
-      variants={wrapperVariants}
-      onMouseDown={() => setIsMouseDown(true)}
-      onMouseUp={() => setIsMouseDown(false)}
-      onMouseLeave={() => setIsMouseDown(false)}
-      className={cn('group/cell outline-none', debug && ['outline', 'outline-pink-500'])}
-      role="button"
-      aria-label={item.label}
-      onKeyDown={handleKeyDown}
-    >
-      <Link
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        href={item.href ?? ('' as any)}
-        onNavigate={onNavigate}
-        onClick={onClick}
-        data-cursor-disabled
-      >
-        {/* Icon bubble */}
-        <motion.div
-          variants={tapVariants}
-          animate={isMouseDown ? 'tap' : undefined}
-          whileHover={isMouseDown ? undefined : 'hover'}
-          transition={tapVariants.hover.transition}
-          className={cn(
-            'group/icon relative',
-            cellXclassName[orderX.toString() as keyof typeof cellXclassName],
-            cellYclassName[orderY.toString() as keyof typeof cellYclassName]
-          )}
-        >
-          <Window
-            className={cn(
-              'rounded-full backdrop-blur [--diameter:96px] [--radius:48px] before:rounded-full',
-              isFocused && 'ring-1 ring-white/50 ring-offset-1 ring-offset-transparent'
-            )}
-            thickness="none"
-            style={{
-              width: itemSize,
-              height: itemSize,
-              opacity,
-              filter,
-              position: 'relative',
-              zIndex: 20,
-              transition: 'all 0.3s ease-out',
-            }}
-          >
-            <div className="relative h-full w-full overflow-hidden rounded-full">
-              {debug && (
-                <span className="absolute inset-0 flex h-full w-full items-center justify-center rounded-full bg-black/50 text-center font-light font-mono text-white/85 text-xs tabular-nums">
-                  {Math.round(cellX)},{Math.round(cellY)}
-                  <br />
-                  row:{row} col:{col}
-                  {isMouseDown ? ' 👆' : ''}
-                  {isFocused ? ' 🔍' : ''}
-                </span>
-              )}
-              {item.background && (
-                <div className={'pointer-events-none absolute inset-0'}>
-                  {item.background}
-                  <div
-                    className={cn(
-                      'absolute inset-0 z-10 bg-white/10 opacity-0 transition-opacity duration-300',
-                      'bg-blend-overlay',
-                      'group-hover/cell:opacity-100',
-                      isFocused ? 'opacity-100' : ''
-                    )}
-                  />
-                </div>
-              )}
-              {item.icon && (
-                <div
-                  className={cn(
-                    'absolute inset-0 z-[11] transition-all duration-300',
-                    isFocused && 'scale-105 brightness-110'
-                  )}
-                >
-                  {item.icon}
-                </div>
-              )}
-            </div>
-          </Window>
-        </motion.div>
-
-        {/* Label */}
-        <motion.div
-          className={cn(
-            'pointer-events-none flex translate-y-0.5 items-center justify-center text-center font-medium text-shadow-md text-white/65 text-xs transition-all duration-300 group-hover/cell:text-white/85',
-            '!delay-0 !duration-0',
-            isFocused && 'translate-y-1 font-semibold text-white'
-          )}
-          style={{
-            height: labelSize,
-            width: itemSize,
-            opacity,
-            filter,
-          }}
-        >
-          {item.label}
-        </motion.div>
-      </Link>
-    </motion.li>
-  )
-}
-
-export const honeycombIconClassName = cn(
-  'object-contain p-3 transition-all duration-300 pointer-events-none touch-none',
-  'translate-y-0 translate-x-0 group-hover/cell:!translate-y-[var(--cell-y,-1px)] group-hover/cell:!translate-x-[var(--cell-x,-1px)]',
-  'group-focus-visible/cell:!translate-y-[var(--cell-y,-1px)] group-focus-visible/cell:!translate-x-[var(--cell-x,-1px)]',
-  '[filter:drop-shadow(0px_0px_1px_rgba(12,12,12,0))] group-hover/cell:[filter:drop-shadow(calc(var(--cell-x,-1px)*-1.5)_calc(var(--cell-y,-1px)*-1.5)_1px_rgba(0,0,0,0.33))]',
-  'group-focus-visible/cell:[filter:drop-shadow(calc(var(--cell-x,-1px)*-1.5)_calc(var(--cell-y,-1px)*-1.5)_1px_rgba(0,0,0,0.33))]'
-)

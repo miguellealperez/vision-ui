@@ -1,34 +1,28 @@
-import { IconHistory, IconPhotoFilled } from '@tabler/icons-react'
-import {
-  Ornament,
-  OrnamentContent,
-  OrnamentContents,
-  OrnamentTab,
-  OrnamentTabs,
-} from '../core/ornament'
+import { Cursor } from '../core/cursor'
+import { Ornament, type OrnamentTabProps } from '../core/ornament'
+import { AppStoreIcon, EnvironmentsIcon, PeopleIcon } from '../icons'
+
+const tabs: OrnamentTabProps[] = [
+  { name: 'Home', href: '#', icon: <AppStoreIcon className="size-6" data-slot="icon" /> },
+  {
+    name: 'People',
+    href: '#',
+    icon: <PeopleIcon className="size-6" data-slot="icon" />,
+  },
+  {
+    name: 'Environments',
+    href: '#',
+    icon: <EnvironmentsIcon className="size-6" data-slot="icon" />,
+  },
+]
 
 export const OrnamentExample = () => {
   return (
     <div className="flex w-full flex-1 pl-[96px]">
-      <Ornament defaultTab="memories">
-        <OrnamentTabs>
-          <OrnamentTab
-            icon={<IconPhotoFilled data-slot="icon" />}
-            label="Memories"
-            value="memories"
-          />
-          <OrnamentTab icon={<IconHistory data-slot="icon" />} label="History" value="history" />
-        </OrnamentTabs>
-        <OrnamentContents contentClassName="h-[400px] min-w-64">
-          <OrnamentContent value="memories" key="memories">
-            <div className="h-[1000px] w-full pt-8">Scrollable content</div>
-            <div className="pb-8 text-center">End</div>
-          </OrnamentContent>
-          <OrnamentContent value="history" key="history" scroll={false}>
-            <div className="flex h-full flex-1 items-center justify-center pt-8">History</div>
-          </OrnamentContent>
-        </OrnamentContents>
+      <Ornament tabs={tabs}>
+        <div>Content</div>
       </Ornament>
+      <Cursor />
     </div>
   )
 }

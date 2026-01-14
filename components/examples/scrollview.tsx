@@ -6,8 +6,8 @@ import {
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@/components/core/v2/scrollview'
-import { Text } from '@/components/core/v2/text'
+} from '@/components/core/scrollview'
+import { Text } from '@/components/core/text'
 
 export function ScrollViewExample() {
   const items = Array.from({ length: 50 }, (_, i) => `Item ${i + 1}`)

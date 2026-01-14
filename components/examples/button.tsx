@@ -1,6 +1,6 @@
 import { Ellipsis, PenBox, Share } from 'lucide-react'
 import { Button, ButtonGroup } from '@/components/core/button'
-import { Window } from '@/components/core/window'
+import { Material } from '../core'
 
 export const ButtonExample = () => {
   return (
@@ -11,7 +11,7 @@ export const ButtonExample = () => {
         <Button variant="secondary">Action</Button>
       </ButtonGroup>
 
-      <Window thickness="thinner">
+      <Material thickness="thinner">
         <ButtonGroup>
           <Button variant="selected" className="rounded-full" size="icon">
             <Share data-slot="icon" />
@@ -23,7 +23,7 @@ export const ButtonExample = () => {
             <PenBox data-slot="icon" />
           </Button>
         </ButtonGroup>
-      </Window>
+      </Material>
     </div>
   )
 }
